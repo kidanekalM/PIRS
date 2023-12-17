@@ -13,8 +13,8 @@
   <ItemGroup>
     <Folder Include="Models\Company\" />
     <Folder Include="Models\Contractor\" />
-    <Folder Include="Models\Users\" />
-    <Folder Include="Models\Report\" />
+    <Folder Include="Models\Transaction\" />
+    <Folder Include="Models\User\" />
   </ItemGroup>
 
 </Project>
