@@ -1,4 +1,4 @@
-﻿namespace PIRS.Models.Report
+﻿namespace PIRS.Models.ReportModel
 {
     public class ReportUpvote
     {
