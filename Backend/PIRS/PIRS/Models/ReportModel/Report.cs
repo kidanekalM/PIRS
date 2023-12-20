@@ -2,6 +2,7 @@
 using PIRS.Models.UserModel;
 using PIRS.Models.CompanyModel;
 using PIRS.Models.ContractorModel;
+using System.Device.Location;
 
 namespace PIRS.Models.ReportModel
 {
@@ -13,7 +14,7 @@ namespace PIRS.Models.ReportModel
         public User User { get; set; }
         public Company Company { get; set; }
         public Contractor Contractor { get; set; }
-        public string location { get; set; }
+        public GeoCoordinate location { get; set; }
         public double awardAmount { get; set; }
         public string status { get; set; }
         public DateTime DateTime { get; set; }

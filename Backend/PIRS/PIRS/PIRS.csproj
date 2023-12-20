@@ -19,4 +19,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="System.Device">
+      <HintPath>..\..\..\..\..\..\..\apps\SET_UP\System.Device.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

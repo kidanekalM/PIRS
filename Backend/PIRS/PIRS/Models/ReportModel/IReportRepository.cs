@@ -1,4 +1,8 @@
-﻿namespace PIRS.Models.ReportModel
+﻿using Microsoft.AspNetCore.Components.Routing;
+using System.Device;
+using System.Device.Location;
+
+namespace PIRS.Models.ReportModel
 {
     public interface IReportRepository
     {
@@ -10,5 +14,6 @@
         List<Report> GetByUser(int id);
         List<Report> GetByCompany(int id);
         List<Report> GetByContractor(int id);
+        List<Report> GetAllNear(GeoCoordinate location,double distance);
     }
 }

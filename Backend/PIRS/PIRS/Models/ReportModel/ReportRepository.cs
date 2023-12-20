@@ -1,4 +1,6 @@
-﻿namespace PIRS.Models.ReportModel
+﻿using System.Device.Location;
+
+namespace PIRS.Models.ReportModel
 {
     public class ReportRepository : IReportRepository
     {
@@ -13,6 +15,11 @@
         }
 
         List<Report> IReportRepository.GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        List<Report> IReportRepository.GetAllNear(GeoCoordinate location, double distance)
         {
             throw new NotImplementedException();
         }
