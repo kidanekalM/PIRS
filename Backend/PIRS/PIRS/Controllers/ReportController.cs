@@ -1,22 +1,59 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PIRS.Models;
 using PIRS.Models.ReportModel;
 
 namespace PIRS.Controllers
 {
-    public class ReportController : Controller
+    [Route("[controller]")]
+    [ApiController]
+    public class ReportController : ControllerBase
     {
-        public Report Index()
+        private readonly PirsContext pirsContext;
+        public ReportController(PirsContext pirsContext)
         {
-            Report report = new Report();
-            report.Title = "Here";
-            report.Description = "Is";
+            this.pirsContext = pirsContext;
+        }
+
+        [HttpPost]
+        public ActionResult<Report> create(Report report)
+        {
+            pirsContext.Report.Add(report);
+            pirsContext.SaveChanges();
+            return report;
+
+        }
+        [HttpPut]
+        public IActionResult update(Report report)
+        {
+            report = pirsContext.Report.Find(report.ReportId);
+            pirsContext.Report.Update(report);
+            pirsContext.SaveChanges();
+            return NotFound();
+        }
+        [HttpDelete]
+        public ActionResult<Report> delete(int id)
+        {
+            Report report = pirsContext.Report.Find(id);
+            pirsContext.Report.Remove(report);
+            pirsContext.SaveChanges();
             return report;
         }
-        // add
-        // edit
-        // delete,
-        // getall
-        // getbycontractorId
+        [HttpGet]
+        public ActionResult<List<Report>> GetAll(int id) 
+        {
+            return pirsContext.Report.ToList<Report>();
+        }
+        [HttpGet("GetByContractor/{ContractrId}",Name ="GetByContractor")]
+        public ActionResult<List<Report>> GetByContractor(int id)
+        {
+            return pirsContext.Report.Where<Report>(r => r.Contractor.Id == id).ToList<Report>();
+        }
+        [HttpGet("{id}",Name ="GetById")]
+        [ActionName("GetById")]
+        public ActionResult<Report> GetById(int id)
+        {
+            return pirsContext.Report.FirstOrDefault<Report>(r=>r.ReportId==id);
+        }
         // get by id
         // get by company id
         // get by contractor id

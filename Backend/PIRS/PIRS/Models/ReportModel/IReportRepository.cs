@@ -13,7 +13,8 @@ namespace PIRS.Models.ReportModel
         List<Report> GetAll();
         List<Report> GetByUser(int id);
         List<Report> GetByCompany(int id);
+        List<Report> GetByCompany(int id,string state);
         List<Report> GetByContractor(int id);
-        List<Report> GetAllNear(GeoCoordinate location,double distance);
+        List<Report> GetByLocation(GeoCoordinate location);
     }
 }
