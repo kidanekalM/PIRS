@@ -9,12 +9,13 @@ namespace PIRS.Models.ReportModel
         void Add(Report report);
         Report Update(Report report);
         Report Delete (Report report);
-        Report GetById(int id);
         List<Report> GetAll();
+        Report GetById(int id);
         List<Report> GetByUser(int id);
         List<Report> GetByCompany(int id);
-        List<Report> GetByCompany(int id,string state);
+        List<Report> GetByCompany(int id,Report.reportStatus status);
         List<Report> GetByContractor(int id);
         List<Report> GetByLocation(GeoCoordinate location);
+        List<Report> GetByLocationAndCompany(GeoCoordinate location,int id);
     }
 }

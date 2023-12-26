@@ -39,7 +39,7 @@ namespace PIRS.Controllers
             return report;
         }
         [HttpGet]
-        public ActionResult<List<Report>> GetAll(int id) 
+        public ActionResult<List<Report>> GetAll() 
         {
             return pirsContext.Report.ToList<Report>();
         }

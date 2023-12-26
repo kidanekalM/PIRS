@@ -31,22 +31,18 @@ namespace PIRS.Models.ReportModel
 
         public List<Report> GetByCompany(int id)
         {
-            //return _context.Report.Where(r => r.Company.Id == id).ToList();
-            throw new NotImplementedException(); 
+            return _context.Report.Where(r => r.Company.Id == id).ToList(); 
         }
 
-        public List<Report> GetByCompany(int id, string state)
+        public List<Report> GetByCompany(int id, Report.reportStatus status)
         {
             //return _context.Report.Where(r => r.Company.Id == id && r.User.State == state).ToList();
             throw new NotImplementedException();
-
         }
 
         public List<Report> GetByContractor(int id)
         {
-            //return _context.Report.Where(r => r.Contractor.Id == id).ToList();
-            throw new NotImplementedException();
-
+            return _context.Report.Where(r => r.Contractor.Id == id).ToList();
         }
 
         public Report GetById(int id)
@@ -57,24 +53,18 @@ namespace PIRS.Models.ReportModel
         public List<Report> GetByLocation(GeoCoordinate location)
         {
             var reports = _context.Report.ToList();
-            var nearbyReports = new List<Report>();
-            foreach (var report in reports)
-            {
-                var reportLocation = new GeoCoordinate(report.location.Latitude, report.location.Longitude);
-                
-                if (reportLocation.GetDistanceTo(location) < 1000)
-                {
-                    nearbyReports.Add(report);
-                }
-            }
-            nearbyReports.Sort((a,b)=>location.GetDistanceTo(new GeoCoordinate(nt.Parse(a.location.Latitude),a.location.Longitude))-location.GetDistanceTo(new GeoCoordinate(b.location.Latitude, b.location.Longitude));
-            return nearbyReports;
+            reports.Sort((a,b)=>(int)location.GetDistanceTo(new GeoCoordinate(a.location.Latitude, a.location.Longitude))-(int)location.GetDistanceTo(new GeoCoordinate(b.location.Latitude,b.location.Longitude))); 
+            return reports;
         }
-
+        public List<Report> GetByLocationAndCompany(GeoCoordinate location,int id)
+        {
+            var reports = _context.Report.Where<Report>(r=>r.Company.Id == id).ToList();
+            reports.Sort((a, b) => (int)location.GetDistanceTo(a.location) - (int)location.GetDistanceTo(b.location));
+            return reports;    
+        }
         public List<Report> GetByUser(int id)
         {
-            //return _context.Report.Where(r => r.User.Id == id).ToList();
-            throw new NotImplementedException();
+            return _context.Report.Where(r => r.User.Id == id).ToList();
         }
 
         public Report Update(Report report)
