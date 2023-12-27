@@ -18,6 +18,7 @@ namespace PIRS.Controllers
         public ActionResult<Report> create(Report report)
         {
             pirsContext.Report.Add(report);
+            // Manage Pics
             pirsContext.SaveChanges();
             return report;
 
@@ -27,6 +28,7 @@ namespace PIRS.Controllers
         {
             report = pirsContext.Report.Find(report.ReportId);
             pirsContext.Report.Update(report);
+            //Manage Pics
             pirsContext.SaveChanges();
             return NotFound();
         }
