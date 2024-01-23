@@ -15,7 +15,7 @@ namespace PIRS.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Report> create(Report report)
+        public ActionResult<Report> Create(Report report)
         {
             pirsContext.Report.Add(report);
             // Manage Pics
@@ -24,7 +24,7 @@ namespace PIRS.Controllers
 
         }
         [HttpPut]
-        public IActionResult update(Report report)
+        public IActionResult Update(Report report)
         {
             report = pirsContext.Report.Find(report.ReportId);
             pirsContext.Report.Update(report);
@@ -33,7 +33,7 @@ namespace PIRS.Controllers
             return NotFound();
         }
         [HttpDelete]
-        public ActionResult<Report> delete(int id)
+        public ActionResult<Report> Delete(int id)
         {
             Report report = pirsContext.Report.Find(id);
             pirsContext.Report.Remove(report);
@@ -56,9 +56,5 @@ namespace PIRS.Controllers
         {
             return pirsContext.Report.FirstOrDefault<Report>(r=>r.ReportId==id);
         }
-        // get by id
-        // get by company id
-        // get by contractor id
-        // get by user id
     }
 }

@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PIRS.Models;
+using PIRS.Models.UserModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +11,20 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<PirsContext, PirsContext>();
+
 builder.Services.AddDbContext<PirsContext>(options => {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection"));
+    options.UseSqlServer(builder.Configuration.
+        GetConnectionString("MyConnection"));
 });
+
+
+
+builder.Services.AddIdentity<AppUser, IdentityRole>().
+AddEntityFrameworkStores<PirsContext>().
+AddDefaultTokenProviders();
+
+
 
 var app = builder.Build();
 
@@ -24,8 +37,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
 
 app.Run();

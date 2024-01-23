@@ -1,14 +1,12 @@
-﻿using System.Reflection;
-using PIRS.Models.UserModel;
+﻿using PIRS.Models.UserModel;
 using PIRS.Models.CompanyModel;
 using PIRS.Models.ContractorModel;
-using System.Device.Location;
 
 namespace PIRS.Models.ReportModel
 {
     public class Report
     {
-        public enum reportStatus
+        public enum ReportStatus
         {
             newReport,
             inProgress,
@@ -23,8 +21,8 @@ namespace PIRS.Models.ReportModel
         public Contractor Contractor { get; set; }
         public Location location { get; set; }
         public double awardAmount { get; set; }
-        public reportStatus status { get; set; } = reportStatus.newReport;
-        public DateTime DateTime { get; set; }
+        public ReportStatus status { get; set; } = ReportStatus.newReport;
+        public DateTime DateTime  { get; set; }
         public List<ReportUpvote> upvotes { get; set; }
         public List<ImageGallery> pictures { get; set; }
     }

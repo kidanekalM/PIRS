@@ -34,7 +34,7 @@ namespace PIRS.Models.ReportModel
             return _context.Report.Where(r => r.Company.Id == id).ToList(); 
         }
 
-        public List<Report> GetByCompany(int id, Report.reportStatus status)
+        public List<Report> GetByCompany(int id, Report.ReportStatus status)
         {
             //return _context.Report.Where(r => r.Company.Id == id && r.User.State == state).ToList();
             throw new NotImplementedException();
