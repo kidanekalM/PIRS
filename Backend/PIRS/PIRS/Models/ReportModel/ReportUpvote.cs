@@ -3,6 +3,6 @@
     public class ReportUpvote
     {
         public int Id { get; set; }
-        public UserModel.User User { get; set; }
+        public UserModel.AppUser User { get; set; }
     }
 }

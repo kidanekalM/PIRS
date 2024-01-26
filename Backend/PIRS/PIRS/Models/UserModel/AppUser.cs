@@ -13,9 +13,9 @@ namespace PIRS.Models.UserModel
         // Name
         public string? Name { get; set; }
         // For contractor 
-        public User? HiringCompany { get; set; }
+        public AppUser? HiringCompany { get; set; } = null;
         // Rating for Contractor
-        public RatingModel.Rating Rating { get; set; }
+        public RatingModel.Rating? Rating { get; set; }
 
     }
 }

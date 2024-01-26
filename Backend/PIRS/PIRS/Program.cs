@@ -11,11 +11,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<PirsContext, PirsContext>();
 
 builder.Services.AddDbContext<PirsContext>(options => {
     options.UseSqlServer(builder.Configuration.
-        GetConnectionString("MyConnection"));
+        GetConnectionString("MyConnection"))
+    .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+    options.EnableSensitiveDataLogging();
 });
 
 

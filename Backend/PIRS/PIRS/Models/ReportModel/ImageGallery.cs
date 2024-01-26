@@ -3,6 +3,6 @@
     public class ImageGallery
     {
         public int Id {  get; set; } 
-        public FileStream ? Image { get; set; }
+        public string ? Image { get; set; }
     }
 }
