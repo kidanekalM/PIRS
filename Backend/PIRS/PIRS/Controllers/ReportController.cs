@@ -138,6 +138,14 @@ namespace PIRS.Controllers
             }
             return reportDtos;
         }
+        [HttpGet("Sort/{companyId}/{geoCoordinate}/{status}")]
+        public IActionResult Sort(string companyId, GeoCoordinate geoCoordinate, ReportStatus status)
+        {
+            var reports = _reportRepository.Sort(companyId, geoCoordinate, status);
+
+            return Ok(reports);
+        }
+
     }
-    
+
 }

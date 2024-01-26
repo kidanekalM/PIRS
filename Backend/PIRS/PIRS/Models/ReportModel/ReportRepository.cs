@@ -22,9 +22,9 @@ namespace PIRS.Models.ReportModel
 
         public async void Add(Report report)
         {
-            _pirsContext.Reports.Add(report);
+            _context.Reports.Add(report);
 
-            _pirsContext.SaveChanges();
+            _context.SaveChanges();
         }
 
         public Report Delete(Report report)
@@ -83,12 +83,39 @@ namespace PIRS.Models.ReportModel
             _context.SaveChanges();
             return report;
         }
-        //sorts on all parameters compnay, dateTime, Upvotes, location, status 
         public List<Report> Sort(string? companyId, GeoCoordinate? geoCoordinate, ReportStatus? status)
         {
-            if ((companyId != null) && (geoCoordinate!=null) && (status.HasValue))
+            if ((companyId != null) && (geoCoordinate != null) && (status.HasValue))
             {
-                _context.Reports.Where(r => (r.Company.Id == companyId) && (r.status == status)).ToList().Sort();
+                return _context.Reports.Where(r => (r.Company.Id == companyId) && (r.status == status)).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
+            }
+            else if ((companyId != null) && (geoCoordinate != null))
+            {
+                return _context.Reports.Where(r => r.Company.Id == companyId).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
+            }
+            else if ((companyId != null) && (status.HasValue))
+            {
+                return _context.Reports.Where(r => (r.Company.Id == companyId) && (r.status == status)).OrderBy(r => r.upvotes.Count).ToList();
+            }
+            else if ((geoCoordinate != null) && (status.HasValue))
+            {
+                return _context.Reports.Where(r => (r.status == status)).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
+            }
+            else if (companyId != null)
+            {
+                return _context.Reports.Where(r => r.Company.Id == companyId).OrderBy(r => r.upvotes.Count).ToList();
+            }
+            else if (geoCoordinate != null)
+            {
+                return _context.Reports.OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
+            }
+            else if (status.HasValue)
+            {
+                return _context.Reports.Where(r => r.status == status).OrderBy(r => r.upvotes.Count).ToList();
+            }
+            else
+            {
+                return _context.Reports.OrderBy(r => r.upvotes.Count).ToList();
             }
         }
 
