@@ -12,6 +12,7 @@ namespace PIRS.Models
 
         }
        public DbSet<TransactionModel.Transaction>? Transactions { get; set; }
+       
 
     }
 }

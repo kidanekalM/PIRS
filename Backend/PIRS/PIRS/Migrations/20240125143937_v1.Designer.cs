@@ -12,8 +12,8 @@ using PIRS.Models;
 namespace PIRS.Migrations
 {
     [DbContext(typeof(PirsContext))]
-    [Migration("20240125071924_init")]
-    partial class init
+    [Migration("20240125143937_v1")]
+    partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
