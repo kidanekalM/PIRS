@@ -13,23 +13,23 @@ namespace PIRS.Controllers
            _transactionRepository= transactionRepository;
         }
         [HttpPut]
-        public Transaction  Add(Transaction transaction)
-        {
-            return  _transactionRepository.add(transaction);
+        public ActionResult<Transaction>  Add(Transaction transaction)
+        {   Transaction transact= _transactionRepository.add(transaction);
+            return  Ok(transact);
         }
         
         
         [HttpGet]
         [Route("GetById/{id}")]
-        public Transaction GetById(int id)
+        public ActionResult<Transaction> GetById(int id)
         {
-            return _transactionRepository.GetById(id);
+            return Ok( _transactionRepository.GetById(id));
         }
         [HttpGet]
         [Route("GetAll")]
-        public List<Transaction> GetAll()
+        public ActionResult<List<Transaction>> GetAll()
         {
-            return _transactionRepository.GetAll();
+            return Ok(_transactionRepository.GetAll());
         }
     }
 }
