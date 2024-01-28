@@ -16,6 +16,5 @@ namespace PIRS.Models.ReportModel
     public DateTime? DateTime { get; set; }
     public List<ReportUpvote>? upvotes { get; set; }
     public List<T>? pictures { get; set; }
-
     }
 }

@@ -9,14 +9,12 @@ namespace PIRS.Models.ReportModel
     public class ReportRepository : IReportRepository
     {
         private readonly PirsContext _context;
-        private readonly IReportRepository _reportRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly HelperService helperService;
-        public ReportRepository(PirsContext pirsContext ,UserManager<AppUser> userManager, IReportRepository reportRepository, IWebHostEnvironment webHostEnvironment)
+        public ReportRepository(PirsContext pirsContext ,UserManager<AppUser> userManager, IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _context = pirsContext;
-            _reportRepository = reportRepository;
             helperService = new HelperService(webHostEnvironment, userManager);
         }
 

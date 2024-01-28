@@ -35,6 +35,7 @@ namespace PIRS.Models.ReportModel
         public List<FileStream> GetImages(List<ImageGallery> images)
         {
             var savedImages = new List<FileStream>();
+            if(images != null)
             foreach (var img in images)
             {
                 var file = Path.Combine(_webHostEnvironment.WebRootPath, "Images", "Report", img.Image);
@@ -51,8 +52,8 @@ namespace PIRS.Models.ReportModel
                 ReportId = report.ReportId,
                 Title = report.Title,
                 Description = report.Description,
-                CompanyId = report.Company.Id,
-                UserId = report.User.Id,
+                CompanyId = report.Company != null ? report.Company.Id : null,
+                UserId = report.User != null ? report.User.Id : null,
                 ContractorId = report.Contractor != null ? report.Contractor.Id : null,
                 location = report.location,
                 awardAmount = report.awardAmount,

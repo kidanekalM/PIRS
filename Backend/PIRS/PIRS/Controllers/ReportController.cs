@@ -6,7 +6,7 @@ using PIRS.Models;
 using PIRS.Models.ReportModel;
 using PIRS.Models.UserModel;
 using System.Device.Location;
-using System.Runtime.InteropServices;
+using System.Security.Permissions;
 
 namespace PIRS.Controllers
 {
@@ -17,10 +17,12 @@ namespace PIRS.Controllers
         private readonly IReportRepository _reportRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly HelperService helperService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         public ReportController(UserManager<AppUser> userManager,IReportRepository reportRepository,IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _reportRepository = reportRepository;
+            _webHostEnvironment = webHostEnvironment;
             helperService = new HelperService(webHostEnvironment,userManager);
         }
 
@@ -39,6 +41,11 @@ namespace PIRS.Controllers
             var oldReport = _reportRepository.GetById(reportDto.ReportId);
             if (oldReport == null)
                 return NotFound();
+            foreach (var img in oldReport.pictures)
+            {
+                var AbsLocation = Path.Combine(_webHostEnvironment.WebRootPath, img.Image);
+                System.IO.File.Delete(AbsLocation);
+            }
             oldReport.Title = newReport.Title;
             oldReport.Description = newReport.Description;
             oldReport.User = newReport.User;
@@ -58,9 +65,14 @@ namespace PIRS.Controllers
         public ActionResult<ReportDto<FileStream>> Delete(int id)
         {
             Report report = _reportRepository.GetById(id);
-            report = _reportRepository.Delete(report);
             if(report == null)
                 return NotFound();
+            foreach(var img in report.pictures)
+            {
+                var AbsLocation = Path.Combine(_webHostEnvironment.WebRootPath, img.Image);
+                System.IO.File.Delete(AbsLocation);
+            }
+            report = _reportRepository.Delete(report);
             return helperService.ToDto(report);
         }
         [HttpGet]
@@ -139,11 +151,16 @@ namespace PIRS.Controllers
             return reportDtos;
         }
         [HttpGet("Sort/{companyId}/{geoCoordinate}/{status}")]
-        public IActionResult Sort(string companyId, GeoCoordinate geoCoordinate, ReportStatus status)
+        public ActionResult Sort(GeoCoordinate geoCoordinate=null,string companyId = null, ReportStatus status = 0)
         {
             var reports = _reportRepository.Sort(companyId, geoCoordinate, status);
+            var reportDtos = new List<ReportDto<FileStream>>();
+            foreach(Report r in reports)
+            {
+                reportDtos.Add(helperService.ToDto(r));
+            }
 
-            return Ok(reports);
+            return Ok(reportDtos);
         }
 
     }
