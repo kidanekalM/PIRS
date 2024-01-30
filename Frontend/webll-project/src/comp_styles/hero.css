@@ -1,0 +1,33 @@
+section {
+  background: linear-gradient(to bottom, #0a0c2c80 3rem, transparent 10rem);
+  background-image: url("../images/original-24dd0d01d231ead3dc20b5a1be1c3297.png");
+  background-position: center;
+  background-size: cover;
+  height: fit-content;
+  color: #fafafc;
+  padding: 15rem 3rem 6rem;
+
+  @media (max-width: 576px) {
+    background: linear-gradient(to bottom, #0a0c2c80 3rem, transparent),
+      url(../images/original-24dd0d01d231ead3dc20b5a1be1c3297.png);
+    background-position: center, bottom left;
+    background-size: cover, cover;
+    align-items: flex-start;
+    padding-top: 7.5rem;
+    height: 75vh;
+    max-height: 720px;
+  }
+}
+.heroInner {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+span {
+  max-width: 50%;
+}
+h1 {
+  font-size: clamp(2rem, 5.5vw, 3.25rem);
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
