@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PIRS.Models;
 
@@ -11,9 +12,10 @@ using PIRS.Models;
 namespace PIRS.Migrations
 {
     [DbContext(typeof(PirsContext))]
-    partial class PirsContextModelSnapshot : ModelSnapshot
+    [Migration("20240130164408_identitymigration")]
+    partial class identitymigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

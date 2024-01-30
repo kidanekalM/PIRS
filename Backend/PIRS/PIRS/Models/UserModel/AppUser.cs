@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace PIRS.Models.UserModel
 {
     public partial class AppUser:IdentityUser
     {
-        // Company
+
+/*        // Company
         public string? Logo { get; set; }
         //Company
         public string? Formula { get; set; }
@@ -13,9 +15,10 @@ namespace PIRS.Models.UserModel
         // Name
         public string? Name { get; set; }
         // For contractor 
-        public User? HiringCompany { get; set; }
+        public AppUser? HiringCompany { get; set; }
         // Rating for Contractor
-        public RatingModel.Rating Rating { get; set; }
+        public RatingModel.Rating Rating { get; set; }*/
+
 
     }
 }

@@ -1,7 +1,10 @@
-﻿namespace PIRS.Models.TransactionModel
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PIRS.Models.TransactionModel
 {
     public class Transaction
     {
-        public int Id { get; set; }
+        [Key]
+        public Guid Id { get; set; }
     }
 }

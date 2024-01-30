@@ -14,9 +14,9 @@ namespace PIRS.Models.ReportModel
         public int ReportId {  get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public User User { get; set; }
-        public User Company { get; set; }
-        public User Contractor { get; set; }
+        public AppUser User { get; set; }
+        public AppUser Company { get; set; }
+        public AppUser Contractor { get; set; }
         public Location location { get; set; }
         public double awardAmount { get; set; }
         public ReportStatus status { get; set; } = ReportStatus.newReport;
