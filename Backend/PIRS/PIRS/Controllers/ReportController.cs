@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Server.HttpSys;
-using PIRS.Models;
 using PIRS.Models.ReportModel;
 using PIRS.Models.UserModel;
 using System.Device.Location;
@@ -27,20 +25,22 @@ namespace PIRS.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ReportDto<IFormFile>>> Create([FromForm] ReportDto<IFormFile> reportDto)
+        public async Task<ActionResult<ReportDto<ImageGallery>>> Create([FromForm] ReportDto<IFormFile> reportDto)
         {
-            _reportRepository.Add(await helperService.ToModel(reportDto));
-            return reportDto;
+            var report = await helperService.ToModel(reportDto);
+            _reportRepository.Add(report);
+            return helperService.ToDto(report);
 
         }
 
         [HttpPut]
-        public async Task<ActionResult<ReportDto<FileStream>>> Update([FromForm]ReportDto<IFormFile> reportDto)
+        public async Task<ActionResult<ReportDto<ImageGallery>>> Update([FromForm]ReportDto<IFormFile> reportDto)
         {
             var newReport = await helperService.ToModel(reportDto);
             var oldReport = _reportRepository.GetById(reportDto.ReportId);
             if (oldReport == null)
                 return NotFound();
+            if(oldReport.pictures != null)
             foreach (var img in oldReport.pictures)
             {
                 var AbsLocation = Path.Combine(_webHostEnvironment.WebRootPath, img.Image);
@@ -62,7 +62,7 @@ namespace PIRS.Controllers
             return helperService.ToDto(oldReport);
         }
         [HttpDelete]
-        public ActionResult<ReportDto<FileStream>> Delete(int id)
+        public ActionResult<ReportDto<ImageGallery>> Delete(int id)
         {
             Report report = _reportRepository.GetById(id);
             if(report == null)
@@ -76,21 +76,22 @@ namespace PIRS.Controllers
             return helperService.ToDto(report);
         }
         [HttpGet]
-        public ActionResult<List<ReportDto<FileStream>>> GetAll() 
+        public ActionResult<List<ReportDto<ImageGallery>>> GetAll() 
         {
             var reports = _reportRepository.GetAll();
-            var reportsDto = new List<ReportDto<FileStream>>();
+            var reportsDto = new List<ReportDto<ImageGallery>>();
             if (reports == null)
                 return NotFound();
             foreach (var item in reports)
             {
-                reportsDto.Add( helperService.ToDto(item));
+                var reportDto = helperService.ToDto(item);
+                reportsDto.Add(reportDto);
             }
             return reportsDto;
         }
         [HttpGet("{id}",Name ="GetById")]
         [ActionName("GetById")]
-        public ActionResult<ReportDto<FileStream>> GetById(int id)
+        public ActionResult<ReportDto<ImageGallery>> GetById(int id)
         {
             var report = _reportRepository.GetById(id);
             if(report==null)
@@ -98,9 +99,9 @@ namespace PIRS.Controllers
             return helperService.ToDto(report);
         }
         [HttpGet("GetByContractor/{ContractrId}",Name ="GetByContractor")]
-        public ActionResult<List<ReportDto<FileStream>>> GetByContractor(int id)
+        public ActionResult<List<ReportDto<ImageGallery>>> GetByContractor(int id)
         {
-            List<ReportDto<FileStream>> reportDtos = new List<ReportDto<FileStream>>();
+            List<ReportDto<ImageGallery>> reportDtos = new List<ReportDto<ImageGallery>>();
             var reports = _reportRepository.GetByContractor(id);
             if(reports == null)
                 return NotFound();
@@ -111,9 +112,9 @@ namespace PIRS.Controllers
             return reportDtos;
         }
         [HttpGet("GetByUser/{UserId}", Name = "GetByUser")]
-        public ActionResult<List<ReportDto<FileStream>>> GetByUser(int id)
+        public ActionResult<List<ReportDto<ImageGallery>>> GetByUser(int id)
         {
-            List<ReportDto<FileStream>> reportDtos = new List<ReportDto<FileStream>>();
+            List<ReportDto<ImageGallery>> reportDtos = new List<ReportDto<ImageGallery>>();
             var reports = _reportRepository.GetByUser(id);
             if (reports == null)
                 return NotFound();
@@ -124,9 +125,9 @@ namespace PIRS.Controllers
             return reportDtos;
         }
         [HttpGet("GetByCompany/{CompanyId}", Name = "GetByCompany")]
-        public ActionResult<List<ReportDto<FileStream>>> GetByCompnany(int id)
+        public ActionResult<List<ReportDto<ImageGallery>>> GetByCompnany(int id)
         {
-            List<ReportDto<FileStream>> reportDtos = new List<ReportDto<FileStream>>();
+            List<ReportDto<ImageGallery>> reportDtos = new List<ReportDto<ImageGallery>>();
             var reports = _reportRepository.GetByCompany(id);
             if (reports == null)
                 return NotFound();
@@ -138,9 +139,9 @@ namespace PIRS.Controllers
         }
         /*//**/
         [HttpGet("GetByLocation/{Location}", Name = "GetByLocation")]
-        public ActionResult<List<ReportDto<FileStream>>> GetByLocation(GeoCoordinate geoCoordinate)
+        public ActionResult<List<ReportDto<ImageGallery>>> GetByLocation(GeoCoordinate geoCoordinate)
         {
-            List<ReportDto<FileStream>> reportDtos = new List<ReportDto<FileStream>>();
+            List<ReportDto<ImageGallery>> reportDtos = new List<ReportDto<ImageGallery>>();
             var reports = _reportRepository.GetByLocation(geoCoordinate);
             if (reports == null)
                 return NotFound();
@@ -154,7 +155,7 @@ namespace PIRS.Controllers
         public ActionResult Sort(GeoCoordinate geoCoordinate=null,string companyId = null, ReportStatus status = 0)
         {
             var reports = _reportRepository.Sort(companyId, geoCoordinate, status);
-            var reportDtos = new List<ReportDto<FileStream>>();
+            var reportDtos = new List<ReportDto<ImageGallery>>();
             foreach(Report r in reports)
             {
                 reportDtos.Add(helperService.ToDto(r));

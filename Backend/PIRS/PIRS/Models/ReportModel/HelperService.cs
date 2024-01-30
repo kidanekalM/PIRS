@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query;
 using PIRS.Models.UserModel;
+using System.ComponentModel.Design;
+using System.Data;
 
 namespace PIRS.Models.ReportModel
 {
@@ -21,48 +24,79 @@ namespace PIRS.Models.ReportModel
         {
             var savedPictures = new List<ImageGallery>();
             string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Images", "Report");
+            if(images != null)
             foreach (var img in images)
             {
                 var fileName = Guid.NewGuid().ToString() + "_" + img.FileName;
                 var uniqueCFileName = Path.Combine(uploadFolder, fileName);
-                img.CopyTo(new FileStream(uniqueCFileName, FileMode.Create));
+                using(var filestream = new FileStream(uniqueCFileName, FileMode.Create))
+                {
+                    img.CopyTo(filestream);   
+                }
                 var productGallary = new ImageGallery();
                 productGallary.Image = Path.Combine("Images", "Report", fileName);
                 savedPictures.Add(productGallary);
             }
             return savedPictures;
         }
-        public List<FileStream> GetImages(List<ImageGallery> images)
+        public List<byte[]> GetImages(List<ImageGallery> images)
         {
-            var savedImages = new List<FileStream>();
+            var savedImages = new List<byte[]>();
             if(images != null)
             foreach (var img in images)
             {
-                var file = Path.Combine(_webHostEnvironment.WebRootPath, "Images", "Report", img.Image);
-                var stream = new FileStream(file, FileMode.Open);
-                savedImages.Add(stream);
+                var file = Path.Combine(_webHostEnvironment.WebRootPath, img.Image);
+                try
+                {
+                    using var ms = new MemoryStream();
+                    using (FileStream stream = new FileStream(file, FileMode.Open))
+                    {                                                
+                        stream.CopyTo(ms);
+                        var fileBytes = ms.ToArray();
+                        savedImages.Add(fileBytes);
+                    }
+                    
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
             return savedImages;
         }
 
-        public ReportDto<FileStream> ToDto(Report report)
+        public ReportDto<ImageGallery> ToDto(Report report)
         {
-            var reportDto = new ReportDto<FileStream>()
+
+            var reportDto = new ReportDto<ImageGallery>()
             {
                 ReportId = report.ReportId,
                 Title = report.Title,
                 Description = report.Description,
-                CompanyId = report.Company != null ? report.Company.Id : null,
-                UserId = report.User != null ? report.User.Id : null,
-                ContractorId = report.Contractor != null ? report.Contractor.Id : null,
                 location = report.location,
-                awardAmount = report.awardAmount,
                 status = ReportStatus.newReport,
                 upvotes = report.upvotes,
                 DateTime = report.DateTime,
-                pictures = GetImages(report.pictures)
-
+                pictures = report.pictures
             };
+            reportDto.CompanyId = report.Company != null ? report.Company.Id : null;
+            reportDto.UserId = report.User != null ? report.User.Id : null;
+            reportDto.ContractorId = report.Contractor != null ? report.Contractor.Id : null;
+            // Calculating the award amount 
+            if (report.Company != null)
+            {
+                if ((!string.IsNullOrEmpty(report.Company.Formula)) && (!report.Company.Formula.Equals("string")))
+                {
+                    // u - number of upvotes
+                    // d - number of days since posting
+                    var u = report.upvotes!=null?report.upvotes.Count():0;
+                    var d = report.DateTime != null ? (DateTime.Now - report.DateTime).TotalDays : 0;
+                    var formula = report.Company.Formula;
+                    formula = formula.Replace("u", u.ToString());
+                    formula = formula.Replace("d", d.ToString());
+                    reportDto.awardAmount = Convert.ToDouble(new DataTable().Compute(formula,string.Empty));
+                }
+            }
             return reportDto;
         }
         public async Task<Report> ToModel(ReportDto<IFormFile> reportDto)
@@ -75,13 +109,23 @@ namespace PIRS.Models.ReportModel
                 Company = await _userManager.FindByIdAsync(reportDto.CompanyId),
                 User = await _userManager.FindByIdAsync(reportDto.UserId),
                 Contractor = await _userManager.FindByIdAsync(reportDto.ContractorId),
-                location = reportDto.location,
+                location = new Location()
+                {
+                    Course = reportDto.location != null ? reportDto.location.Course : 0,
+                    Speed = reportDto.location != null ?reportDto.location.Speed : 0,
+                    Latitude = reportDto.location!=null?reportDto.location.Latitude:0,
+                    Longitude = reportDto.location != null ? reportDto.location.Longitude:0,
+                    Altitude = reportDto.location != null ? reportDto.location.Altitude:0,
+                    HorizontalAccuracy = reportDto.location != null ? reportDto.location.HorizontalAccuracy:0.9,
+                    VerticalAccuracy = reportDto.location != null ? reportDto.location.VerticalAccuracy:0.9
+                },
                 awardAmount = reportDto.awardAmount,
                 status = ReportStatus.newReport,
                 upvotes = reportDto.upvotes,
                 DateTime = DateTime.Now,
                 pictures = SaveImages(reportDto.pictures)
             };
+            report = report;
             return report;
         }
 

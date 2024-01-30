@@ -13,7 +13,7 @@ namespace PIRS.Models.ReportModel
         public Location? location { get; set; } 
         public double? awardAmount { get; set; } 
         public ReportStatus? status { get; set; } = ReportStatus.newReport;
-        public DateTime? DateTime { get; set; } 
+        public DateTime DateTime { get; set; } = DateTime.Now;
         public List<ReportUpvote>? upvotes { get; set; } 
         public List<ImageGallery>? pictures { get; set; } 
     }

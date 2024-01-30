@@ -5,6 +5,6 @@
         newReport,
         inProgress,
         Submitted,
-        Finished
+        Approved
     }
 }
