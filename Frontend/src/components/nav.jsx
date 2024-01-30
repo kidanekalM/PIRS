@@ -1,8 +1,8 @@
 function NavBar(){
     return(
         <>
-        <nav className="navbar navbar-expand-lg bg-light">
-        <div className="container">
+        <nav className="navbar navbar-expand-lg bg-light sticky-top">
+        <div className="container-fluid">
           <a className="navbar-brand">
             EthioRush
           </a>
@@ -18,19 +18,16 @@ function NavBar(){
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id='navbarNavDropdown'>
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <a className="nav-link active" aria-current="page"
-                  >Home</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" 
-                  >Reports</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link">Profile</a>
-              </li>
+            <ul className="navbar-nav  me-auto mb-2 mb-lg-0">
             </ul>
+                  <div className="d-flex align-items-center">
+        <button data-mdb-ripple-init type="button" className="btn px-3 me-2">
+          Login
+        </button>
+        <button data-mdb-ripple-init type="button" className="btn btn-dark me-3">
+          Sign up for free
+        </button>
+      </div>
           </div>
         </div>
       </nav>
