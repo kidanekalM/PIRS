@@ -24,6 +24,8 @@ builder.Services.AddIdentity<AppUser, IdentityRole>().
 AddEntityFrameworkStores<PirsContext>().
 AddDefaultTokenProviders();
 
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 
 
 var app = builder.Build();

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PIRS.Models.UserModel;
 using System.ComponentModel.DataAnnotations;
@@ -16,56 +17,19 @@ public class UserController : ControllerBase
         _userManager = userManager;
         _roleManager = roleManager;
     }
-
     [HttpPost]
-    [ProducesResponseType(typeof(AppUser), 201)]
-    [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
-    /*    public async Task<IActionResult> Create(AppUser user, string roleName)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var result = await _userManager.CreateAsync(user);
-
-            if (result.Succeeded)
-            {
-                if (await _roleManager.RoleExistsAsync(roleName))
-                {
-                    await _userManager.AddToRoleAsync(user, roleName);
-                }
-
-                return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
-            }
-
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-
-            return BadRequest(ModelState);
-        }*/
-    public async Task<IActionResult> Create(AppUser user, string roleName)
+    public async Task<IActionResult> Create(AppUser user)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-
-        var existingRole = await _roleManager.FindByNameAsync(roleName);
-
-        if (existingRole == null)
-        {
-            return BadRequest("Invalid role name");
-        }
 
         var result = await _userManager.CreateAsync(user);
 
         if (result.Succeeded)
         {
-            if (await _roleManager.RoleExistsAsync(roleName))
-            {
-                await _userManager.AddToRoleAsync(user, roleName);
-            }
+            await _userManager.AddToRoleAsync(user, "Customer");
 
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+            return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, user);
         }
 
         foreach (var error in result.Errors)
@@ -76,20 +40,14 @@ public class UserController : ControllerBase
         return BadRequest(ModelState);
     }
 
-    [HttpGet("{id}")]
-    [ProducesResponseType(typeof(AppUser), 200)]
-    [ProducesResponseType(404)]
-    public async Task<IActionResult> GetUser([FromRoute] string id)
+    [HttpGet]
+    public IActionResult GetUsers()
     {
-        var user = await _userManager.FindByIdAsync(id);
+        var users = _userManager.GetUsersInRoleAsync("Customer").Result.ToList();
 
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(user);
+        return Ok(users);
     }
+
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUser(string id, AppUser updatedUser)
     {
@@ -100,6 +58,11 @@ public class UserController : ControllerBase
 
         if (existingUser == null)
             return NotFound();
+
+        var userRoles = await _userManager.GetRolesAsync(existingUser);
+
+        if (!userRoles.Contains("Customer"))
+            return Forbid(); // Return 403 Forbidden if the user does not have the "Customer" role
 
         existingUser.UserName = updatedUser.UserName;
         existingUser.Email = updatedUser.Email;
@@ -117,6 +80,7 @@ public class UserController : ControllerBase
 
         return BadRequest(ModelState);
     }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(string id)
     {
@@ -125,10 +89,15 @@ public class UserController : ControllerBase
         if (existingUser == null)
             return NotFound();
 
+        var userRoles = await _userManager.GetRolesAsync(existingUser);
+
+        if (!userRoles.Contains("Customer"))
+            return Forbid(); // Return 403 Forbidden if the user does not have the "Customer" role
+
         var result = await _userManager.DeleteAsync(existingUser);
 
         if (result.Succeeded)
-            return NoContent();
+            return Ok(existingUser);
 
         foreach (var error in result.Errors)
         {
@@ -137,6 +106,7 @@ public class UserController : ControllerBase
 
         return BadRequest(ModelState);
     }
+
     [HttpGet("users-with-roles")]
     public IActionResult GetUsersWithRoles(string roleName)
     {
