@@ -18,32 +18,33 @@ public class UserController : ControllerBase
         _roleManager = roleManager;
     }
     [HttpPost]
-    public async Task<IActionResult> Create(AppUser user)
+    public async Task<IActionResult> Create(AppUser user, string roleName)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var result = await _userManager.CreateAsync(user);
+        var role = await _roleManager.FindByNameAsync(roleName);
 
-        if (result.Succeeded)
+        if (role != null && (roleName == "User" || roleName == "Contractor"))
         {
-            await _userManager.AddToRoleAsync(user, "Customer");
+            var result = await _userManager.CreateAsync(user);
+            if (result.Succeeded)
+            {
+                if (!await _userManager.IsInRoleAsync(user, roleName))
+                    await _userManager.AddToRoleAsync(user, roleName);
 
-            return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, user);
+                return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, user);
+            }
         }
 
-        foreach (var error in result.Errors)
-        {
-            ModelState.AddModelError(string.Empty, error.Description);
-        }
-
+        ModelState.AddModelError(string.Empty, "Invalid role or role does not exist");
         return BadRequest(ModelState);
     }
 
     [HttpGet]
     public IActionResult GetUsers()
     {
-        var users = _userManager.GetUsersInRoleAsync("Customer").Result.ToList();
+        var users = _userManager.GetUsersInRoleAsync("User").Result.ToList();
 
         return Ok(users);
     }
