@@ -209,8 +209,8 @@ namespace PIRS.Controllers
             return reportDtos;
         }
         /*//**/
-        [HttpPost("GetByLocation", Name = "GetByLocation")]
-        public ActionResult<List<ReportDto<ImageGallery>>> GetByLocation(GeoCoordinate geoCoordinate)
+        [HttpGet("GetByLocation", Name = "GetByLocation")]
+        public ActionResult<List<ReportDto<ImageGallery>>> GetByLocation([FromQuery]GeoCoordinate geoCoordinate)
         {
             List<ReportDto<ImageGallery>> reportDtos = new List<ReportDto<ImageGallery>>();
             var reports = _reportRepository.GetByLocation(geoCoordinate);
@@ -222,8 +222,8 @@ namespace PIRS.Controllers
             }
             return reportDtos;
         }
-        [HttpPost("Sort")]
-        public ActionResult Sort([FromBody] SortReportModel sort)
+        [HttpGet("Sort")]
+        public ActionResult Sort([FromQuery] SortReportModel sort)
         {
             var reports = _reportRepository.Sort(sort.CompanyId, sort.GeoCoordinate, sort.Status);
             var reportDtos = new List<ReportDto<ImageGallery>>();
