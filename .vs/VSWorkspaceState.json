@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\.github",
+    "\\.github\\workflows",
+    "\\Backend",
+    "\\Backend\\PIRS",
+    "\\Backend\\PIRS\\PIRS"
+  ],
+  "SelectedNode": "\\Backend\\PIRS\\PIRS.sln",
+  "PreviewInSolutionExplorer": false
+}
