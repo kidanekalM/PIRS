@@ -11,11 +11,70 @@ public class UserController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IWebHostEnvironment webHostEnvironment;
 
-    public UserController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
+    public UserController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IWebHostEnvironment webHostEnvironment)
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        this.webHostEnvironment = webHostEnvironment;
+    }
+    [HttpPost]
+    public async Task<IActionResult> UploadImage([FromForm] IFormFile file)
+    {
+        if (file != null && file.Length > 0)
+        {
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(webHostEnvironment.WebRootPath, "Images", fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var imageUrl = "/Images/" + fileName; 
+
+            return Ok(imageUrl);
+        }
+
+        
+        return BadRequest("Please select a file.");
+    }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> EditImage(string id, [FromForm] IFormFile file)
+    {
+        var existingImagePath = Path.Combine(webHostEnvironment.WebRootPath, "Images", id);
+
+        if (file != null && file.Length > 0)
+        {
+            var newFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var newFilePath = Path.Combine(webHostEnvironment.WebRootPath, "Images", newFileName);
+
+            using (var stream = new FileStream(newFilePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            
+            System.IO.File.Delete(existingImagePath);
+
+            return Ok(); 
+        }
+
+        
+        return BadRequest("Please select a file.");
+    }
+    [HttpDelete("{id}")]
+    public IActionResult DeleteImage(string id)
+    {
+        var imagePath = Path.Combine(webHostEnvironment.WebRootPath, "Images", id);
+
+        
+        System.IO.File.Delete(imagePath);
+
+        
+
+        return Ok(); 
     }
     [HttpPost]
     public async Task<IActionResult> Create(AppUser user, string roleName)
