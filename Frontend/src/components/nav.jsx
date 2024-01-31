@@ -1,11 +1,14 @@
+import { Link } from 'react-router-dom';
 function NavBar(){
     return(
         <>
         <nav className="navbar navbar-expand-lg bg-light sticky-top">
         <div className="container-fluid">
-          <a className="navbar-brand">
-            EthioRush
-          </a>
+            <Link to="/">
+              <button data-mdb-ripple-init type="button" className="btn btn-lg">
+                EthioRush
+                </button>
+            </Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -21,12 +24,16 @@ function NavBar(){
             <ul className="navbar-nav  me-auto mb-2 mb-lg-0">
             </ul>
                   <div className="d-flex align-items-center">
+        <Link to='signin'>
         <button data-mdb-ripple-init type="button" className="btn px-3 me-2">
-          Login
-        </button>
+          Sign In
+          </button>
+          </Link>
+        <Link to='signup'>
         <button data-mdb-ripple-init type="button" className="btn btn-dark me-3">
-          Sign up for free
+          Sign up
         </button>
+        </Link>
       </div>
           </div>
         </div>
