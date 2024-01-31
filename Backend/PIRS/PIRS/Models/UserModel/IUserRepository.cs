@@ -1,4 +1,4 @@
-﻿namespace PIRS.Models.UserModel
+﻿/*namespace PIRS.Models.UserModel
 {
     public interface IUserRepository
     {
@@ -8,3 +8,4 @@
         public List<User> GetAll();
     }
 }
+*/
