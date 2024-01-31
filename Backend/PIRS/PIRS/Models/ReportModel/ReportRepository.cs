@@ -12,11 +12,11 @@ namespace PIRS.Models.ReportModel
         private readonly PirsContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly HelperService helperService;
-        public ReportRepository(PirsContext pirsContext ,UserManager<AppUser> userManager, IWebHostEnvironment webHostEnvironment)
+        public ReportRepository(PirsContext pirsContext ,UserManager<AppUser> userManager, IWebHostEnvironment webHostEnvironment,IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _context = pirsContext;
-            helperService = new HelperService(webHostEnvironment, userManager);
+            helperService = new HelperService(webHostEnvironment, userManager,httpContextAccessor.HttpContext);
         }
 
         public async void Add(Report report)
@@ -39,7 +39,7 @@ namespace PIRS.Models.ReportModel
                 .Include(r => r.User)
                 .Include(r => r.Contractor)
                 .Include(r => r.location)
-                .Include(r => r.upvotes)
+                .Include(r => r.upvotes).ThenInclude(u => u.User)
                 .Include(r => r.pictures).ToList();
         }
 
@@ -50,7 +50,7 @@ namespace PIRS.Models.ReportModel
                 .Include(r => r.User)
                 .Include(r => r.Contractor)
                 .Include(r => r.location)
-                .Include(r => r.upvotes)
+                .Include(r => r.upvotes).ThenInclude(u => u.User)
                 .Include(r => r.pictures)
                 .Where(r => r.Company.Id.Equals(id.ToString())).ToList(); 
         }
@@ -62,7 +62,7 @@ namespace PIRS.Models.ReportModel
                 .Include(r => r.User)
                 .Include(r => r.Contractor)
                 .Include(r => r.location)
-                .Include(r => r.upvotes)
+                .Include(r => r.upvotes).ThenInclude(u => u.User)
                 .Include(r => r.pictures)
                 .Where(r => r.Company.Id.Equals(id.ToString() ) && r.status == status).ToList();
            
@@ -77,14 +77,14 @@ namespace PIRS.Models.ReportModel
                 .Include(r => r.location)
                 .Include(r=> r.upvotes)
                 .Include(r=>r.pictures)
-                .Include(r => r.upvotes)
+                .Include(r => r.upvotes).ThenInclude(u => u.User)
                 .Include(r => r.pictures)
                 .Where(r => r.Contractor.Id.Equals(id.ToString() ) ).ToList();
         }
 
         public Report GetById(int id)
         {
-            return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).FirstOrDefault(r => r.ReportId == id);
+            return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).FirstOrDefault(r => r.ReportId == id);
         }
 
         public List<Report> GetByLocation(GeoCoordinate location)
@@ -94,7 +94,7 @@ namespace PIRS.Models.ReportModel
                 .Include(r => r.User)
                 .Include(r => r.Contractor)
                 .Include(r => r.location)
-                .Include(r => r.upvotes)
+                .Include(r => r.upvotes).ThenInclude(u => u.User)
                 .Include(r => r.pictures)
                 .ToList();
             reports.Sort((a,b)=>(int)location.GetDistanceTo(new GeoCoordinate(a.location.Latitude, a.location.Longitude))-(int)location.GetDistanceTo(new GeoCoordinate(b.location.Latitude,b.location.Longitude))); 
@@ -107,7 +107,7 @@ namespace PIRS.Models.ReportModel
                 .Include(r => r.User)
                 .Include(r => r.Contractor)
                 .Include(r => r.location)
-                .Include(r => r.upvotes)
+                .Include(r => r.upvotes).ThenInclude(u => u.User)
                 .Include(r => r.pictures)
                 .Where<Report>(r=>r.Company.Id.Equals(id.ToString()) ).ToList();
             reports.Sort((a, b) => (int)location.GetDistanceTo(a.location) - (int)location.GetDistanceTo(b.location));
@@ -120,7 +120,7 @@ namespace PIRS.Models.ReportModel
                 .Include(r => r.User)
                 .Include(r => r.Contractor)
                 .Include(r => r.location)
-                .Include(r => r.upvotes)
+                .Include(r => r.upvotes).ThenInclude(u => u.User)
                 .Include(r => r.pictures).Where(r => r.User.Id.Equals( id.ToString() ) ).ToList();
         }
 
@@ -134,35 +134,35 @@ namespace PIRS.Models.ReportModel
         {
             if ((companyId != null) && (geoCoordinate != null) && (status.HasValue))
             {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).Include(r => r.pictures).Where(r => (r.Company.Id == companyId) && (r.status == status)).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
+                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).Where(r => (r.Company.Id == companyId) && (r.status == status)).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
             }
             else if ((companyId != null) && (geoCoordinate != null))
             {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).Include(r => r.pictures).Where(r => r.Company.Id == companyId).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
+                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).Where(r => r.Company.Id == companyId).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
             }
             else if ((companyId != null) && (status.HasValue))
             {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).Include(r => r.pictures).Where(r => (r.Company.Id == companyId) && (r.status == status)).OrderBy(r => r.upvotes.Count).ToList();
+                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).Where(r => (r.Company.Id == companyId) && (r.status == status)).OrderBy(r => r.upvotes.Count).ToList();
             }
             else if ((geoCoordinate != null) && (status.HasValue))
             {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).Include(r => r.pictures).Where(r => (r.status == status)).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
+                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).Where(r => (r.status == status)).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
             }
             else if (companyId != null)
             {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).Include(r => r.pictures).Where(r => r.Company.Id == companyId).OrderBy(r => r.upvotes.Count).ToList();
+                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).Where(r => r.Company.Id == companyId).OrderBy(r => r.upvotes.Count).ToList();
             }
             else if (geoCoordinate != null)
             {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).Include(r => r.pictures).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
+                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
             }
             else if (status.HasValue)
             {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).Include(r => r.pictures).Where(r => r.status == status).OrderBy(r => r.upvotes.Count).ToList();
+                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).Where(r => r.status == status).OrderBy(r => r.upvotes.Count).ToList();
             }
             else
             {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).Include(r => r.pictures).OrderBy(r => r.upvotes.Count).ToList();
+                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).OrderBy(r => r.upvotes.Count).ToList();
             }
         }
 

@@ -14,7 +14,7 @@ namespace PIRS.Models.ReportModel
     public double? awardAmount { get; set; }
     public ReportStatus? status { get; set; } = ReportStatus.newReport;
     public DateTime? DateTime { get; set; }
-    public List<ReportUpvote>? upvotes { get; set; }
+    public List<ReportUpvoteDto>? upvotes { get; set; }
     public List<T>? pictures { get; set; }
     }
 }

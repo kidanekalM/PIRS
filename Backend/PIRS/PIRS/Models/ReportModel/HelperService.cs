@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query;
 using PIRS.Models.UserModel;
@@ -15,10 +16,12 @@ namespace PIRS.Models.ReportModel
          */
         public readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<AppUser> _userManager;
-        public HelperService(IWebHostEnvironment webHostEnvironment, UserManager<AppUser> userManager)
+        private readonly HttpContext _httpContext;
+        public HelperService(IWebHostEnvironment webHostEnvironment, UserManager<AppUser> userManager,HttpContext httpContext)
         {
             _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
+            _httpContext = httpContext;
         }
         public List<ImageGallery> SaveImages(List<IFormFile> images)
         {
@@ -39,28 +42,14 @@ namespace PIRS.Models.ReportModel
             }
             return savedPictures;
         }
-        public List<byte[]> GetImages(List<ImageGallery> images)
+        public List<ImageGallery> GetImages(List<ImageGallery> images)
         {
-            var savedImages = new List<byte[]>();
-            if(images != null)
-            foreach (var img in images)
+            var savedImages = new List<ImageGallery>();
+            if(images !=null)
+            foreach(var img in images)
             {
-                var file = Path.Combine(_webHostEnvironment.WebRootPath, img.Image);
-                try
-                {
-                    using var ms = new MemoryStream();
-                    using (FileStream stream = new FileStream(file, FileMode.Open))
-                    {                                                
-                        stream.CopyTo(ms);
-                        var fileBytes = ms.ToArray();
-                        savedImages.Add(fileBytes);
-                    }
-                    
-                }
-                catch(Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
+                var ImgUrl = _httpContext.Request.Scheme+"://"+_httpContext.Request.Host+"/"+img.Image.Replace("\\","/");
+                savedImages.Add(new ImageGallery { Id= img.Id,Image=ImgUrl});
             }
             return savedImages;
         }
@@ -75,10 +64,16 @@ namespace PIRS.Models.ReportModel
                 Description = report.Description,
                 location = report.location,
                 status = ReportStatus.newReport,
-                upvotes = report.upvotes,
                 DateTime = report.DateTime,
-                pictures = report.pictures
+                pictures = GetImages(report.pictures)
             };
+            reportDto.upvotes = new List<ReportUpvoteDto>();
+            if(report.upvotes !=null)
+                foreach(var upv in report.upvotes)
+                {
+                    reportDto.upvotes.Add(new ReportUpvoteDto() { Id=upv.Id,UserId=upv.User.Id });
+                }
+
             reportDto.CompanyId = report.Company != null ? report.Company.Id : null;
             reportDto.UserId = report.User != null ? report.User.Id : null;
             reportDto.ContractorId = report.Contractor != null ? report.Contractor.Id : null;
@@ -121,11 +116,18 @@ namespace PIRS.Models.ReportModel
                 },
                 awardAmount = reportDto.awardAmount,
                 status = ReportStatus.newReport,
-                upvotes = reportDto.upvotes,
                 DateTime = DateTime.Now,
                 pictures = SaveImages(reportDto.pictures)
             };
-            report = report;
+            /*
+            report.upvotes = new List<ReportUpvote>();
+            if(reportDto.upvotes !=null)
+            foreach(var upvote in reportDto.upvotes)
+            {
+                    var upv = new ReportUpvote();
+                    upv.User = await _userManager.FindByIdAsync(upvote.UserId);
+                    report.upvotes.Add(upv);
+            }*/
             return report;
         }
 

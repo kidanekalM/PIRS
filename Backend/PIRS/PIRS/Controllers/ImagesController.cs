@@ -7,7 +7,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace PIRS.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class ImagesController : ControllerBase
     {
@@ -17,12 +17,13 @@ namespace PIRS.Controllers
             this.webHostEnvironment = webHostEnvironment;
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetImage(string name)
+        [HttpGet]
+        public IActionResult GetImage(string id)
         {
-            var pathToFile = Path.Combine(webHostEnvironment.WebRootPath, "Images", name); 
+            var pathToFile = Path.Combine(webHostEnvironment.WebRootPath, "Images");
+            pathToFile = Path.Combine(pathToFile, id);
             var stream = System.IO.File.OpenRead(pathToFile);
-            return File(stream, "application/octet-stream");
+            return File(stream, "image/"+id.Substring(id.IndexOf(".")));
         }
 
         // Additional actions for other image operations...

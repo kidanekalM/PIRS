@@ -10,18 +10,19 @@ namespace PIRS.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [DisableRequestSizeLimit]
     public class ReportController : ControllerBase
     {
         private readonly IReportRepository _reportRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly HelperService helperService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public ReportController(UserManager<AppUser> userManager,IReportRepository reportRepository,IWebHostEnvironment webHostEnvironment)
+        public ReportController(UserManager<AppUser> userManager,IReportRepository reportRepository,IWebHostEnvironment webHostEnvironment,IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _reportRepository = reportRepository;
             _webHostEnvironment = webHostEnvironment;
-            helperService = new HelperService(webHostEnvironment,userManager);
+            helperService = new HelperService(webHostEnvironment,userManager,httpContextAccessor.HttpContext);
         }
 
         [HttpPost]
@@ -55,11 +56,81 @@ namespace PIRS.Controllers
             oldReport.awardAmount = newReport.awardAmount;
             oldReport.status = newReport.status;
             oldReport.DateTime = newReport.DateTime;
-            oldReport.upvotes = newReport.upvotes;
-            oldReport.pictures = newReport.pictures;
+            /*
+            if (oldReport.upvotes == null)
+                oldReport.upvotes = new List<ReportUpvote>();
+            else
+                oldReport.upvotes.Clear();
+            if (reportDto.upvotes != null)
+                foreach (var upvote in reportDto.upvotes)
+                {
+                    var upv = new ReportUpvote();
+                    upv.User = await _userManager.FindByIdAsync(upvote.UserId);
+                    upv.Id = upvote.Id;
+                    oldReport.upvotes.Add(upv);
+                }
+            */
+            if (newReport.pictures != null)
+            {
+                if (oldReport.pictures != null)
+                {
+                    foreach (var img in oldReport.pictures)
+                    {
+                        var AbsLocation = Path.Combine(_webHostEnvironment.WebRootPath, img.Image);
+                        System.IO.File.Delete(AbsLocation);
+                    }
+                    oldReport.pictures.Clear();
+                }
+                else
+                {
+                    oldReport.pictures = new List<ImageGallery>();
+                }
+                foreach (var pic in newReport.pictures)
+                {
+                    oldReport.pictures.Add(pic);
+                }
+            }
 
             _reportRepository.Update(oldReport);
             return helperService.ToDto(oldReport);
+        }
+        [HttpPost("Upvote")]
+        public async Task<ActionResult<List<ReportUpvote>>> Upvote(int reportId,string userId)
+        {
+            var report = _reportRepository.GetById(reportId);
+            var user = await _userManager.FindByIdAsync(userId);
+            if((user == null)|| (report == null)) 
+            {
+                return NotFound();
+            }
+            if(report.upvotes !=null)
+            {
+                report.upvotes.Add(new ReportUpvote() { User=user});
+                _reportRepository.Update(report);
+            }
+            else
+            {
+                report.upvotes = new List<ReportUpvote>();
+                report.upvotes.Add(new ReportUpvote() { User = user });
+                _reportRepository.Update(report);
+
+            }
+            return report.upvotes;
+        }
+        [HttpDelete("Upvote")]
+        public async Task<ActionResult<List<ReportUpvote>>> DeleteUpvote(int reportId, int upvoteId)
+        {
+            var report = _reportRepository.GetById(reportId);
+            if ((report != null) &&(report.upvotes != null))
+            {
+                report.upvotes.Remove(report.upvotes.FirstOrDefault(upv=> upv.Id==upvoteId));
+                _reportRepository.Update(report);
+            }
+            else
+            {
+                return NotFound();
+            }
+            return report.upvotes;
         }
         [HttpDelete]
         public ActionResult<ReportDto<ImageGallery>> Delete(int id)
@@ -138,7 +209,7 @@ namespace PIRS.Controllers
             return reportDtos;
         }
         /*//**/
-        [HttpGet("GetByLocation/{Location}", Name = "GetByLocation")]
+        [HttpPost("GetByLocation", Name = "GetByLocation")]
         public ActionResult<List<ReportDto<ImageGallery>>> GetByLocation(GeoCoordinate geoCoordinate)
         {
             List<ReportDto<ImageGallery>> reportDtos = new List<ReportDto<ImageGallery>>();
@@ -151,16 +222,15 @@ namespace PIRS.Controllers
             }
             return reportDtos;
         }
-        [HttpGet("Sort/{companyId}/{geoCoordinate}/{status}")]
-        public ActionResult Sort(GeoCoordinate geoCoordinate=null,string companyId = null, ReportStatus status = 0)
+        [HttpPost("Sort")]
+        public ActionResult Sort([FromBody] SortReportModel sort)
         {
-            var reports = _reportRepository.Sort(companyId, geoCoordinate, status);
+            var reports = _reportRepository.Sort(sort.CompanyId, sort.GeoCoordinate, sort.Status);
             var reportDtos = new List<ReportDto<ImageGallery>>();
             foreach(Report r in reports)
             {
                 reportDtos.Add(helperService.ToDto(r));
             }
-
             return Ok(reportDtos);
         }
 
