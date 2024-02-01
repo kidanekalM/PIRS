@@ -84,7 +84,7 @@ public class UserController : ControllerBase
 
         var role = await _roleManager.FindByNameAsync(roleName);
 
-        if (role != null && (roleName == "User" || roleName == "Contractor"))
+        if (role != null && (roleName == "User" || roleName == "Contractor" || roleName == "Company"))
         {
             var result = await _userManager.CreateAsync(user);
             if (result.Succeeded)
