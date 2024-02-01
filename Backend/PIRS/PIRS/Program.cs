@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PIRS.Models;
 using PIRS.Models.ReportModel;
+using PIRS.Models.TransactionModel;
 using PIRS.Models.UserModel;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +25,9 @@ builder.Services.AddDbContext<PirsContext>(options => {
 builder.Services.AddIdentity<AppUser, IdentityRole>().
 AddEntityFrameworkStores<PirsContext>().
 AddDefaultTokenProviders();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
+
 
 
 
