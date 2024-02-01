@@ -78,7 +78,7 @@ namespace PIRS.Controllers
             IList<string> roles = await userManager.GetRolesAsync(user);
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name,user.Name ),
+                new Claim(ClaimTypes.Name,user.Name),
                 new Claim(ClaimTypes.Role, roles!=null ?roles[0] :"User" )
             };
 
