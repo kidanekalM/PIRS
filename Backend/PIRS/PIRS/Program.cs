@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PIRS.Models;
 using PIRS.Models.ReportModel;
 using PIRS.Models.TransactionModel;
 using PIRS.Models.UserModel;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +23,28 @@ builder.Services.AddDbContext<PirsContext>(options => {
     .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
     options.EnableSensitiveDataLogging();
 });
+var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
+var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
+var jwtAudience = builder.Configuration.GetSection("Jwt:Audience").Get<string>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
+    });
 
-
-builder.Services.AddIdentity<AppUser, IdentityRole>().
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+}).
 AddEntityFrameworkStores<PirsContext>().
 AddDefaultTokenProviders();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();

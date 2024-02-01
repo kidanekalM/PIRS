@@ -11,67 +11,89 @@ using Microsoft.AspNetCore.Identity;
 
 namespace PIRS.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<AppUser> userManager;
         private readonly SignInManager<AppUser> signInManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public AccountController(IConfiguration configuration, SignInManager<AppUser> signInManager,UserManager<AppUser> userManager)
+        public AccountController(IConfiguration configuration, SignInManager<AppUser> signInManager,UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _configuration = configuration;
             this.signInManager = signInManager;
             this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         [HttpPost]
         [Route("signup")]
-        public async Task<IActionResult> SignUp(AppUser user, string password)
+        public async Task<IActionResult> SignUp(AppUser user,string roleName, string password)
         {
-            if((user == null) || (string.IsNullOrEmpty(password)) || (!ModelState.IsValid))
+            if ((!ModelState.IsValid) ||(user == null) || (string.IsNullOrEmpty(password)))
+                return BadRequest(ModelState);
+
+            var role = await roleManager.FindByNameAsync(roleName);
+
+            if (role != null && (roleName == "User" || roleName == "Contractor" || roleName == "Company"))
             {
-                return BadRequest();
+
+                var result = await userManager.CreateAsync(user);
+                if (!result.Succeeded) return Unauthorized(result.Errors);
+                if (!await userManager.IsInRoleAsync(user, roleName))
+                    await userManager.AddToRoleAsync(user, roleName);
+                await signInManager.PasswordSignInAsync(user, password, false, false);
+                IList<string> roles = await userManager.GetRolesAsync(user);
+                var claims = new[]
+                {
+                    new Claim(ClaimTypes.Name, user.Name ),
+                    new Claim(ClaimTypes.Role, roleName )
+                };
+                var token = GenerateJwtToken(claims);
+
+                return Ok(new { Token = token });
             }
-            userManager.CreateAsync()
-            return Ok(); // User successfully signed up, return 200 OK status code
+
+            ModelState.AddModelError(string.Empty, "Invalid role or role does not exist");
+            return BadRequest(ModelState);
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login(string email,string password)
         {
-            // Perform any necessary validation checks
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            // Authenticate the user (e.g., check credentials against the database)
-            // ...
-
-            // Create claims for the authenticated user
+            var user = await userManager.FindByEmailAsync(email);
+            if(user == null) return BadRequest(ModelState);
+            var result = await signInManager.PasswordSignInAsync(user, password,false,false);
+            if(!result.Succeeded)
+            {
+                return Unauthorized();
+            }
+            IList<string> roles = await userManager.GetRolesAsync(user);
             var claims = new[]
             {
-              //  new Claim(ClaimTypes.NameIdentifier,loginModel.Username),
-                new Claim(ClaimTypes.Role, "comp"),
-                // Add any other necessary claims
+                new Claim(ClaimTypes.Name,user.Name ),
+                new Claim(ClaimTypes.Role, roles!=null ?roles[0] :"User" )
             };
 
-            // Generate a JWT token
-            //var token = GenerateJwtToken(claims);
+            var token = GenerateJwtToken(claims);
 
-            // Return the token to the client
-            //return Ok(new { Token = token });
+            return Ok(new { Token = token });
         }
-        /*
+
+        [NonAction]
         private string GenerateJwtToken(Claim[] claims)
         {
-            var jwtSecret = _configuration["JwtSettings:Secret"];
-            var jwtIssuer = _configuration["JwtSettings:Issuer"];
-            var jwtAudience = _configuration["JwtSettings:Audience"];
-            var jwtExpiryMinutes = Convert.ToInt32(_configuration["JwtSettings:ExpiryMinutes"]);
+            var jwtSecret = _configuration["Jwt:Key"];
+            var jwtIssuer = _configuration["Jwt:Issuer"];
+            var jwtAudience = _configuration["Jwt:Audience"];
+            var jwtExpiryMinutes = 120;
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -86,6 +108,6 @@ namespace PIRS.Controllers
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-        }*/
+        }
     }
 }
