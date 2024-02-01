@@ -88,7 +88,10 @@ namespace PIRS.Models.ReportModel
                     var d = report.DateTime != null ? (DateTime.Now - report.DateTime).TotalDays : 0;
                     var formula = report.Company.Formula;
                     formula = formula.Replace("u", u.ToString());
+                    formula = formula.Replace("U", u.ToString());
                     formula = formula.Replace("d", d.ToString());
+                    formula = formula.Replace("D", d.ToString());
+
                     reportDto.awardAmount = Convert.ToDouble(new DataTable().Compute(formula,string.Empty));
                 }
             }
