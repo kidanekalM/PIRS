@@ -44,7 +44,16 @@ public class UserController : ControllerBase
         ModelState.AddModelError(string.Empty, "Invalid role or role does not exist");
         return BadRequest(ModelState);
     }
-
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUser(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        return Ok(user);
+    }
     [HttpGet]
     public IActionResult GetUsers()
     {
