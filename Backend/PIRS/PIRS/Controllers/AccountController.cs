@@ -53,7 +53,7 @@ namespace PIRS.Controllers
                 };
                 var token = GenerateJwtToken(claims);
 
-                return Ok(new { Token = token });
+                return Ok(new { Token = token, User= user });
             }
 
             ModelState.AddModelError(string.Empty, "Invalid role or role does not exist");
@@ -84,7 +84,7 @@ namespace PIRS.Controllers
 
             var token = GenerateJwtToken(claims);
 
-            return Ok(new { Token = token });
+            return Ok(new { Token = token ,User = user});
         }
 
         [NonAction]

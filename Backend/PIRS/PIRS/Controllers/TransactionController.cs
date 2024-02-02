@@ -44,7 +44,7 @@ namespace PIRS.Controllers
             };
 
             var transact = _transactionRepository.add(transaction);
-
+            /*
             var chapaTransaction = new
             {
                 amount = transactionDto.Payment,
@@ -60,7 +60,7 @@ namespace PIRS.Controllers
 
             var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "CHASECK_TEST-DDPjhSKiRFaBHM5cy1nrtSGeuMP0HgFC"); 
-            var response = await client.PostAsJsonAsync("https://api-demo.chapa.co/v1/transaction/initialize", chapaTransaction);
+            var response = await client.PostAsJsonAsync("https://api.chapa.co/v1/transaction/initialize", chapaTransaction);
             var content = await response.Content.ReadAsStringAsync();
             var chapaResponse = JsonConvert.DeserializeObject<dynamic>(content);
 
@@ -71,8 +71,9 @@ namespace PIRS.Controllers
             }
             else
             {
-                return BadRequest(chapaResponse.message);
-            }
+                return BadRequest(response);
+            }*/
+            return Ok(transact);
         }
         /*
         [HttpPost]

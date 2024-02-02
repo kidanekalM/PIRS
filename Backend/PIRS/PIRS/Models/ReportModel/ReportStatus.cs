@@ -5,6 +5,7 @@
         newReport,
         inProgress,
         Submitted,
-        Approved
+        Approved,
+        Rejected
     }
 }

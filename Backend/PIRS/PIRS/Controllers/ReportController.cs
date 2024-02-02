@@ -169,7 +169,7 @@ namespace PIRS.Controllers
                 return NotFound();
             return helperService.ToDto(report);
         }
-        [HttpGet("GetByContractor/{ContractrId}",Name ="GetByContractor")]
+        [HttpGet("GetByContractor",Name ="GetByContractor")]
         public ActionResult<List<ReportDto<ImageGallery>>> GetByContractor(int id)
         {
             List<ReportDto<ImageGallery>> reportDtos = new List<ReportDto<ImageGallery>>();
@@ -182,7 +182,7 @@ namespace PIRS.Controllers
             }
             return reportDtos;
         }
-        [HttpGet("GetByUser/{UserId}", Name = "GetByUser")]
+        [HttpGet("GetByUser", Name = "GetByUser")]
         public ActionResult<List<ReportDto<ImageGallery>>> GetByUser(int id)
         {
             List<ReportDto<ImageGallery>> reportDtos = new List<ReportDto<ImageGallery>>();
@@ -195,7 +195,7 @@ namespace PIRS.Controllers
             }
             return reportDtos;
         }
-        [HttpGet("GetByCompany/{CompanyId}", Name = "GetByCompany")]
+        [HttpGet("GetByCompany", Name = "GetByCompany")]
         public ActionResult<List<ReportDto<ImageGallery>>> GetByCompnany(int id)
         {
             List<ReportDto<ImageGallery>> reportDtos = new List<ReportDto<ImageGallery>>();
