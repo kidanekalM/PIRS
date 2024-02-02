@@ -1,5 +1,5 @@
 import {Link} from 'react-router-dom'
-const CNav = () => {
+const ContNav = () => {
     return ( 
         <nav className="navbar navbar-expand-lg sticky-top bg-light">
         <div className="container-fluid">
@@ -20,16 +20,25 @@ const CNav = () => {
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
             <ul className="navbar-nav">
               <li className="nav-item">
-              <Link to='../cdashboard'>
-                <p className="nav-link active" aria-current="page"
-                  >Home
-                  </p>
+              <Link to='../contdashboard'>
+              <button data-mdb-ripple-init type="button" className="btn">
+                  Home
+                </button>
               </Link>
               </li>
               <li className="nav-item">
-              <Link to='../cprofile'>
-                <p className="nav-link">Profile</p>
+              <Link to='../contprofile'>
+              <button data-mdb-ripple-init type="button" className="btn">
+                  Profile
+                </button> 
               </Link>
+              </li>
+              <li className="nav-item">
+                <Link to='../'>                
+                <button data-mdb-ripple-init type="button" className="btn">
+                  Log Out
+                </button> 
+                </Link>
               </li>
             </ul>
           </div>
@@ -38,4 +47,4 @@ const CNav = () => {
      );
 }
  
-export default CNav;
+export default ContNav;

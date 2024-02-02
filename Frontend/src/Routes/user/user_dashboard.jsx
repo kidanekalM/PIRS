@@ -1,10 +1,9 @@
-import UNav from "../../components/user_nav";
+import UNav from "../../components/user_dashboard/user_nav";
 
 const UDashboard = () => {
     return ( 
         <>
         <UNav/>
-        <h1 className="hello bg-dark">Hello User</h1>
         </>
      )
 }

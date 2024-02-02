@@ -1,4 +1,3 @@
-import '../comp_styles/footer.css'
 const Footer = () => {
     return (
         <>

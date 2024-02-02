@@ -1,4 +1,4 @@
-import UNav from "../../components/user_nav";
+import UNav from "../../components/user_dashboard/user_nav";
 
 const UProfile = () => {
     return ( 

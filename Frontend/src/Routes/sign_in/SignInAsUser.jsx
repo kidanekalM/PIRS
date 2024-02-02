@@ -25,7 +25,7 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+export default function SignInAsUser() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -49,7 +49,7 @@ export default function SignIn() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Email"
               name="email"
               autoComplete="email"
               autoFocus
@@ -71,17 +71,7 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 1 }}
             >
-              Sign In as User
-            </Button>
-            </Link>
-            <Link to='../cdashboard'>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 1, mb: 2 }}
-            >
-              Sign In as Contractor
+              Sign In
             </Button>
             </Link>
           </Box>

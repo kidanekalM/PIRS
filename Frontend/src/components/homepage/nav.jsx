@@ -24,12 +24,12 @@ function NavBar(){
             <ul className="navbar-nav  me-auto mb-2 mb-lg-0">
             </ul>
                   <div className="d-flex align-items-center">
-        <Link to='signin'>
+        <Link to='choose'>
         <button data-mdb-ripple-init type="button" className="btn px-3 me-2">
           Sign In
           </button>
           </Link>
-        <Link to='signup'>
+        <Link to='choosecreate'>
         <button data-mdb-ripple-init type="button" className="btn btn-dark me-3">
           Sign up
         </button>

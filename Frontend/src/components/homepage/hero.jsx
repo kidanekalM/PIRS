@@ -1,14 +1,17 @@
-import '../../comp_styles/hero.css';
-const user_hero = () => {
+import { Link } from 'react-router-dom';
+import '../../component_styles/hero.css';
+const Hero = () => {
     return ( 
         <div>
         <section className="light hero">
           <div className="heroInner">
             <span>
               <h1>Report, Gain Ratings and Expect Support in a Short Time</h1>
-              <a href="#" className="btn btn-light">
+              <Link to="/signupasuser">
+              <p className="btn btn-light">
                 Report Now
-              </a>
+              </p>
+              </Link>
             </span>
           </div>
         </section>
@@ -16,4 +19,4 @@ const user_hero = () => {
      );
 }
  
-export default user_hero;
+export default Hero;
