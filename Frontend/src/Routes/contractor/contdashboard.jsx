@@ -1,5 +1,5 @@
 import ContNav from "../../components/cont_dashboard/cont_nav";
-import ReportCard from "../../components/user_dashboard/report_card";
+import ReportCard from "../../components/Report/report_card";
 const ContDashboard = () => {
     return ( 
         <>
