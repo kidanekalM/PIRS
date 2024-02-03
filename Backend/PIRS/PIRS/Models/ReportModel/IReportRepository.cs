@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Routing;
 using System.Device;
 using System.Device.Location;
+using System.Reflection;
 
 namespace PIRS.Models.ReportModel
 {
@@ -13,9 +14,10 @@ namespace PIRS.Models.ReportModel
         Report GetById(int id);
         List<Report> GetByUser(int id);
         List<Report> GetByCompany(int id);
-        List<Report> GetByCompany(int id,Report.ReportStatus status);
+        List<Report> GetByCompany(int id,ReportStatus status);
         List<Report> GetByContractor(int id);
         List<Report> GetByLocation(GeoCoordinate location);
-        List<Report> GetByLocationAndCompany(GeoCoordinate location,int id);
+        //sorts on all parameters compnay, dateTime, Upvotes, location, status 
+        List<Report> Sort(string? companyId, GeoCoordinate? geoCoordinate, ReportStatus? status);
     }
 }
