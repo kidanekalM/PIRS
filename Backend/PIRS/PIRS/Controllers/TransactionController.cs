@@ -25,7 +25,7 @@ namespace PIRS.Controllers
             _userManager = userManager;
             _reportRepository = reportRepository;
         }
-        
+
         [HttpPost]
         public async Task<ActionResult<TransactionDto>> Add(TransactionDto transactionDto)
         {
@@ -33,82 +33,42 @@ namespace PIRS.Controllers
             var contractor = await _userManager.FindByIdAsync(transactionDto.ContractorId);
             var report = _reportRepository.GetById(transactionDto.ReportId);
 
-            var transaction = new Transaction
-            {
-                Id = transactionDto.Id,
-                Payment = transactionDto.Payment,
-                DateTime = transactionDto.DateTime,
-                Company = company,
-                Contractor = contractor,
-                Report = report
-            };
-
-            var transact = _transactionRepository.add(transaction);
-            /*
-            var chapaTransaction = new
-            {
-                amount = transactionDto.Payment,
-                currency = "ETB", 
-                email = contractor.Email,
-                first_name = contractor.FirstName, 
-                last_name = contractor.LastName, 
-                phone_number = contractor.PhoneNumber, 
-                tx_ref = transactionDto.Id.ToString(), 
-                callback_url = "https://localhost:7077/swagger/index.html", 
-                return_url = "https://localhost:7077/swagger/index.html"
-            };
-
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "CHASECK_TEST-DDPjhSKiRFaBHM5cy1nrtSGeuMP0HgFC"); 
-            var response = await client.PostAsJsonAsync("https://api.chapa.co/v1/transaction/initialize", chapaTransaction);
-            var content = await response.Content.ReadAsStringAsync();
-            var chapaResponse = JsonConvert.DeserializeObject<dynamic>(content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var returnUrl = chapaResponse.data.authorization_url;
-                return Ok(new { Transaction = transact, ReturnUrl = returnUrl });
-            }
-            else
-            {
-                return BadRequest(response);
-            }*/
-            return Ok(transact);
-        }
-        /*
-        [HttpPost]
-        public async Task<ActionResult<TransactionDto>> Add(TransactionDto transactionDto)
-        {
-            AppUser company = await _userManager.FindByIdAsync(transactionDto.CompanyId);
-            var contractor = await _userManager.FindByIdAsync(transactionDto.ContractorId);
-            var report = _reportRepository.GetById(transactionDto.ReportId);
-
-            var transaction = new Transaction
-            {
-                Id = transactionDto.Id,
-                Payment = transactionDto.Payment,
-                DateTime = transactionDto.DateTime,
-                Company = company,
-                Contractor = contractor,
-                Report = report
-            };
-            var transact = _transactionRepository.add(transaction);
-            Chapa chapa = new("CHASECK_TEST-DDPjhSKiRFaBHM5cy1nrtSGeuMP0HgFC"); 
+            Chapa chapa = new("CHASECK_TEST-rsh3UiMpIBytuEGhtyBPKtRU6ziR7Anj");
 
             var ID = Chapa.GetUniqueRef();
 
             var Request = new ChapaRequest(
                 amount: transactionDto.Payment,
-                email: contractor.Email, 
-                firstName: contractor.FirstName, 
-                lastName: contractor.LastName, 
+                email: "golden1flying1eagle@gmail.com",
+                firstName: company.Name,
+                lastName: "Company",
                 tx_ref: ID,
-                callback_url: "https://localhost:7077/swagger/index.html" 
+                callback_url: "https://localhost:7077/swagger/index.html",
+                customDescription: "Payment for resolution of "+report.Title,
+                customLogo: company.Logo,
+                customTitle:"Contractor Payment"
             );
             var Result = await chapa.RequestAsync(Request);
-            return Ok(new { Transaction = transact, CheckoutUrl = Result.CheckoutUrl });
+            if (Result.Status.Equals("success"))
+            {
+                var transaction = new Transaction
+                {
+                    Id = transactionDto.Id,
+                    Payment = transactionDto.Payment,
+                    DateTime = transactionDto.DateTime,
+                    Company = company,
+                    Contractor = contractor,
+                    Report = report
+                };
+                var transact = _transactionRepository.add(transaction);
+                return Ok(new { Transaction = transactionDto, result = Result });
+            }
+            else
+            {
+                return Ok(new { Transaction = transactionDto, result = Result });
+            }
         }
-        */
+        
         [HttpGet]
         [Route("GetById/{id}")]
         public ActionResult<TransactionDto> GetById(int id)

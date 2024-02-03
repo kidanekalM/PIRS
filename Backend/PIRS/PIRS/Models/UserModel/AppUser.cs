@@ -9,7 +9,7 @@ namespace PIRS.Models.UserModel
         //Company
         public string? Formula { get; set; }
         // Company and Contractor 
-        public string PaymentInfo { get; } = "CHASECK_TEST-DDPjhSKiRFaBHM5cy1nrtSGeuMP0HgFC";
+        public string PaymentInfo { get; } = "CHASECK_TEST-rsh3UiMpIBytuEGhtyBPKtRU6ziR7Anj";
         // Name
         public string? Name { get; set; }
         // For contractor 
