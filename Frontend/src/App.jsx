@@ -15,6 +15,7 @@ import ContProfile from './Routes/contractor/cont_profile'
 import CreateReport from './Routes/user/create_report'
 import MyReports from './Routes/user/my_reports'
 import Trending from './Routes/user/trending'
+import Company from './Routes/company/Company'
 
 function App() {
   return (
@@ -37,6 +38,8 @@ function App() {
          <Route path="createreport" element={<CreateReport/>} />
          <Route path="reports" element={<MyReports/>} />
          <Route path="trending" element={<Trending/>} />
+
+         <Route path='Company/*' element={<Company/>}/>
          
         </Routes>
       </BrowserRouter>
