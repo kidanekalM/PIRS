@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PIRS.Models;
 
@@ -11,9 +12,10 @@ using PIRS.Models;
 namespace PIRS.Migrations
 {
     [DbContext(typeof(PirsContext))]
-    partial class PirsContextModelSnapshot : ModelSnapshot
+    [Migration("20240130103521_migration2")]
+    partial class migration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,6 +157,32 @@ namespace PIRS.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PIRS.Models.InventoryModel.Inventory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Inventory");
+                });
+
+            modelBuilder.Entity("PIRS.Models.RatingModel.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ratings");
+                });
+
             modelBuilder.Entity("PIRS.Models.ReportModel.ImageGallery", b =>
                 {
                     b.Property<int>("Id")
@@ -289,28 +317,7 @@ namespace PIRS.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("CompanyId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ContractorId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Payment")
-                        .HasColumnType("float");
-
-                    b.Property<int>("ReportId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("ContractorId");
-
-                    b.HasIndex("ReportId");
 
                     b.ToTable("Transactions");
                 });
@@ -334,19 +341,11 @@ namespace PIRS.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Formula")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HiringCompanyId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -371,11 +370,17 @@ namespace PIRS.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PaymentInfo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("RatingId")
+                        .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -398,6 +403,8 @@ namespace PIRS.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("RatingId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -500,36 +507,19 @@ namespace PIRS.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PIRS.Models.TransactionModel.Transaction", b =>
-                {
-                    b.HasOne("PIRS.Models.UserModel.AppUser", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.HasOne("PIRS.Models.UserModel.AppUser", "Contractor")
-                        .WithMany()
-                        .HasForeignKey("ContractorId");
-
-                    b.HasOne("PIRS.Models.ReportModel.Report", "Report")
-                        .WithMany()
-                        .HasForeignKey("ReportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Company");
-
-                    b.Navigation("Contractor");
-
-                    b.Navigation("Report");
-                });
-
             modelBuilder.Entity("PIRS.Models.UserModel.AppUser", b =>
                 {
                     b.HasOne("PIRS.Models.UserModel.AppUser", "HiringCompany")
                         .WithMany()
                         .HasForeignKey("HiringCompanyId");
 
+                    b.HasOne("PIRS.Models.RatingModel.Rating", "Rating")
+                        .WithMany()
+                        .HasForeignKey("RatingId");
+
                     b.Navigation("HiringCompany");
+
+                    b.Navigation("Rating");
                 });
 
             modelBuilder.Entity("PIRS.Models.ReportModel.Report", b =>

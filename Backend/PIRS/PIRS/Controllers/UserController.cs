@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using PIRS.Models.ReportModel;
 using PIRS.Models.UserModel;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -11,11 +13,12 @@ public class UserController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
-
-    public UserController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
+    private readonly IWebHostEnvironment _webHostEnvironment;
+    public UserController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IWebHostEnvironment webHostEnvironment)
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        _webHostEnvironment = webHostEnvironment;
     }
     [HttpPost]
     public async Task<IActionResult> Create(AppUser user, string roleName)
@@ -25,8 +28,9 @@ public class UserController : ControllerBase
 
         var role = await _roleManager.FindByNameAsync(roleName);
 
-        if (role != null && (roleName == "User" || roleName == "Contractor"))
+        if (role != null && (roleName == "User" || roleName == "Contractor" || roleName == "Company"))
         {
+
             var result = await _userManager.CreateAsync(user);
             if (result.Succeeded)
             {
@@ -41,23 +45,15 @@ public class UserController : ControllerBase
         return BadRequest(ModelState);
     }
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUserByIdAndRoleName(string id)
+    public async Task<IActionResult> GetUser(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user == null)
         {
-            return NotFound(); // User not found
+            return NotFound();
         }
-
-        var isInRole = await _userManager.IsInRoleAsync(user, "User");
-        if (!isInRole)
-        {
-            return NotFound(); // User is not in the specified role
-        }
-
         return Ok(user);
     }
-
     [HttpGet]
     public IActionResult GetUsers()
     {
@@ -79,8 +75,8 @@ public class UserController : ControllerBase
 
         var userRoles = await _userManager.GetRolesAsync(existingUser);
 
-/*        if (!userRoles.Contains("Customer"))
-            return Forbid(); // Return 403 Forbidden if the user does not have the "Customer" role*/
+        if (!userRoles.Contains("Customer"))
+            return Forbid(); // Return 403 Forbidden if the user does not have the "Customer" role
 
         existingUser.UserName = updatedUser.UserName;
         existingUser.Email = updatedUser.Email;
@@ -107,15 +103,11 @@ public class UserController : ControllerBase
         if (existingUser == null)
             return NotFound();
 
-        var userRoles = await _userManager.GetRolesAsync(existingUser);
-/*
-        if (!userRoles.Contains("Customer"))
-            return Forbid(); // Return 403 Forbidden if the user does not have the "Customer" role
-*/
         var result = await _userManager.DeleteAsync(existingUser);
 
         if (result.Succeeded)
             return Ok(existingUser);
+        System.IO.File.Delete(Path.Combine(_webHostEnvironment.WebRootPath,existingUser.Logo));
 
         foreach (var error in result.Errors)
         {

@@ -1,4 +1,7 @@
-﻿namespace PIRS.Models.ReportModel
+﻿using PIRS.Models.UserModel;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace PIRS.Models.ReportModel
 {
     public class ReportUpvote
     {
