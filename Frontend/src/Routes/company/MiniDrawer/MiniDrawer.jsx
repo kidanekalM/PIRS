@@ -25,12 +25,14 @@ import PeopleIcon from '@mui/icons-material/People';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import Avatar  from '@mui/material/Avatar';
 import {alpha} from '@mui/material/styles';
-import { Link } from 'react-router-dom';
+import Dashboard from '../Dashboard/Dashboard';
+import Reports from '../Reports/Reports'
 
 const drawerWidth = 240;
+
 const menusItems = [
-  { name: 'Home', route: '/Company',Icon: <HomeIcon />},
-  { name: 'All Reports',Icon:<ReportIcon />, route: '/all-reports' },
+  { name: 'Home', route: <Dashboard/>,Icon: <HomeIcon />},
+  { name: 'All Reports',Icon:<ReportIcon />, route: <Reports status="0" companyId="1"/> },
   { name: 'Submitted',Icon:<SendIcon />, route: '/submitted' },
   { name: 'Rejected',Icon:<CancelIcon />, route: '/rejected' },
   { name: 'Approved',Icon:<CheckCircleIcon />, route: '/approved' },
@@ -105,6 +107,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [MainContent,SetMainContent] = React.useState(Dashboard);
+  const [title,setTitle] = React.useState("Home")
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -132,7 +136,7 @@ export default function MiniDrawer() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }} >
-            Dashboard
+            {title}
           </Typography>
           <Avatar>A</Avatar>
         </Toolbar>
@@ -147,9 +151,8 @@ export default function MiniDrawer() {
         <List>
           {menusItems.map((obj, indx) => (
             <ListItem key={obj.name} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton 
-              component={Link}
-              to={obj.route}
+              <ListItemButton
+               onClick={(e)=>{setTitle(obj.name); SetMainContent(obj.route)}}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
@@ -171,35 +174,9 @@ export default function MiniDrawer() {
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" display="flex"minHeight={"90vh"} gap={"1rem"} justifyContent="center" alignItems="center" sx={{ flexGrow: 1,pt: 3}}>
         <DrawerHeader />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-          Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-          Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-          nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-          leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-          feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-          consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-          sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-          eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-          neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-          tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-          sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-          tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-          gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-          tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        {MainContent}
       </Box>
     </Box>
   );

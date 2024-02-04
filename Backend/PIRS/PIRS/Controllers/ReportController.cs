@@ -196,10 +196,10 @@ namespace PIRS.Controllers
             return reportDtos;
         }
         [HttpGet("GetByCompany", Name = "GetByCompany")]
-        public ActionResult<List<ReportDto<ImageGallery>>> GetByCompnany(int id)
+        public ActionResult<List<ReportDto<ImageGallery>>> GetByCompnany(int id, ReportStatus reportStatus)
         {
             List<ReportDto<ImageGallery>> reportDtos = new List<ReportDto<ImageGallery>>();
-            var reports = _reportRepository.GetByCompany(id);
+            var reports = _reportRepository.GetByCompany(id,reportStatus);
             if (reports == null)
                 return NotFound();
             foreach (var item in reports)
