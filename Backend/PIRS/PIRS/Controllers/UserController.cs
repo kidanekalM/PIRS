@@ -40,6 +40,23 @@ public class UserController : ControllerBase
         ModelState.AddModelError(string.Empty, "Invalid role or role does not exist");
         return BadRequest(ModelState);
     }
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUserByIdAndRoleName(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null)
+        {
+            return NotFound(); // User not found
+        }
+
+        var isInRole = await _userManager.IsInRoleAsync(user, "User");
+        if (!isInRole)
+        {
+            return NotFound(); // User is not in the specified role
+        }
+
+        return Ok(user);
+    }
 
     [HttpGet]
     public IActionResult GetUsers()
@@ -62,8 +79,8 @@ public class UserController : ControllerBase
 
         var userRoles = await _userManager.GetRolesAsync(existingUser);
 
-        if (!userRoles.Contains("Customer"))
-            return Forbid(); // Return 403 Forbidden if the user does not have the "Customer" role
+/*        if (!userRoles.Contains("Customer"))
+            return Forbid(); // Return 403 Forbidden if the user does not have the "Customer" role*/
 
         existingUser.UserName = updatedUser.UserName;
         existingUser.Email = updatedUser.Email;
@@ -91,10 +108,10 @@ public class UserController : ControllerBase
             return NotFound();
 
         var userRoles = await _userManager.GetRolesAsync(existingUser);
-
+/*
         if (!userRoles.Contains("Customer"))
             return Forbid(); // Return 403 Forbidden if the user does not have the "Customer" role
-
+*/
         var result = await _userManager.DeleteAsync(existingUser);
 
         if (result.Succeeded)
