@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 
 export default function Dashboard(){
     return<>
-          <Box component="main" display="flex"minHeight={"90vh"} gap={"1rem"} justifyContent="center" alignItems="center" sx={{ flexGrow: 1,pt: 3}}>
+          <Box component="main" display="flex"minHeight={"90vh"} gap={"1rem"} justifyContent="space-around" alignItems="center" sx={{ flexGrow: 1,pt: 3}}>
        <Box>
        <LineChart
           xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}

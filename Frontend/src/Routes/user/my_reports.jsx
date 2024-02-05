@@ -1,4 +1,4 @@
-import ReportCard from "../../components/Report/report_card";
+import ReportCard from "../../components/ReportCard/ReportCard";
 import UNav from "../../components/user_dashboard/user_nav";
 
 const MyReports = () => {
