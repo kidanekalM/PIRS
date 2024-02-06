@@ -39,7 +39,8 @@ namespace PIRS.Controllers
 
             if (role != null && (roleName == "User" || roleName == "Contractor" || roleName == "Company"))
             {
-
+                var ph = new PasswordHasher<AppUser>();
+                user.PasswordHash= ph.HashPassword(user,password);
                 var result = await userManager.CreateAsync(user);
                 if (!result.Succeeded) return Unauthorized(result.Errors);
                 if (!await userManager.IsInRoleAsync(user, roleName))
@@ -59,32 +60,40 @@ namespace PIRS.Controllers
             ModelState.AddModelError(string.Empty, "Invalid role or role does not exist");
             return BadRequest(ModelState);
         }
-
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login(string email,string password)
+        public async Task<IActionResult> Login(string email, string password)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
             var user = await userManager.FindByEmailAsync(email);
-            if(user == null) return BadRequest(ModelState);
-            var result = await signInManager.PasswordSignInAsync(user, password,false,false);
-            if(!result.Succeeded)
+
+            if (user == null)
             {
-                return Unauthorized();
+                return BadRequest("Invalid email or password.");
             }
-            IList<string> roles = await userManager.GetRolesAsync(user);
+
+            var result = await signInManager.CheckPasswordSignInAsync(user, password, false);
+
+            if (!result.Succeeded)
+            {
+                return Unauthorized("Invalid email or password.");
+            }
+
+            var roles = await userManager.GetRolesAsync(user);
+
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name,user.Name),
-                new Claim(ClaimTypes.Role, roles!=null ?roles[0] :"User" )
-            };
+        new Claim(ClaimTypes.Name, user.Name),
+        new Claim(ClaimTypes.Role, roles != null && roles.Count > 0 ? roles[0] : "User")
+    };
 
             var token = GenerateJwtToken(claims);
 
-            return Ok(new { Token = token ,User = user});
+            return Ok(new { Token = token, User = user });
         }
 
         [NonAction]

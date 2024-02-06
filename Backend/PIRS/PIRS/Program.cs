@@ -23,6 +23,16 @@ builder.Services.AddDbContext<PirsContext>(options => {
     .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
     options.EnableSensitiveDataLogging();
 });
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      builder =>
+                      {
+                          builder.WithOrigins("http://localhost:5173")
+                                 .AllowAnyHeader(); // Allow any header, including 'content-type'
+                      });
+});
 var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
 var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
 var jwtAudience = builder.Configuration.GetSection("Jwt:Audience").Get<string>();
@@ -50,16 +60,7 @@ AddDefaultTokenProviders();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("MyPolicy",
-        builder =>
-        {
-            builder.WithOrigins("http://localhost:5173")
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
-});
+
 
 
 var app = builder.Build();
@@ -70,15 +71,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors("MyPolicy");
-
 app.UseStaticFiles();
+app.UseRouting();
+app.UseCors(MyAllowSpecificOrigins);
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 
 app.Run();
