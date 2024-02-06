@@ -132,6 +132,22 @@ namespace PIRS.Controllers
             }
             return report.upvotes;
         }
+        [HttpPut("UpdateStatus")]
+        public async Task<ActionResult<Report>> UpdateStatus(int reportId, ReportStatus status)
+        {
+            var report = _reportRepository.GetById(reportId);
+            Report res;
+            if ((report != null))
+            {
+                report.status = status;
+                res = _reportRepository.Update(report);
+            }
+            else
+            {
+                return NotFound();
+            }
+            return res;
+        }
         [HttpDelete]
         public ActionResult<ReportDto<ImageGallery>> Delete(int id)
         {
