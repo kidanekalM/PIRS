@@ -27,17 +27,22 @@ import Avatar  from '@mui/material/Avatar';
 import {alpha} from '@mui/material/styles';
 import Dashboard from '../Dashboard/Dashboard';
 import Reports from '../Reports/Reports'
+import Transactions from '../Transactions/Transactions';
+import Submitted from '../Reports/Submitted';
+import Rejected from '../Reports/Rejected';
+import Approved from '../Reports/Approved';
+import Contractors from '../Contractors/Contractors';
 
 const drawerWidth = 240;
 
 const menusItems = [
   { name: 'Home', route: <Dashboard/>,Icon: <HomeIcon />},
-  { name: 'All Reports',Icon:<ReportIcon />, route: <Reports status="0" companyId="1"/> },
-  { name: 'Submitted',Icon:<SendIcon />, route: '/submitted' },
-  { name: 'Rejected',Icon:<CancelIcon />, route: '/rejected' },
-  { name: 'Approved',Icon:<CheckCircleIcon />, route: '/approved' },
-  { name: 'Contractors',Icon:<PeopleIcon />, route: '/contractors' },
-  { name: 'Transactions',Icon:<SwapHorizIcon />, route: '/transactions' },
+  { name: 'All Reports',Icon:<ReportIcon />, route: <Reports companyId='ukhui98' reportStatus='0'/> },
+  { name: 'Submitted',Icon:<SendIcon />, route: <Submitted companyId='ukhui98'/> },
+  { name: 'Rejected',Icon:<CancelIcon />, route: <Rejected companyId='ukhui98'/> },
+  { name: 'Approved',Icon:<CheckCircleIcon />, route: <Approved companyId='ukhui98'/> },
+  { name: 'Contractors',Icon:<PeopleIcon />, route: <Contractors companyId='ukhui98'/> },
+  { name: 'Transactions',Icon:<SwapHorizIcon />, route: <Transactions companyId='ukhui98'/> },
 ];
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -138,7 +143,7 @@ export default function MiniDrawer() {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }} >
             {title}
           </Typography>
-          <Avatar>A</Avatar>
+          <Avatar src='https://localhost:7077/Images?id=CompanyLogo%5C%5C1377380f-8e98-47c1-b7e8-a19c11645c21_images.jpg'>A</Avatar>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>

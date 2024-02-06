@@ -144,12 +144,6 @@ namespace PIRS.Models.ReportModel
                 reports = reports.Where(r => r.status == status);
             }
 
-            if (geoCoordinate != null)
-            {
-                var orderedReports = reports.OrderBy(r => r.location.GetDistanceTo(geoCoordinate));
-                reports = orderedReports.ThenBy(r => r.upvotes.Count);
-            }
-
             reports = reports.Include(r => r.Company)
                              .Include(r => r.User)
                              .Include(r => r.Contractor)
@@ -157,7 +151,16 @@ namespace PIRS.Models.ReportModel
                              .Include(r => r.upvotes).ThenInclude(u => u.User)
                              .Include(r => r.pictures);
 
-            return reports.ToList();
+            var reportList = reports.ToList();
+
+            if (geoCoordinate != null)
+            {
+                reportList = reportList.OrderBy(r => r.location.GetDistanceTo(geoCoordinate))
+                                       .ThenBy(r => r.upvotes.Count)
+                                       .ToList();
+            }
+
+            return reportList;
         }
 
     }

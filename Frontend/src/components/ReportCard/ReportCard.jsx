@@ -9,16 +9,18 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import {useState} from 'react'
 
-const ReportCard = ({ report, role,appUserId="",onUpvoteClick, onDeleteClick,onEditCLick,onSubmitClick,onSaveClick,onApproveClick,onRejectClick }) => {
-  // const [coord,setCoord] = useState()
-  // role= 'Contractor'
+const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteClick,onEditCLick,onSubmitClick,onSaveClick,onApproveClick,onRejectClick }) => {
+  coord==null?coord={latitude:0.0,longitude:0.0}:"";
+  // const [coord,setCoord] = useState({latitude:0.0,longitude:0.00})
+  //  role= 'Contractor'
+    // appUserId='2'
   // navigator.geolocation.getCurrentPosition((pos)=>console.log(setCoord(pos.coords)),(err)=>console.log(err))
   if (!report) {
     return <div>No report data</div>;
   }
   return (
     <>
-    <Card sx={{ maxWidth: '90vw', width: '100%', marginRight:'2rem' }}>
+    <Card sx={{ maxWidth: '70vw', width: '100%', marginRight:'2rem' }}>
       <Grid container>
         <Grid item xs={2}>
           <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
@@ -34,6 +36,11 @@ const ReportCard = ({ report, role,appUserId="",onUpvoteClick, onDeleteClick,onE
             <Typography variant="body2" color="text.secondary">
               {report.description}
             </Typography>
+            <Typography variant="body2" color="text.secondary">
+                Distance: {getDistanceFromLatLonInKm(report.location.latitude,report.location.longitude,coord.latitude,coord.longitude)}Km
+                {/* {console.log(report.location)} */}
+                {/* {console.log(coord)} */}
+              </Typography>
             {role != 'User' && (
               <Typography variant="body2" color="text.secondary">
                 Award Amount: ${report.awardAmount}
@@ -44,23 +51,22 @@ const ReportCard = ({ report, role,appUserId="",onUpvoteClick, onDeleteClick,onE
             <CardContent>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               {role=="User"?
+              <>
+
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent:'center', flexDirection:'column' }}>
               <IconButton>
-                  <ChangeHistoryRoundedIcon fontSize='medium' color={report.upvotes.some(r => r.userId === appUserId) ? 'primary' : 'inherit'} />
+                  <ChangeHistoryRoundedIcon onClick={onUpvoteClick} fontSize='medium' color={report.upvotes.some(r => r.userId === appUserId) ? 'primary' : 'inherit'} />
                 </IconButton>
                 <Typography variant="body2" color="text.secondary">
                 {report.upvotes.length}
                 </Typography>
                 
-              </Box>: <></>   }
+              </Box>
+              </>
+              : <></>   }
               <Box sx={{ display: 'flex', alignItems: 'center'}}>
               {((role=="User") && (appUserId==report.userId))?
               <>
-              <Typography variant="body2" color="text.secondary">
-                Distance: {getDistanceFromLatLonInKm(report.location.latitude,report.location.longtude,coord.geolocationcoordinates.latitude,coord.longtude)}Km
-                {console.log(report.location.latitude)}
-                {/* {console.log(coord)} */}
-              </Typography>
               <IconButton>
                   <Edit  onClick={onEditCLick}/>
                 </IconButton>
@@ -102,6 +108,7 @@ export default ReportCard;
 
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   var R = 6371; // Radius of the earth in km
+  console.log(lat1,lon1,lat2,lon2);
   var dLat = deg2rad(lat2-lat1);
   var dLon = deg2rad(lon2-lon1); 
   var a = 
@@ -111,9 +118,9 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   ; 
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
   var d = R * c; // Distance in km
-  return d;
+  return d.toFixed(1);
 }
 
 function deg2rad(deg) {
-  return deg * (Math.PI/180)
+  return (deg * (Math.PI/180));
 }
