@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Box from '@mui/material/Box'
 import ReportCard from "../../../components/ReportCard/ReportCard";
 import { CleaningServices } from "@mui/icons-material";
-export default function Reports({companyId="1", reportStatus}){
+export default function Reports({companyId, reportStatus}){
  
      const [coord,setCoord] = useState( {
       latitude: 0.0,
@@ -26,25 +26,17 @@ export default function Reports({companyId="1", reportStatus}){
     
     return<>
     <Box display={"flex"} flexDirection='column' width={'90%'} gap='1.5rem' paddingTop={'100px'} paddingBottom={'50px'} >
-
-    {reports.map((r)=>{return <ReportCard coord={coord} report={r} appUserId={companyId} role="Company" onApproveClick={()=>Approve(r)} onRejectClick={()=>{console.log(r)}}/>})}
+    
+    {reports.map((r)=>{ return <ReportCard coord={coord} report={r} appUserId={companyId} role="Company" onApproveClick={()=> {console.log(r.reportId);approve(r) }} onRejectClick={()=>{console.log(r)}}/>})}
     </Box>
     </>
 }
-function Approve(report){
-  if((report.status==2) ||( report.status==4)){
-    report.status = 3;
-    fetch('https://localhost:7077/Report', {
-      method: 'PUT', 
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: JSON.stringify(report),
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-  }
+function approve(r){
+  if((r.reportStatus==2)||(r.reportStatus==4))
+  fetch(`https://localhost:7077/Report/Status?reportId=${r.reportId}&status=${3}`, {
+          method: 'PUT',
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error('Error:', error));
 }

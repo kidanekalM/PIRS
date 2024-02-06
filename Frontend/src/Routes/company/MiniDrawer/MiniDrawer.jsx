@@ -37,7 +37,7 @@ const drawerWidth = 240;
 
 const menusItems = [
   { name: 'Home', route: <Dashboard/>,Icon: <HomeIcon />},
-  { name: 'All Reports',Icon:<ReportIcon />, route: <Reports companyId='ukhui98' reportStatus='0'/> },
+  { name: 'All Reports',Icon:<ReportIcon />, route: <Reports companyId='ukhui98' reportStatus={0}/> },
   { name: 'Submitted',Icon:<SendIcon />, route: <Submitted companyId='ukhui98'/> },
   { name: 'Rejected',Icon:<CancelIcon />, route: <Rejected companyId='ukhui98'/> },
   { name: 'Approved',Icon:<CheckCircleIcon />, route: <Approved companyId='ukhui98'/> },
