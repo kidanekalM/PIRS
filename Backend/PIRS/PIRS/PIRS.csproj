@@ -25,15 +25,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="System.Device">
-      <HintPath>..\..\..\..\..\..\..\apps\SET_UP\System.Device.dll</HintPath>
-    </Reference>
+    <Folder Include="wwwroot\Images\CompanyLogo\" />
+    <Folder Include="wwwroot\Images\Report\" />
+    <Folder Include="wwwroot\Images\Report\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
-    <Folder Include="wwwroot\Images\CompanyLogo\" />
-    <Folder Include="wwwroot\Images\Report\" />
+    <Reference Include="System.Device">
+      <HintPath>..\..\..\..\..\..\Downloads\System.Device.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

@@ -19,10 +19,11 @@ namespace PIRS.Models.ReportModel
             helperService = new HelperService(webHostEnvironment, userManager,httpContextAccessor.HttpContext);
         }
 
-        public async void Add(Report report)
+        public async Task<Report> Add(Report report)
         {
             _context.Reports.Add(report);
             _context.SaveChanges();
+            return report;
         }
 
         public Report Delete(Report report)

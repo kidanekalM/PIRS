@@ -7,7 +7,7 @@ namespace PIRS.Models.ReportModel
 {
     public interface IReportRepository
     {
-        void Add(Report report);
+        Task<Report> Add(Report report);
         Report Update(Report report);
         Report Delete (Report report);
         List<Report> GetAll();

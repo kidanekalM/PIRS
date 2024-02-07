@@ -23,6 +23,15 @@ builder.Services.AddDbContext<PirsContext>(options => {
     .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
     options.EnableSensitiveDataLogging();
 });
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      builder =>
+                      {
+                          builder.WithOrigins("http://localhost:5174");
+                      });
+});
 var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
 var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
 var jwtAudience = builder.Configuration.GetSection("Jwt:Audience").Get<string>();
@@ -62,12 +71,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseStaticFiles();
+app.UseRouting();
+app.UseCors(MyAllowSpecificOrigins);
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 
 app.Run();

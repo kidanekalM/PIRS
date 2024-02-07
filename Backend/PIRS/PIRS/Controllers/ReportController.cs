@@ -29,8 +29,8 @@ namespace PIRS.Controllers
         public async Task<ActionResult<ReportDto<ImageGallery>>> Create([FromForm] ReportDto<IFormFile> reportDto)
         {
             var report = await helperService.ToModel(reportDto);
-            _reportRepository.Add(report);
-            return helperService.ToDto(report);
+            var rep = await  _reportRepository.Add(report);
+            return helperService.ToDto(rep);
 
         }
 

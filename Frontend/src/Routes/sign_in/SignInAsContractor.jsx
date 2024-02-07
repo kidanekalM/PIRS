@@ -64,7 +64,7 @@ export default function SignInAsContractor() {
               id="password"
               autoComplete="current-password"
             />
-            <Link to='../contdashboard'>
+            <Link to='../contdashboard' replace>
             <Button
               type="submit"
               fullWidth
