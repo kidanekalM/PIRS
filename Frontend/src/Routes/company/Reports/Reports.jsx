@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import Box from '@mui/material/Box'
 import ReportCard from "../../../components/ReportCard/ReportCard";
 import { CleaningServices } from "@mui/icons-material";
+import { json, redirect } from "react-router-dom";
 export default function Reports({companyId, reportStatus}){
- 
      const [coord,setCoord] = useState( {
       latitude: 0.0,
       longitude: 0.1,
@@ -33,12 +33,32 @@ export default function Reports({companyId, reportStatus}){
 }
 function approve(r){
   if((r.reportStatus==2)||(r.reportStatus==4))
-  "https://localhost:7077/Report/UpdateStatus?reportId=3&status=3"
   console.log(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${3}`)
   fetch(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${3}`, {
           method: 'PUT',
         })
         .then(response => response.json())
-        .then(data => console.log("status"+ data))
+        .then(data =>{ 
+          console.log( data)
+          let transaction ={
+            payment:r.awardAmount,
+            reportId:r.reportId,
+            companyId:r.companyId,
+            contractorId:r.contractorId,
+          }
+          fetch(`https://localhost:7077/Transaction`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(transaction)
+        })
+        .then(response => response.json())
+        .then(data =>{ 
+          console.log( data)
+          window.location.href = data.result.checkoutUrl
+          
+        })
+        })
         .catch(error => console.error('Error:', error));
 }

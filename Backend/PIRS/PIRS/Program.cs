@@ -30,7 +30,8 @@ builder.Services.AddCors(options =>
                       builder =>
                       {
                           builder.WithOrigins("http://localhost:5173")
-                          .AllowAnyMethod().AllowAnyHeader();
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
                       });
 });
 var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();

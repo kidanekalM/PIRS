@@ -4,8 +4,19 @@ import { Card } from '@mui/material';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { useEffect, useState } from 'react';
 
 export default function Dashboard(){
+  localStorage.setItem('appUserId', 'ukhui98');
+  let companyId = localStorage.getItem('appUserId');
+   let allReportsData= [
+     { id: '0', value: 10, label: 'newReports' },
+     { id: '1', value: 20, label: 'inProgress' },
+     { id: '2', value: 5, label: 'submitted' },
+     { id: '3', value: 17, label: 'approved' },
+     { id: '4', value: 2, label: 'rejected' },
+   ];
+
     return<>
 
           <Box component="main" display="flex" flexDirection="column" minHeight={"90vh"} gap={"1rem"} justifyContent="space-around" alignItems="center" sx={{ flexGrow: 1,pt: 3}}>
@@ -59,13 +70,15 @@ export default function Dashboard(){
       <PieChart
       series={[
         {
-          data: [
-            { id: '0', value: 10, label: 'Submitted' },
-            { id: '1', value: 15, label: 'Approved' },
-            { id: '2', value: 20, label: 'New' },
-          ],
+          data:allReportsData,
+          innerRadius: 30,
+          outerRadius: 100,
+          paddingAngle: 5,
+          cornerRadius: 5,
+          startAngle: -90,
         },
-      ]}
+      ]
+    }
       width={400}
       height={200}
     />

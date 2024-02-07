@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react'; 
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -32,6 +33,7 @@ import Submitted from '../Reports/Submitted';
 import Rejected from '../Reports/Rejected';
 import Approved from '../Reports/Approved';
 import Contractors from '../Contractors/Contractors';
+import Account from '../Account/Account'
 
 const drawerWidth = 240;
 
@@ -43,6 +45,7 @@ const menusItems = [
   { name: 'Approved',Icon:<CheckCircleIcon />, route: <Approved companyId='ukhui98'/> },
   { name: 'Contractors',Icon:<PeopleIcon />, route: <Contractors companyId='ukhui98'/> },
   { name: 'Transactions',Icon:<SwapHorizIcon />, route: <Transactions companyId='ukhui98'/> },
+
 ];
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -111,9 +114,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function MiniDrawer() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const [MainContent,SetMainContent] = React.useState(Dashboard);
-  const [title,setTitle] = React.useState("Home")
+  const [open, setOpen] = useState(false);
+  const [MainContent,SetMainContent] = useState(Dashboard);
+  const [title,setTitle] = useState("Home")
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -143,7 +146,7 @@ export default function MiniDrawer() {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }} >
             {title}
           </Typography>
-          <Avatar src='https://localhost:7077/Images?id=CompanyLogo%5C%5C1377380f-8e98-47c1-b7e8-a19c11645c21_images.jpg'>A</Avatar>
+          <Avatar src='https://localhost:7077/Images?id=CompanyLogo%5C%5C1377380f-8e98-47c1-b7e8-a19c11645c21_images.jpg' onClick={()=>{setTitle('Account'); SetMainContent(Account)}}>A</Avatar>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
