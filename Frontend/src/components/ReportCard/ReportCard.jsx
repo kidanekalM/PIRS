@@ -85,7 +85,7 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
                 {role=="Company"?
                 <>
                 <IconButton>
-                  <VerifiedIcon onClick={onApproveClick} {...report.status==2?{color:"primary"}:{color:"inherit"}}/>
+                  <VerifiedIcon onClick={onApproveClick} {...report.status==3?{color:"primary"}:{color:"inherit"}}/>
                 </IconButton>
                 <IconButton>
                   <ThumbDownOffAltIcon onClick={onRejectClick} {...report.status==4?{color:"error"}:{color:"inherit"}}/>
