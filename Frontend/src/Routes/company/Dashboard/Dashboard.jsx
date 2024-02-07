@@ -7,15 +7,60 @@ import Box from '@mui/material/Box';
 import { useEffect, useState } from 'react';
 
 export default function Dashboard(){
-  localStorage.setItem('appUserId', 'ukhui98');
-  let companyId = localStorage.getItem('appUserId');
-   let allReportsData= [
-     { id: '0', value: 10, label: 'newReports' },
-     { id: '1', value: 20, label: 'inProgress' },
-     { id: '2', value: 5, label: 'submitted' },
-     { id: '3', value: 17, label: 'approved' },
-     { id: '4', value: 2, label: 'rejected' },
-   ];
+  let companyId = localStorage.getItem('userId');
+  let allReportsData= [
+    { id: '0', value: 10, label: 'newReports' },
+    { id: '1', value: 20, label: 'inProgress' },
+    { id: '2', value: 5, label: 'submitted' },
+    { id: '3', value: 17, label: 'approved' },
+    { id: '4', value: 2, label: 'rejected' },
+  ];
+  const [reportsData,setReportsData] = useState(allReportsData)
+  const [reportCount,setReportCount] = useState(1);
+  useEffect(() => {
+    fetch(`https://localhost:7077/Report`)
+      .then((response) => response.json())
+      .then((data) => {
+        setReportCount(data.length)
+        const companyReports = data.filter(report => report.companyId === companyId);
+          let reportCounts = {
+          newReports: 0,
+          inProgress: 0,
+          submitted: 0,
+          approved: 0,
+          rejected: 0,
+        };
+  
+        companyReports.forEach(report => {
+          switch (report.status) {
+            case 0:
+              reportCounts.newReports++;
+              break;
+            case 1:
+              reportCounts.inProgress++;
+              break;
+            case 2:
+              reportCounts.submitted++;
+              break;
+            case 3:
+              reportCounts.approved++;
+              break;
+            case 4:
+              reportCounts.rejected++;
+              break;
+            default:
+              break;
+          }
+        });
+          let newReportsData = Object.keys(reportCounts).map((key, index) => ({
+          id: String(index),
+          value: reportCounts[key],
+          label: key,
+        }));
+          setReportsData(newReportsData);
+          console.log(reportsData);
+      });
+  }, []);
 
     return<>
 
@@ -27,7 +72,7 @@ export default function Dashboard(){
               Total Reports
             </Typography>
             <Typography variant="body2">
-              200
+              {reportCount||10}
             </Typography>
           </CardContent>
         </Card>
@@ -37,7 +82,7 @@ export default function Dashboard(){
               Contractors
             </Typography>
             <Typography variant="body2">
-              452
+              4
             </Typography>
           </CardContent>
         </Card>
@@ -70,7 +115,7 @@ export default function Dashboard(){
       <PieChart
       series={[
         {
-          data:allReportsData,
+          data:reportsData,
           innerRadius: 30,
           outerRadius: 100,
           paddingAngle: 5,

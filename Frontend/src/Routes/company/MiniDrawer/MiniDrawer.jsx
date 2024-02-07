@@ -34,17 +34,18 @@ import Rejected from '../Reports/Rejected';
 import Approved from '../Reports/Approved';
 import Contractors from '../Contractors/Contractors';
 import Account from '../Account/Account'
+import { useEffect } from 'react';
 
 const drawerWidth = 240;
-
+const companyId = localStorage.getItem('userId')
 const menusItems = [
   { name: 'Home', route: <Dashboard/>,Icon: <HomeIcon />},
-  { name: 'All Reports',Icon:<ReportIcon />, route: <Reports companyId='ukhui98' reportStatus={0}/> },
-  { name: 'Submitted',Icon:<SendIcon />, route: <Submitted companyId='ukhui98'/> },
-  { name: 'Rejected',Icon:<CancelIcon />, route: <Rejected companyId='ukhui98'/> },
-  { name: 'Approved',Icon:<CheckCircleIcon />, route: <Approved companyId='ukhui98'/> },
-  { name: 'Contractors',Icon:<PeopleIcon />, route: <Contractors companyId='ukhui98'/> },
-  { name: 'Transactions',Icon:<SwapHorizIcon />, route: <Transactions companyId='ukhui98'/> },
+  { name: 'All Reports',Icon:<ReportIcon />, route: <Reports companyId={companyId} reportStatus={0}/> },
+  { name: 'Submitted',Icon:<SendIcon />, route: <Submitted companyId={companyId}/> },
+  { name: 'Rejected',Icon:<CancelIcon />, route: <Rejected companyId={companyId}/> },
+  { name: 'Approved',Icon:<CheckCircleIcon />, route: <Approved companyId={companyId}/> },
+  { name: 'Contractors',Icon:<PeopleIcon />, route: <Contractors companyId={companyId}/> },
+  { name: 'Transactions',Icon:<SwapHorizIcon />, route: <Transactions companyId={companyId}/> },
 
 ];
 const openedMixin = (theme) => ({
@@ -114,14 +115,20 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function MiniDrawer() {
   const theme = useTheme();
+  const [companyInfo,setCompanyInfo] = useState(new Object())
   const [open, setOpen] = useState(false);
-  const [MainContent,SetMainContent] = useState(Dashboard);
+  const [MainContent,SetMainContent] = useState(<Dashboard/>);
   const [title,setTitle] = useState("Home")
-
+  useEffect(()=>{fetch(`https://localhost:7077/User/${companyId}`)
+  .then((res)=>res.json())
+  .then((data)=>{setCompanyInfo(data)
+  console.log(data)})},[])
   const handleDrawerOpen = () => {
     setOpen(true);
   };
-
+  const handleIconCLick = (obj) =>{
+    setTitle(obj.name); SetMainContent(obj.route)
+  }
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -146,7 +153,7 @@ export default function MiniDrawer() {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }} >
             {title}
           </Typography>
-          <Avatar src='https://localhost:7077/Images?id=CompanyLogo%5C%5C1377380f-8e98-47c1-b7e8-a19c11645c21_images.jpg' onClick={()=>{setTitle('Account'); SetMainContent(Account)}}>A</Avatar>
+          <Avatar src={`https://localhost:7077/${companyInfo.logo}`} onClick={()=>{setTitle('Account'); SetMainContent(<Account/>)}}>A</Avatar>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -160,7 +167,7 @@ export default function MiniDrawer() {
           {menusItems.map((obj, indx) => (
             <ListItem key={obj.name} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
-               onClick={(e)=>{setTitle(obj.name); SetMainContent(obj.route)}}
+               onClick={(e)=>{handleIconCLick(obj)}}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',

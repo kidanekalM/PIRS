@@ -25,7 +25,7 @@ namespace PIRS.Controllers
             var pathToFile = Path.Combine(webHostEnvironment.WebRootPath, "Images");
             pathToFile = Path.Combine(pathToFile, id);
             var stream = System.IO.File.OpenRead(pathToFile);
-            return File(stream, "image/"+id.Substring(id.IndexOf(".")));
+            return File(stream,  "image/"+id.Substring(id.IndexOf(".")));
         }
         [HttpPost("PostCompanyLogo")]
         public async Task<IActionResult> PostCompanyLogo(string id,IFormFile imgFile)
@@ -43,8 +43,8 @@ namespace PIRS.Controllers
                 if(company != null)
                 {
                     company.Logo = Path.Combine("Images", "CompanyLogo", fileName);
-                    _userManager.UpdateAsync(company);
-                    return Ok(company);
+                    var result = await _userManager.UpdateAsync(company);
+                    return Ok(result);
                 }
                 else
                 {

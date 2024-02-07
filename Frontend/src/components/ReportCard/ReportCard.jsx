@@ -20,11 +20,11 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
   }
   return (
     <>
-    <Card sx={{ maxWidth: '70vw', width: '100%', marginRight:'2rem' }}>
+    <Card sx={{ maxWidth: '60vw', width: '100%', height:'120px', marginRight:'2rem' }}>
       <Grid container>
         <Grid item xs={2}>
           <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
-            <img src={report.pictures.length>0?report.pictures[0].image:"https://picsum.photos/400/300"} alt="Demo" loading="lazy" style={{ position: 'absolute', height:'100%', objectFit: 'cover', borderRadius:'4px' }} />
+            <img src={report.pictures.length>0?report.pictures[0].image:"https://picsum.photos/400/300"} alt="Demo" loading="lazy" style={{ width:'120px', height:'100%', objectFit: 'cover', borderRadius:'4px' }} />
           </Box>
         </Grid>
         <Grid item xs={10} display={'flex'} justifyContent={'space-between'} paddingLeft={'1rem'}>
