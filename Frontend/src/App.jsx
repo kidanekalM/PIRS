@@ -6,8 +6,8 @@ import SignUpAsContractor from './Routes/sign_up/SignUpAsContractor'
 import SignUpAsCompany from './Routes/sign_up/SignUpAsCompany'
 import SignInAsUser from './Routes/sign_in/SignInAsUser'
 import UDashboard from './Routes/user/user_dashboard'
-import ContDashboard from './Routes/contractor/contdashboard'
-import ContProfile from './Routes/contractor/cont_profile'
+// import ContDashboard from './Routes/contractor/contdashboard'
+// import ContProfile from './Routes/contractor/cont_profile'
 import CreateReport from './Routes/user/create_report'
 import MyReports from './Routes/user/my_reports'
 import Trending from './Routes/user/trending'
@@ -26,15 +26,24 @@ function App() {
          <Route path="signupascompany" element={<SignUpAsCompany/>} />
          <Route path="signinasuser" element={<SignInAsUser/>} />
          <Route path="udashboard" element={<UDashboard/>} />
-         <Route path="contdashboard" element={<ContDashboard/>} />
-         <Route path="contprofile" element={<ContProfile/>} />
+         {/* <Route path="contprofile" element={<ContProfile/>} /> */}
          <Route path="createreport" element={<CreateReport/>} />
          <Route path="reports" element={<MyReports/>} />
          <Route path="trending" element={<Trending/>} />
          <Route path="editreport/*" element={<EditReport/>} />
          <Route path='Company/*' element={<Company/>}/>
 
-         
+         <Route path="contdashboard" element={<Layout/>} />
+           <Route path="GetReportById" element={<ContReports/>}/>
+           <Route path="profile" element={<ContProfile/>} />
+           <Route path="Transaction" element={<ContTransaction/>}/>
+
+
+         <Route path="contdashboard/Logout" element={<Home/>}/>
+         <Route path="contdashboard/Logout/choose" element={<ChooseAccount/>}/>
+         <Route path="contdashboard/Logout/choose/choosecreate" element={<ChooseCreateAcc/>}/>
+         <Route path='contdashboard/Logout/choosecreate' element={<ChooseCreateAcc/>}/>
+
         </Routes>
       </BrowserRouter>
     </>
