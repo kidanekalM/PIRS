@@ -25,36 +25,10 @@ namespace PIRS.Controllers
             var pathToFile = Path.Combine(webHostEnvironment.WebRootPath, "Images");
             pathToFile = Path.Combine(pathToFile, id);
             var stream = System.IO.File.OpenRead(pathToFile);
-            return File(stream, "image/"+id.Substring(id.IndexOf(".")));
+            return File(stream,  "image/"+id.Substring(id.IndexOf(".")));
         }
-        /*        [HttpPost("PostCompanyLogo")]
-                public async Task<IActionResult> PostCompanyLogo(string id,IFormFile imgFile)
-                {
-                    string uploadFolder = Path.Combine(webHostEnvironment.WebRootPath, "Images", "CompanyLogo");
-                    if (imgFile != null)
-                    {
-                        var fileName = Guid.NewGuid().ToString() + "_" + imgFile.FileName;
-                        var uniqueCFileName = Path.Combine(uploadFolder, fileName);
-                        using (var filestream = new FileStream(uniqueCFileName, FileMode.Create))
-                        {
-                            imgFile.CopyTo(filestream);
-                        }
-                        var company = await _userManager.FindByIdAsync(id);
-                        if(company != null)
-                        {
-                            company.Logo = Path.Combine("Images", "CompanyLogo", fileName);
-                            _userManager.UpdateAsync(company);
-                            return Ok(company);
-                        }
-                        else
-                        {
-                            return NotFound();
-                        }
-                    }
-                    return BadRequest();
-                }*/
         [HttpPost("PostCompanyLogo")]
-        public async Task<IActionResult> PostCompanyLogo(string username, IFormFile imgFile)
+        public async Task<IActionResult> PostCompanyLogo(string id,IFormFile imgFile)
         {
             string uploadFolder = Path.Combine(webHostEnvironment.WebRootPath, "Images", "CompanyLogo");
             if (imgFile != null)
@@ -65,12 +39,12 @@ namespace PIRS.Controllers
                 {
                     imgFile.CopyTo(filestream);
                 }
-                var company = await _userManager.FindByNameAsync(username); // Find the company by username
-                if (company != null)
+                var company = await _userManager.FindByIdAsync(id);
+                if(company != null)
                 {
                     company.Logo = Path.Combine("Images", "CompanyLogo", fileName);
-                    await _userManager.UpdateAsync(company);
-                    return Ok(company);
+                    var result = await _userManager.UpdateAsync(company);
+                    return Ok(result);
                 }
                 else
                 {

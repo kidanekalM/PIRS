@@ -1,5 +1,4 @@
 
-import ReportCard from "../../components/Report/report_card";
 
 
 const ContDashboard = () => {

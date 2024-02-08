@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import Box from '@mui/material/Box'
 import ReportCard from "../../../components/ReportCard/ReportCard";
-import { CleaningServices } from "@mui/icons-material";
-import { json, redirect } from "react-router-dom";
+import  Button  from "@mui/material/Button";
+import GetAppIcon from '@mui/icons-material/GetApp'
+
 export default function Reports({companyId, reportStatus}){
      const [coord,setCoord] = useState( {
       latitude: 0.0,
@@ -25,9 +26,13 @@ export default function Reports({companyId, reportStatus}){
       }, []);
     
     return<>
-    <Box display={"flex"} flexDirection='column' width={'90%'} gap='1.5rem' paddingTop={'100px'} paddingBottom={'50px'} >
-    
-    {reports.map((r)=>{ return <ReportCard coord={coord} report={r} appUserId={companyId} role="Company" onApproveClick={()=> {approve(r) }} onRejectClick={()=>{console.log(r)}}/>})}
+      <Box display={"flex"} flexDirection='column' width={'80%'} gap='1.5rem' paddingTop={'100px'} paddingBottom={'50px'} >
+      {reports.map((r)=>{ return <ReportCard coord={coord} report={r} appUserId={companyId} role="Company" onApproveClick={()=> {approve(r) }} onRejectClick={()=>{console.log(r)}}/>})}
+      </Box>
+    <Box display={'flex'} height={'70%'} alignItems={'flex-start'} >
+      <Button onClick={()=>onExportClick(reports)} component="label" variant="contained" startIcon={<GetAppIcon />}>
+      Export
+    </Button>
     </Box>
     </>
 }
@@ -61,4 +66,13 @@ function approve(r){
         })
         })
         .catch(error => console.error('Error:', error));
+}
+function onExportClick(reports){
+  var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reports));
+  var downloadAnchorNode = document.createElement('a');
+  downloadAnchorNode.setAttribute("href", dataStr);
+  downloadAnchorNode.setAttribute("download", "reports" + ".json");
+  document.body.appendChild(downloadAnchorNode); 
+  downloadAnchorNode.click();
+  downloadAnchorNode.remove();
 }

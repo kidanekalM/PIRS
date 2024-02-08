@@ -33,6 +33,8 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\Images\CompanyLogo\" />
+    <Folder Include="wwwroot\Images\Report\" />
   </ItemGroup>
 
 </Project>

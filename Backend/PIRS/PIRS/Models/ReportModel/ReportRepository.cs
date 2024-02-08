@@ -132,38 +132,35 @@ namespace PIRS.Models.ReportModel
         }
         public List<Report> Sort(string? companyId, GeoCoordinate? geoCoordinate, ReportStatus? status)
         {
-            if ((companyId != null) && (geoCoordinate != null) && (status.HasValue))
+            var reports = _context.Reports.AsQueryable();
+
+            if (companyId != null)
             {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).Where(r => (r.Company.Id == companyId) && (r.status == status)).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
+                reports = reports.Where(r => r.Company.Id == companyId);
             }
-            else if ((companyId != null) && (geoCoordinate != null))
+
+            if (status.HasValue)
             {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).Where(r => r.Company.Id == companyId).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
+                reports = reports.Where(r => r.status == status);
             }
-            else if ((companyId != null) && (status.HasValue))
+
+            reports = reports.Include(r => r.Company)
+                             .Include(r => r.User)
+                             .Include(r => r.Contractor)
+                             .Include(r => r.location)
+                             .Include(r => r.upvotes).ThenInclude(u => u.User)
+                             .Include(r => r.pictures);
+
+            var reportList = reports.ToList();
+
+            if (geoCoordinate != null)
             {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).Where(r => (r.Company.Id == companyId) && (r.status == status)).OrderBy(r => r.upvotes.Count).ToList();
+                reportList = reportList.OrderBy(r => r.location.GetDistanceTo(geoCoordinate))
+                                       .ThenBy(r => r.upvotes.Count)
+                                       .ToList();
             }
-            else if ((geoCoordinate != null) && (status.HasValue))
-            {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).Where(r => (r.status == status)).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
-            }
-            else if (companyId != null)
-            {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).Where(r => r.Company.Id == companyId).OrderBy(r => r.upvotes.Count).ToList();
-            }
-            else if (geoCoordinate != null)
-            {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).OrderBy(r => r.location.GetDistanceTo(geoCoordinate)).ThenBy(r => r.upvotes.Count).ToList();
-            }
-            else if (status.HasValue)
-            {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).Where(r => r.status == status).OrderBy(r => r.upvotes.Count).ToList();
-            }
-            else
-            {
-                return _context.Reports.Include(r => r.Company).Include(r => r.User).Include(r => r.Contractor).Include(r => r.location).Include(r => r.upvotes).ThenInclude(u => u.User).Include(r => r.pictures).OrderBy(r => r.upvotes.Count).ToList();
-            }
+
+            return reportList;
         }
 
     }

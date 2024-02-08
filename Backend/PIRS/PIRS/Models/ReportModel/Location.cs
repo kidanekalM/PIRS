@@ -1,5 +1,4 @@
-﻿
-using System.Device.Location;
+﻿using System.Device.Location;
 
 namespace PIRS.Models.ReportModel
 {

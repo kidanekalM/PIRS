@@ -30,24 +30,56 @@ export default function SignInAsUser() {
       Email : email,
       Password : password
     };
-    fetch(`https://localhost:7077/Account/login?email=${email}&password=${password}`,{
-      method : 'POST',
-      headers: {
-        'Content-Type': 'application/json'      
-      },
-      body:JSON.stringify(data)
-    }).then((response) => {
-      return response.json();
-    }).then((response) =>{
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("userId", response.user.id);
-    }).then(() => {
-      alert("Redirecting to the dashboard...");
-      window.location.href = "./udashboard";
-    }).catch(() => {
-      alert("Invalid email or password");
-    })
-  };
+  //   fetch(`https://localhost:7077/Account/login?email=${email}&password=${password}`,{
+  //     method : 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'      
+  //     },
+  //     body:JSON.stringify(data)
+  //   }).then((response) => {
+  //     return response.json();
+  //   }).then((response) =>{
+  //     localStorage.setItem("token", response.token);
+  //     localStorage.setItem("userId", response.user.id);
+  //   }).then((response) => {
+  //     console.log(response);
+  //     const role = response.role;
+  //     alert("Redirecting to the " + role.toLowerCase() + " dashboard...");
+
+  //     window.location.href = role === "User" ? "./udashboard" : role === "Contractor" ? "./ContDashboard" : "./Company";
+  //   }).catch(() => {
+  //     alert("Invalid email or password");
+  //   })
+  // };
+  fetch(`https://localhost:7077/Account/login?email=${email}&password=${password}`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(data)
+})
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error('Invalid email or password');
+    }
+    return response.json();
+  })
+  .then((response) => {
+    localStorage.setItem('token', response.token);
+    localStorage.setItem('userId', response.user.id);
+    const role = response.role;
+    alert(`Redirecting to the ${role.toLowerCase()} dashboard...`);
+    window.location.href =
+      role === 'User'
+        ? './udashboard'
+        : role === 'Contractor'
+        ? './ContDashboard'
+        : './Company';
+  })
+  .catch((error) => {
+    alert(error.message);
+  });
+};
 
   return (
     <ThemeProvider theme={defaultTheme}>

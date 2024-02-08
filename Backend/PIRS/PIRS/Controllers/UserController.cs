@@ -62,37 +62,84 @@ public class UserController : ControllerBase
         return Ok(users);
     }
 
+    /*    [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(string id, AppUser updatedUser)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var existingUser = await _userManager.FindByIdAsync(id);
+
+            if (existingUser == null)
+                return NotFound();
+
+            var userRoles = await _userManager.GetRolesAsync(existingUser);
+
+            if (!userRoles.Contains("Customer"))
+                return Forbid(); // Return 403 Forbidden if the user does not have the "Customer" role
+
+            existingUser.UserName = updatedUser.UserName;
+            existingUser.Email = updatedUser.Email;
+            existingUser.PhoneNumber = updatedUser.PhoneNumber;
+
+            var result = await _userManager.UpdateAsync(existingUser);
+
+            if (result.Succeeded)
+                return Ok(existingUser);
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return BadRequest(ModelState);
+        }*/
+
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser(string id, AppUser updatedUser)
+    public async Task<IActionResult> Update(string id, AppUser user, string roleName)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         var existingUser = await _userManager.FindByIdAsync(id);
-
         if (existingUser == null)
-            return NotFound();
-
-        var userRoles = await _userManager.GetRolesAsync(existingUser);
-
-        if (!userRoles.Contains("Customer"))
-            return Forbid(); // Return 403 Forbidden if the user does not have the "Customer" role
-
-        existingUser.UserName = updatedUser.UserName;
-        existingUser.Email = updatedUser.Email;
-        existingUser.PhoneNumber = updatedUser.PhoneNumber;
-
-        var result = await _userManager.UpdateAsync(existingUser);
-
-        if (result.Succeeded)
-            return Ok(existingUser);
-
-        foreach (var error in result.Errors)
         {
-            ModelState.AddModelError(string.Empty, error.Description);
+            ModelState.AddModelError(string.Empty, "User not found");
+            return NotFound(ModelState);
         }
 
-        return BadRequest(ModelState);
+        var role = await _roleManager.FindByNameAsync(roleName);
+        if (role == null || !(roleName == "User" || roleName == "Contractor" || roleName == "Company"))
+        {
+            ModelState.AddModelError(string.Empty, "Invalid role or role does not exist");
+            return BadRequest(ModelState);
+        }
+
+        existingUser.UserName = user.UserName;
+        existingUser.Email = user.Email;
+        existingUser.PasswordHash = user.PasswordHash;
+        existingUser.PhoneNumber = user.PhoneNumber;
+        existingUser.FirstName = user.FirstName;
+        existingUser.LastName = user.LastName;
+
+
+        var result = await _userManager.UpdateAsync(existingUser);
+        if (result.Succeeded)
+        {
+            var userRoles = await _userManager.GetRolesAsync(existingUser);
+            if (!userRoles.Contains(roleName))
+            {
+                await _userManager.RemoveFromRolesAsync(existingUser, userRoles);
+                await _userManager.AddToRoleAsync(existingUser, roleName);
+            }
+
+            return Ok(existingUser);
+        }
+        else
+        {
+            ModelState.AddModelError(string.Empty, "Failed to update user");
+            return BadRequest(ModelState);
+        }
     }
 
     [HttpDelete("{id}")]

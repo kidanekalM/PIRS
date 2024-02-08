@@ -126,7 +126,7 @@ import { Outlet } from 'react-router-dom';
             </ListItemIcon>
             My Transaction
           </ListItem>
-          <ListItem component={Link} to="Logout" onClick={handleDrawerClose} sx={{ color: 'black' ,fontWeight:'bold',textTransform:'uppercase'}}>
+          <ListItem component={Link} to="../" onClick={handleDrawerClose} sx={{ color: 'black' ,fontWeight:'bold',textTransform:'uppercase'}}>
             <ListItemIcon>
               <ExitToAppIcon />
             </ListItemIcon>

@@ -20,7 +20,7 @@ namespace PIRS.Controllers
         private readonly SignInManager<AppUser> signInManager;
         private readonly RoleManager<IdentityRole> roleManager;
 
-        public AccountController(IConfiguration configuration, SignInManager<AppUser> signInManager,UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AccountController(IConfiguration configuration, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _configuration = configuration;
             this.signInManager = signInManager;
@@ -30,9 +30,9 @@ namespace PIRS.Controllers
 
         [HttpPost]
         [Route("signup")]
-        public async Task<IActionResult> SignUp(AppUser user,string roleName, string password)
+        public async Task<IActionResult> SignUp(AppUser user, string roleName, string password)
         {
-            if ((!ModelState.IsValid) ||(user == null) || (string.IsNullOrEmpty(password)))
+            if ((!ModelState.IsValid) || (user == null) || (string.IsNullOrEmpty(password)))
                 return BadRequest(ModelState);
 
             var role = await roleManager.FindByNameAsync(roleName);
@@ -40,7 +40,7 @@ namespace PIRS.Controllers
             if (role != null && (roleName == "User" || roleName == "Contractor" || roleName == "Company"))
             {
                 var ph = new PasswordHasher<AppUser>();
-                user.PasswordHash= ph.HashPassword(user,password);
+                user.PasswordHash = ph.HashPassword(user, password);
                 var result = await userManager.CreateAsync(user);
                 if (!result.Succeeded) return Unauthorized(result.Errors);
                 if (!await userManager.IsInRoleAsync(user, roleName))
@@ -54,7 +54,7 @@ namespace PIRS.Controllers
                 };
                 var token = GenerateJwtToken(claims);
 
-                return Ok(new { Token = token, User= user });
+                return Ok(new { Token = token, User = user });
             }
 
             ModelState.AddModelError(string.Empty, "Invalid role or role does not exist");
@@ -93,7 +93,7 @@ namespace PIRS.Controllers
 
             var token = GenerateJwtToken(claims);
 
-            return Ok(new { Token = token, User = user });
+            return Ok(new { Token = token, User = user, Role = roles.Count > 0 ? roles[0] : "User" });
         }
 
         [NonAction]

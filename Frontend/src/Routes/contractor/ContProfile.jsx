@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, TextField, Button } from '@mui/material';
 
-const ContProfile = ({contractorId}) => {
+const ContProfile = () => {
+  let contractorId = localStorage.getItem('userId')
   const [profile, setProfile] = useState({});
   const [editMode, setEditMode] = useState(false);
   const [updatedProfile, setUpdatedProfile] = useState({
@@ -39,8 +40,8 @@ const ContProfile = ({contractorId}) => {
     }));
   };
 
-  const handleSubmitClick = (contractorId) => {
-    fetch(`https://localhost:7077/User/${contractorId}`, {
+  const handleSubmitClick = () => {
+    fetch(`https://localhost:7077/User/${contractorId}?roleName=Contractor`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

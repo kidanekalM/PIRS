@@ -63,7 +63,7 @@ namespace PIRS.Models.ReportModel
                 Title = report.Title,
                 Description = report.Description,
                 location = report.location,
-                status = ReportStatus.newReport,
+                status = report.status,
                 DateTime = report.DateTime,
                 pictures = GetImages(report.pictures)
             };
@@ -118,7 +118,7 @@ namespace PIRS.Models.ReportModel
                     VerticalAccuracy = reportDto.location != null ? reportDto.location.VerticalAccuracy:0.9
                 },
                 awardAmount = reportDto.awardAmount,
-                status = ReportStatus.newReport,
+                status = reportDto.status,
                 DateTime = DateTime.Now,
                 pictures = SaveImages(reportDto.pictures)
             };

@@ -31,7 +31,6 @@ function App() {
          <Route path="signupascompany" element={<SignUpAsCompany/>} />
          <Route path="signinasuser" element={<SignInAsUser/>} />
          <Route path="udashboard" element={<UDashboard/>} />
-         {/* <Route path="contprofile" element={<ContProfile/>} /> */}
          <Route path="createreport" element={<CreateReport/>} />
          <Route path="reports" element={<MyReports/>} />
          <Route path="trending" element={<Trending/>} />
@@ -44,7 +43,7 @@ function App() {
            <Route path="Transaction" element={<ContTransaction/>}/>
           </Route>
 
-         <Route path="contdashboard/Logout" element={<Home/>}/>
+         {/* <Route path="contdashboard/Logout" element={<Home/>}/> */}
          {/* <Route path="contdashboard/Logout/choose" element={<ChooseAccount/>}/> */}
          <Route path="contdashboard/Logout/choose/choosecreate" element={<ChooseCreateAcc/>}/>
          <Route path='contdashboard/Logout/choosecreate' element={<ChooseCreateAcc/>}/>

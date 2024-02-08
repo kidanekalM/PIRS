@@ -30,6 +30,28 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+
+  const [coord,setCoord] = React.useState( {
+    latitude: 0.0,
+    longitude: 0.1,
+    altitude: 0.0,
+    accuracy: 0.2,
+    altitudeAccuracy: 0.0,
+    heading: 0.0,
+    speed: 0.0
+  })
+
+
+  React.useEffect(() => {
+    navigator.geolocation.getCurrentPosition((pos)=>{
+      setCoord(pos.coords)
+      // fetch(`https://localhost:7077/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&Status=${ reportStatus || 0}`)
+      //   .then(response => response.json())
+      //   .then(data => setReports(data));
+    },(err)=>console.log(err))
+    }, []);
+
+    
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [userId, setUserId] = React.useState('');
@@ -40,7 +62,7 @@ export default function SignUp() {
     const [course, setCourse] = React.useState('');
     const [horizontalAccuracy, setHorizontalAccuracy] = React.useState('');
     const [verticalAccuracy, setVerticalAccuracy] = React.useState('');
-    const [awardAmount, setAwardAmount] = React.useState('');
+    // const [awardAmount, setAwardAmount] = React.useState('');
     // const [selectedDate, setSelectedDate] = useState(new Date());
     const [picture, setPicture] = React.useState(null);
     const [isUnknown, setIsUnknown] = React.useState('');
@@ -85,9 +107,9 @@ export default function SignUp() {
       setVerticalAccuracy(event.target.value);
     };
   
-    const handleAwardAmountChange = (event) => {
-      setAwardAmount(event.target.value);
-    };
+    // const handleAwardAmountChange = (event) => {
+    //   setAwardAmount(event.target.value);
+    // };
 
     const handleDateChange = (date) => {
       setSelectedDate(date);
@@ -107,37 +129,67 @@ export default function SignUp() {
       event.preventDefault();
   
       // Create a new FormData object to send the form data
-      const formData = new FormData();
-      formData.append('title', title);
-      formData.append('description', description);
-      formData.append('userId', userId);
-      formData.append('companyId', companyId);
-      formData.append('contractorId', contractorId);
-      formData.append('locationId', locationId);
-      formData.append('altitude', altitude);
-      formData.append('course', course);
-      formData.append('horizontalAccuracy', horizontalAccuracy);
-      formData.append('verticalAccuracy', verticalAccuracy);
-      formData.append('awardAmount', awardAmount);
+      let formData;
+      
+      // formData.append('locationId', locationId);
+      // formData.append('altitude', altitude);
+      // formData.append('course', course);
+      // formData.append('horizontalAccuracy', horizontalAccuracy);
+      // formData.append('verticalAccuracy', verticalAccuracy);
+      // formData.append('awardAmount', awardAmount);
       // formData.append('date', date);
       // formData.append('picture', picture);
       // formData.append('isUnknown', isUnknown);
   
       // Send the form data to the server
-      fetch('https://localhost:7077/Report', {
-        method: 'POST',
-        body: formData
-      }).then((response) => {
-        return response.json();
-      // }).then((response) =>{
-      //   localStorage.setItem("token", response.token);
-      //   localStorage.setItem("userId", response.user.id);
-      }).then(() => {
-        alert("Report Created...");
-        window.location.href = "./reports";
-      }).catch(() => {
-        alert("Invalid input");
-      })
+
+      navigator.geolocation.getCurrentPosition((pos)=>{
+        setCoord(pos.coords);
+        console.log('succcesskk')
+        let cord = {
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+          horizontalAccuracy: pos.coords.accuracy,
+          verticalAccuracy: pos.coords.altitudeAccuracy,
+          course: pos.coords.heading,
+          altitude: pos.coords.altitude,
+          isUnknown: true
+        };
+        formData={
+          title : title,
+          description : description,
+          userId : userId,
+          companyId : companyId,
+          contractorId : contractorId,
+          location : cord
+        }
+        console.log(pos.coords)
+        
+      
+        console.log(formData);
+        fetch('https://localhost:7077/Report', {
+          headers: {
+            'Content-Type':  'multipart/form-data; boundary=---------------------------boundary'      
+          },         
+          method: 'POST',
+          body: JSON.stringify(formData)
+        }).then((response) => {
+          return response.json();
+        // }).then((response) =>{
+        //   localStorage.setItem("token", response.token);
+        //   localStorage.setItem("userId", response.user.id);
+        }).then((response) => {
+          console.log(response);
+          alert("Report Created...");
+          window.location.href = "./reports";
+        }).catch(() => {
+          alert("Invalid input");
+        })
+
+        // fetch(`https://localhost:7077/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&Status=${ reportStatus || 0}`)
+        //   .then(response => response.json())
+        //   .then(data => setReports(data));
+      },(err)=>console.log(err))
     };
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -223,7 +275,7 @@ export default function SignUp() {
                   onChange={handleContractorIdChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -287,8 +339,8 @@ export default function SignUp() {
                   value={verticalAccuracy}
                   onChange={handleVerticalAccuracyChange}
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Grid> */}
+              {/* <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
@@ -300,7 +352,7 @@ export default function SignUp() {
                   value={awardAmount}
                   onChange={handleAwardAmountChange}
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
             <Button
               type="submit"

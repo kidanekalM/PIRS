@@ -28,6 +28,7 @@ namespace PIRS.Controllers
         [HttpPost]
         public async Task<ActionResult<ReportDto<ImageGallery>>> Create([FromForm] ReportDto<IFormFile> reportDto)
         {
+            Console.WriteLine(reportDto);
             var report = await helperService.ToModel(reportDto);
             _reportRepository.Add(report);
             return helperService.ToDto(report);
@@ -132,6 +133,22 @@ namespace PIRS.Controllers
             }
             return report.upvotes;
         }
+        [HttpPut("UpdateStatus")]
+        public async Task<ActionResult<Report>> UpdateStatus(int reportId, ReportStatus status)
+        {
+            var report = _reportRepository.GetById(reportId);
+            Report res;
+            if ((report != null))
+            {
+                report.status = status;
+                res = _reportRepository.Update(report);
+            }
+            else
+            {
+                return NotFound();
+            }
+            return res;
+        }
         [HttpDelete]
         public ActionResult<ReportDto<ImageGallery>> Delete(int id)
         {
@@ -196,10 +213,10 @@ namespace PIRS.Controllers
             return reportDtos;
         }
         [HttpGet("GetByCompany", Name = "GetByCompany")]
-        public ActionResult<List<ReportDto<ImageGallery>>> GetByCompnany(int id)
+        public ActionResult<List<ReportDto<ImageGallery>>> GetByCompnany(int id, ReportStatus reportStatus)
         {
             List<ReportDto<ImageGallery>> reportDtos = new List<ReportDto<ImageGallery>>();
-            var reports = _reportRepository.GetByCompany(id);
+            var reports = _reportRepository.GetByCompany(id,reportStatus);
             if (reports == null)
                 return NotFound();
             foreach (var item in reports)

@@ -43,7 +43,7 @@ namespace PIRS.Controllers
                 firstName: company.Name,
                 lastName: "Company",
                 tx_ref: ID,
-                callback_url: "https://localhost:7077/swagger/index.html",
+                callback_url: "http://localhost:5173/company",
                 customDescription: "Payment for resolution of "+report.Title,
                 customLogo: company.Logo,
                 customTitle:"Contractor Payment"
