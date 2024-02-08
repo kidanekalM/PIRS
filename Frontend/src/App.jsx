@@ -13,6 +13,11 @@ import MyReports from './Routes/user/my_reports'
 import Trending from './Routes/user/trending'
 import Company from './Routes/company/Company'
 import EditReport from './Routes/user/EditReport'
+import Layout from '../src/components/cont_dashboard/Layout'
+import ContReports from '../src/Routes/contractor/ContReports'
+import ContProfile from '../src/Routes/contractor/ContProfile'
+import ContTransaction from '../src/Routes/contractor/ContTransaction'
+
 
 function App() {
   return (
@@ -33,14 +38,14 @@ function App() {
          <Route path="editreport/*" element={<EditReport/>} />
          <Route path='Company/*' element={<Company/>}/>
 
-         <Route path="contdashboard" element={<Layout/>} />
+         <Route path="contdashboard" element={<Layout/>} >
            <Route path="GetReportById" element={<ContReports/>}/>
            <Route path="profile" element={<ContProfile/>} />
            <Route path="Transaction" element={<ContTransaction/>}/>
-
+          </Route>
 
          <Route path="contdashboard/Logout" element={<Home/>}/>
-         <Route path="contdashboard/Logout/choose" element={<ChooseAccount/>}/>
+         {/* <Route path="contdashboard/Logout/choose" element={<ChooseAccount/>}/> */}
          <Route path="contdashboard/Logout/choose/choosecreate" element={<ChooseCreateAcc/>}/>
          <Route path='contdashboard/Logout/choosecreate' element={<ChooseCreateAcc/>}/>
 

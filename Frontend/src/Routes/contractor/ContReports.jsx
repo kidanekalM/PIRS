@@ -1,4 +1,4 @@
-import ReportCard from "../../components/Report/report_card";
+import ReportCard from "../../components/ReportCard/ReportCard";
 import React, { useEffect, useState } from 'react';
 
 
