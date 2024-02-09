@@ -22,15 +22,14 @@ export default function Reports(companyId, status="0"){
         setCoord(pos.coords)
         fetch(`https://localhost:7077/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&Status=${0}`)
           .then(response => response.json())
-          .then(data => setReports(data));
+          .then(data => {setReports(data); console.log(data)});
       },(err)=>console.log(err))
       }, []);
-    
     return<>
     <UNav/>
     <Box display={"flex"} flexDirection='column' width={'90%'} gap='1.5rem' paddingTop={'100px'} paddingBottom={'50px'} className="report mx-5">
 
-    {reports.map((r)=>{return <ReportCard coord={coord} report={r} appUserId={companyId} role="User" onDeleteClick={()=> {onDeleteClick(r) }} onEditCLick={()=>{onEditClick(r)}}/>})}
+    {reports.map((r)=>{return <ReportCard coord={coord} report={r} appUserId={companyId} role="User" onDeleteClick={()=> {onDeleteClick(r) }} onUpvoteClick={()=>{onUpvoteClick(r)}}/>})}
     </Box>
     </>
 }
@@ -51,7 +50,52 @@ const onDeleteClick = (r) => {
   });
 };
 
-const onEditClick = (r) => {
-  window.location.href = `./editreport/${r.reportId}`;
-};
 
+const onUpvoteClick = (r) => {
+  const data = {
+    reportId: r.reportId,
+    userId: localStorage.getItem('userId')
+  };
+  if(r.upvotes != null){
+    console.log(r.upvotes);
+    const upv = r.upvotes.find((upv)=> upv.userId == data.userId);
+    if(upv){
+      // If the user has already upvoted, remove the upvote
+      fetch(`https://localhost:7077/Report/Upvote?reportId=${data.reportId}&upvoteId=${upv.id}`, {
+        method: 'DELETE'
+      })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+      });
+    }
+    else{
+      
+      // If the user hasn't upvoted yet, add the upvote
+      fetch(`https://localhost:7077/Report/Upvote?reportId=${data.reportId}&userId=${data.userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+      });
+    }
+  }
+  else{
+    fetch(`https://localhost:7077/Report/Upvote?reportId=${data.reportId}&userId=${data.userId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then((response) => response.json())
+    .then((response) => {
+      console.log(response);
+    });
+  }
+};

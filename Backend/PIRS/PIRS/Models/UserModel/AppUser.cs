@@ -13,7 +13,7 @@ namespace PIRS.Models.UserModel
         // Name
         public string? Name { get; set; }
         // For contractor 
-        public AppUser? HiringCompany { get; set; } = null;
+        public string? HiringCompanyId { get; set; } = null;
         public string FirstName { get; set; }
         public string LastName { get; set; }
 

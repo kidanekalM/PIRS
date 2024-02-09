@@ -92,7 +92,6 @@ namespace PIRS.Controllers
     };
 
             var token = GenerateJwtToken(claims);
-
             return Ok(new { Token = token, User = user, Role = roles.Count > 0 ? roles[0] : "User" });
         }
 

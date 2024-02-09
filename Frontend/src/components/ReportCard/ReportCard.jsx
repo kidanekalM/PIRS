@@ -8,8 +8,10 @@ import SendIcon from '@mui/icons-material/Send';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import {useState} from 'react'
+import DetailsIcon from '@mui/icons-material/Details';
 
-const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteClick,onEditCLick,onSubmitClick,onSaveClick,onApproveClick,onRejectClick }) => {
+
+const ReportCard = ({ report, onDetailsClick, role, appUserId="",coord,onUpvoteClick, onDeleteClick,onEditCLick,onSubmitClick,onSaveClick,onApproveClick,onRejectClick }) => {
   coord==null?coord={latitude:0.0,longitude:0.0}:"";
   // const [coord,setCoord] = useState({latitude:0.0,longitude:0.00})
   //  role= 'Contractor'
@@ -20,8 +22,8 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
   }
   return (
     <>
-    <Card sx={{ maxWidth: '70vw', width: '100%', marginRight:'2rem' }}>
-      <Grid container>
+    <Card sx={{ maxWidth: '70vw', width: '100%', marginRight:'2rem' }} >
+      <Grid container >
         <Grid item xs={2}>
           <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
             <img src={report.pictures.length>0?report.pictures[0].image:"https://picsum.photos/400/300"} alt="Demo" loading="lazy" style={{ position: 'absolute', height:'100%', objectFit: 'cover', borderRadius:'4px' }} />
@@ -74,12 +76,15 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
                   <Delete color='error' onClick={onDeleteClick}/>
                 </IconButton>
                 </>:<></>}
-                { (role=="Contractor")&&((report.status != 2) && (report.status != 3))?
+                { (role=="Contractor")?
                 <><IconButton>
-                  <BookmarkBorderIcon onClick={onSaveClick} {...report.contractorId==appUserId?{color:"primary"}:{color:"inherit"}}/>
+                  <BookmarkBorderIcon {...report.status==2?{color:"primary"}:{color:"inherit"}} onClick={onSaveClick} />
                 </IconButton>
                 <IconButton>
-                  <SendIcon  color='primary' onClick={onSubmitClick} />
+                  <SendIcon   {...report.status==3?{color:"primary"}:{color:"inherit"}} onClick={onSubmitClick} />
+                </IconButton>
+                <IconButton>
+                  <DetailsIcon onClick={onDetailsClick}/>
                 </IconButton>
                 </>:<></>}
                 {role=="Company"?

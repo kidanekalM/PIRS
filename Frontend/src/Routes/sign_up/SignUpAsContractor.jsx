@@ -60,6 +60,7 @@ export default function SignUp() {
     setPassword(event.target.value);
   };
   const handleCompanySelection = (company) => {
+    console.log(company);
     setSelectedCompany(company);
   };
 
@@ -71,9 +72,10 @@ export default function SignUp() {
       lastName: lastName,
       email: email,
       password: password,
-      name: firstName
+      name: firstName,
+      hiringCompanyId:selectedCompany.user.id
     };
-
+    console.log(data);
     fetch(`https://localhost:7077/Account/signup?roleName=Contractor&password=${password}`, {
       method: 'POST',
       headers: {
@@ -87,8 +89,6 @@ export default function SignUp() {
       .then((response) => {
         localStorage.setItem("token", response.token);
         localStorage.setItem("userId", response.user.id);
-      })
-      .then(() => {
         alert("Account Created. Redirecting to the Sign In...");
         window.location.href = "./signinasuser";
       })
@@ -199,7 +199,8 @@ export default function SignUp() {
               </button>
               <ul className="dropdown-menu">
                 {hiringCompanies.map((company) => (
-                  <li key={company.user.id}>
+                  <li key={company.user.id} className='d-flex flex-direction-column'>
+                    <Avatar src={"https://localhost:7077/"+company.user.logo}></Avatar>
                     <a className="dropdown-item" onClick={() => handleCompanySelection(company)}>
                       {company.user.name}
                     </a>
@@ -208,6 +209,7 @@ export default function SignUp() {
               </ul>
             </div>
               </Grid>
+
             </Grid>
             <Button
               type="submit"

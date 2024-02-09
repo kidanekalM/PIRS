@@ -33,19 +33,23 @@ import Submitted from '../Reports/Submitted';
 import Rejected from '../Reports/Rejected';
 import Approved from '../Reports/Approved';
 import Contractors from '../Contractors/Contractors';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Account from '../Account/Account'
 import { useEffect } from 'react';
+import {Link} from 'react-router-dom'
 
 const drawerWidth = 240;
 const companyId = localStorage.getItem('userId')
 const menusItems = [
   { name: 'Home', route: <Dashboard/>,Icon: <HomeIcon />},
-  { name: 'All Reports',Icon:<ReportIcon />, route: <Reports companyId={companyId} reportStatus={0}/> },
+  { name: 'New Reports',Icon:<ReportIcon />, route: <Reports companyId={companyId} reportStatus={0}/> },
   { name: 'Submitted',Icon:<SendIcon />, route: <Submitted companyId={companyId}/> },
   { name: 'Rejected',Icon:<CancelIcon />, route: <Rejected companyId={companyId}/> },
   { name: 'Approved',Icon:<CheckCircleIcon />, route: <Approved companyId={companyId}/> },
   { name: 'Contractors',Icon:<PeopleIcon />, route: <Contractors companyId={companyId}/> },
   { name: 'Transactions',Icon:<SwapHorizIcon />, route: <Transactions companyId={companyId}/> },
+  { name: 'Log Out',Icon:<Link to="../"><ExitToAppIcon /></Link>, route:''  },
+
 
 ];
 const openedMixin = (theme) => ({

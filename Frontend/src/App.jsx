@@ -17,6 +17,7 @@ import Layout from '../src/components/cont_dashboard/Layout'
 import ContReports from '../src/Routes/contractor/ContReports'
 import ContProfile from '../src/Routes/contractor/ContProfile'
 import ContTransaction from '../src/Routes/contractor/ContTransaction'
+import reportDetail from './Routes/contractor/reportDetail'
 
 
 function App() {
@@ -38,7 +39,8 @@ function App() {
          <Route path='Company/*' element={<Company/>}/>
 
          <Route path="contdashboard" element={<Layout/>} >
-           <Route path="GetReportById" element={<ContReports/>}/>
+           <Route path="GetReportById" element={<ContReports />}/>
+           <Route path="reportDetail" element={<reportDetail />}/>
            <Route path="profile" element={<ContProfile/>} />
            <Route path="Transaction" element={<ContTransaction/>}/>
           </Route>

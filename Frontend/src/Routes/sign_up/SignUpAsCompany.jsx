@@ -10,6 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 
 function Copyright(props) {
   return (
@@ -34,7 +35,8 @@ export default function SignUp() {
   const [lastName, setLastName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-
+  const [imageData,setImageData]= React.useState(new FormData());
+  const [formula,setFormula] = React.useState('50');
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
   };
@@ -50,11 +52,20 @@ export default function SignUp() {
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
+  function handleImageChange(event) {
+    console.log('Handle image change')
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append('imgFile', file)
+    setImageData(formData);
 
+}
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
-
+  const handleFormulaChange = (event) => {
+    setFormula(event.target.value)
+  }
   const handleSignUp = async (event) => {
 
     const data = {
@@ -63,7 +74,8 @@ export default function SignUp() {
       lastName: lastName,
       email: email,
       password: password,
-      name: firstName
+      name: firstName,
+      formula:formula,
     };
 
     event.preventDefault();
@@ -79,8 +91,20 @@ export default function SignUp() {
         return response.json();
       })
       .then((response) => {
+        console.log(response)
         localStorage.setItem("token", response.token);
         localStorage.setItem("userId", response.user.id);
+        fetch(`https://localhost:7077/Images/PostCompanyLogo?id=${response.user.id}`, {
+          method: 'POST',
+          body: imageData
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log(data);
+      })
+      .catch((error) => {
+          console.error('Error:', error);
+      });
       })
       .then(() => {
         alert("Account Created. Redirecting to the Sign In...");
@@ -152,6 +176,20 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  autoComplete="formula"
+                  name="formula"
+                  required
+                  fullWidth
+                  id="formula"
+                  label="formula to calculate award amount 'u-upvotes' and 'd-number of days'"
+                  autoFocus
+                  value={formula}
+                  onChange={handleFormulaChange}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
                   required
                   fullWidth
                   id="email"
@@ -174,6 +212,26 @@ export default function SignUp() {
                   value={password}
                   onChange={handlePasswordChange}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
+                Upload Company Logo
+                    <input
+                        accept="image/*"
+                        style={{   clip: 'rect(0 0 0 0)',
+                        clipPath: 'inset(50%)',
+                        height: 1,
+                        overflow: 'hidden',
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        whiteSpace: 'nowrap',
+                        width: 1,}}
+                        id="hidden-file-input"
+                        type="file"
+                        onChange={handleImageChange}
+                    />
+                </Button>
               </Grid>
             </Grid>
             <Button

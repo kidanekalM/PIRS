@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using PIRS.Models.ReportModel;
 using PIRS.Models.UserModel;
 using System.Device.Location;
@@ -10,7 +13,7 @@ namespace PIRS.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [DisableRequestSizeLimit]
+    [RequestSizeLimit(100_000_000)]
     public class ReportController : ControllerBase
     {
         private readonly IReportRepository _reportRepository;

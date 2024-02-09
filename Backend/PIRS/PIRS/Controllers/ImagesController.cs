@@ -51,7 +51,7 @@ namespace PIRS.Controllers
                     return NotFound();
                 }
             }
-            return BadRequest();
+            return BadRequest("could not find the image you sent");
         }
         [HttpPut("PutCompanyLogo")]
         public async Task<IActionResult> PutCompanyLogo(string id, IFormFile imgFile)

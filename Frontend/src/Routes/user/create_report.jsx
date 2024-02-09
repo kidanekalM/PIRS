@@ -10,8 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -54,7 +53,7 @@ export default function SignUp() {
     
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
-    const [userId, setUserId] = React.useState('');
+    const [userId, setUserId] = React.useState(localStorage.getItem('userId'));
     const [companyId, setCompanyId] = React.useState('');
     const [contractorId, setContractorId] = React.useState('');
     const [locationId, setLocationId] = React.useState('');
@@ -66,6 +65,10 @@ export default function SignUp() {
     // const [selectedDate, setSelectedDate] = useState(new Date());
     const [picture, setPicture] = React.useState(null);
     const [isUnknown, setIsUnknown] = React.useState('');
+    const [selectedCompany, setSelectedCompany] = React.useState('');
+    const [hiringCompanies, setHiringCompanies] = React.useState([]);
+    const [imageData,setImageData]= React.useState(new FormData());
+
   
     const handleTitleChange = (event) => {
       setTitle(event.target.value);
@@ -106,10 +109,6 @@ export default function SignUp() {
     const handleVerticalAccuracyChange = (event) => {
       setVerticalAccuracy(event.target.value);
     };
-  
-    // const handleAwardAmountChange = (event) => {
-    //   setAwardAmount(event.target.value);
-    // };
 
     const handleDateChange = (date) => {
       setSelectedDate(date);
@@ -120,64 +119,66 @@ export default function SignUp() {
       const file = event.target.files[0];
       setPicture(file);
     };
-  
+    const handleCompanySelection = (company) => {
+      console.log(company.user.id)
+      setSelectedCompany(company);
+      setCompanyId(company.user.id);
+    };
     const handleIsUnknownChange = (event) => {
       setIsUnknown(event.target.value);
     };
+    function handleImageChange(event) {
+      console.log('Handle image change')
+      const files = Array.from(event.target.files);
+
+      setImageData(files);
   
+  }
     const handleFormSubmit = async (event) => {
       event.preventDefault();
-  
-      // Create a new FormData object to send the form data
-      let formData;
-      
-      // formData.append('locationId', locationId);
-      // formData.append('altitude', altitude);
-      // formData.append('course', course);
-      // formData.append('horizontalAccuracy', horizontalAccuracy);
-      // formData.append('verticalAccuracy', verticalAccuracy);
-      // formData.append('awardAmount', awardAmount);
-      // formData.append('date', date);
-      // formData.append('picture', picture);
-      // formData.append('isUnknown', isUnknown);
-  
-      // Send the form data to the server
 
       navigator.geolocation.getCurrentPosition((pos)=>{
         setCoord(pos.coords);
-        console.log('succcesskk')
-        let cord = {
-          latitude: pos.coords.latitude,
-          longitude: pos.coords.longitude,
-          horizontalAccuracy: pos.coords.accuracy,
-          verticalAccuracy: pos.coords.altitudeAccuracy,
-          course: pos.coords.heading,
-          altitude: pos.coords.altitude,
-          isUnknown: true
-        };
-        formData={
-          title : title,
-          description : description,
-          userId : userId,
-          companyId : companyId,
-          contractorId : contractorId,
-          location : cord
+        let formData = new FormData();
+
+        formData.append('location.Latitude', pos.coords.latitude);
+        formData.append('userId', userId ? userId : null);
+        formData.append('location.IsUnknown', true);
+        formData.append('location.VerticalAccuracy', pos.coords.accuracy);
+        formData.append('location.LocationId', 0);
+        formData.append('location.Speed', 0.1);
+        formData.append('upvotes', JSON.stringify({
+          id: 0,
+          userId: 'string'
+        }));
+        formData.append('reportId', 0);
+        formData.append('title', title ? title : null);
+        formData.append('description', description ? description : null);
+        formData.append('userId', userId ? userId : null);
+        formData.append('companyId', companyId ? companyId : null);
+        formData.append('contractorId', contractorId ? contractorId : null);
+        formData.append('awardAmount', 0);
+        formData.append('status', 0);
+        formData.append('dateTime', '2015-05-16T05:50:06');
+        formData.append('upvotes',  null);
+        formData.append('location.Course', 0.1);
+        formData.append('awardAmount', 2);
+        if (imageData) {
+          for (let i = 0; i < imageData.length; i++) {
+              formData.append(`pictures`, imageData[i],imageData[i].name);
+          }
         }
-        console.log(pos.coords)
-        
-      
+        formData.append('location.HorizontalAccuracy', pos.coords.accuracy);
+        formData.append('location.Longitude', pos.coords.longitude);
+        formData.append('location.Altitude',pos.coords.altitude || 0.1);
+        console.log('Form data before sending')
         console.log(formData);
-        fetch('https://localhost:7077/Report', {
-          headers: {
-            'Content-Type':  'multipart/form-data; boundary=---------------------------boundary'      
-          },         
+        fetch('https://localhost:7077/Report', {      
           method: 'POST',
-          body: JSON.stringify(formData)
+          body: formData
         }).then((response) => {
           return response.json();
-        // }).then((response) =>{
-        //   localStorage.setItem("token", response.token);
-        //   localStorage.setItem("userId", response.user.id);
+       
         }).then((response) => {
           console.log(response);
           alert("Report Created...");
@@ -186,11 +187,20 @@ export default function SignUp() {
           alert("Invalid input");
         })
 
-        // fetch(`https://localhost:7077/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&Status=${ reportStatus || 0}`)
-        //   .then(response => response.json())
-        //   .then(data => setReports(data));
+       
       },(err)=>console.log(err))
     };
+    React.useEffect(() => {
+      // Fetch the list of hiring companies from the server
+      fetch(`https://localhost:7077/User/users-with-roles?roleName=Company`)
+        .then((response) => response.json())
+        .then((data) => {
+          setHiringCompanies(data);
+        })
+        .catch((error) => {
+          console.error('Error fetching hiring companies:', error);
+        });
+    }, [])
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -251,30 +261,24 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="companyid"
-                  label="Company Id"
-                  name="email"
-                  autoComplete="email"
-                  value={companyId}
-                  onChange={handleCompanyIdChange}
-                />
+              <div className="dropdown text-center">
+              <p> Company:</p> 
+              <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+               {selectedCompany && selectedCompany.user.name}
+              </button>
+              <ul className="dropdown-menu">
+                {hiringCompanies.map((company) => (
+                  <li key={company.user.id} className='d-flex flex-direction-column'>
+                    <Avatar src={"https://localhost:7077/"+company.user.logo}></Avatar>
+                    <a className="dropdown-item" onClick={() => handleCompanySelection(company)}>
+                      {company.user.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="contractorId"
-                  label="Contractor Id"
-                  type="contractorId"
-                  id="contractorId"
-                  autoComplete="new-contractorId"
-                  value={contractorId}
-                  onChange={handleContractorIdChange}
-                />
-              </Grid>
+
               {/* <Grid item xs={12}>
                 <TextField
                   required
@@ -353,6 +357,28 @@ export default function SignUp() {
                   onChange={handleAwardAmountChange}
                 />
               </Grid> */}
+              <Grid item xs={12}>
+                <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
+                Upload Images
+                    <input
+                        accept="image/*"
+                        style={{   clip: 'rect(0 0 0 0)',
+                        clipPath: 'inset(50%)',
+                        height: 1,
+                        overflow: 'hidden',
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        whiteSpace: 'nowrap',
+                        width: 1,}}
+                        id="hidden-file-input"
+                        type="file"
+                        onChange={handleImageChange}
+                        multiple
+                    />
+                </Button>
+              </Grid>
+
             </Grid>
             <Button
               type="submit"
