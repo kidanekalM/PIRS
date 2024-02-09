@@ -13,7 +13,6 @@ const ContProfile = () => {
     userName: "",
     phoneNumber: ""
   });
-
   useEffect(() => {
     fetch(`https://localhost:7077/User/${contractorId}`)
       .then(response => response.json())
@@ -25,7 +24,6 @@ const ContProfile = () => {
         console.error('Error fetching user profile:', error);
       });
   }, [contractorId]);
-
   const handleEditClick = () => {
     setEditMode(true);
     setUpdatedProfile(profile);
