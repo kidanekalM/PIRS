@@ -12,7 +12,7 @@ export default function ReportDetail({report}) {
       <Card sx={{ flex: 1, mr: 2 }}>
         <CardMedia
           component="img"
-          height="140"
+          height="140px"
           image={report.pictures[0]} // replace with actual image url
           alt={report.title}
         />
@@ -32,10 +32,10 @@ export default function ReportDetail({report}) {
         </CardContent>
       </Card>
       <Box sx={{ flex: 1, height: 100  }}>
-        <MapContainer center={position} zoom={13} style={{ height: '100%', width: '100%' }}>
+        <MapContainer center={position} zoom={13} style={{ height: '30%', width: '30%' }}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            attribution='&copy; <a href="">OpenStreetMap</a> contributors'
           />
           <Marker position={position} />
         </MapContainer>

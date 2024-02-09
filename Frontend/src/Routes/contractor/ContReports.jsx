@@ -9,7 +9,7 @@ export default function ContReports(){
   useEffect(()=>{
     fetch(`https://localhost:7077/User/${localStorage.getItem('userId')}`)
     .then((response)=>response.json())
-    .then((data)=>setContractor(data));
+    .then((data)=>{setContractor(data)});
   },[])
 
      const [coord,setCoord] = useState( {
@@ -43,7 +43,7 @@ export default function ContReports(){
     <Box display={'flex'} height={'70%'} alignItems={'flex-start'} >
     </Box>
     </>
-}/*
+}
 function save(r){
   if((r.reportStatus==0))
   console.log(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${1}`)
@@ -65,7 +65,7 @@ function submit(r){
         .then(data =>{ 
           console.log( data)
         }).catch(error => console.error('Error:', error));
-}*/
+}
 function onExportClick(reports){
   var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reports));
   var downloadAnchorNode = document.createElement('a');

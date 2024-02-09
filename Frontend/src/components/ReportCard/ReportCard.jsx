@@ -22,7 +22,7 @@ const ReportCard = ({ report, onDetailsClick, role, appUserId="",coord,onUpvoteC
   }
   return (
     <>
-    <Card sx={{ maxWidth: '70vw', width: '100%', marginRight:'2rem' }} >
+    <Card sx={{ maxWidth: '80vw', width: '100%', marginRight:'2rem' }} >
       <Grid container >
         <Grid item xs={2}>
           <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>

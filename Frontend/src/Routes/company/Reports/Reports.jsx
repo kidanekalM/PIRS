@@ -28,7 +28,7 @@ export default function Reports({companyId, reportStatus}){
     
     return<>
       <Box display={"flex"} flexDirection='column' width={'80%'} gap='1.5rem' paddingTop={'100px'} paddingBottom={'50px'} >
-      {reports.map((r)=>{ return <ReportCard onDetailsClick={handleReportClick} coord={coord} report={r} appUserId={companyId} role="Company" onApproveClick={()=> {approve(r) }} onRejectClick={()=>{reject(r)}}/>})}
+      {reports.map((r)=>{ return <ReportCard coord={coord} report={r} appUserId={companyId} role="Company" onApproveClick={()=> {approve(r) }} onRejectClick={()=>{reject(r)}}/>})}
       </Box>
     <Box display={'flex'} height={'70%'} alignItems={'flex-start'} >
       <Button onClick={()=>onExportClick(reports)} component="label" variant="contained" startIcon={<GetAppIcon />}>
@@ -38,7 +38,8 @@ export default function Reports({companyId, reportStatus}){
     </>
 }
 function approve(r){
-  if((r.reportStatus==2)||(r.reportStatus==4))
+  console.log(r);
+  if((r.status==2)||(r.status==4))
   fetch(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${3}`, {
           method: 'PUT',
         })
@@ -68,7 +69,7 @@ function approve(r){
         .catch(error => console.error('Error:', error));
 }
 function reject(r){
-  if((r.reportStatus==2))
+  if((r.status==2))
   fetch(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${3}`, {
   }).then((respose)=>respose.json())
   .then((data)=>{console.log(data)})
