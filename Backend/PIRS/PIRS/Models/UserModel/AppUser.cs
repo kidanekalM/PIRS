@@ -9,13 +9,13 @@ namespace PIRS.Models.UserModel
         //Company
         public string? Formula { get; set; }
         // Company and Contractor 
-        public string? PaymentInfo { get; set; }
+        public string PaymentInfo { get; } = "CHASECK_TEST-rsh3UiMpIBytuEGhtyBPKtRU6ziR7Anj";
         // Name
         public string? Name { get; set; }
         // For contractor 
-        public User? HiringCompany { get; set; }
-        // Rating for Contractor
-        public RatingModel.Rating Rating { get; set; }
+        public string? HiringCompanyId { get; set; } = null;
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
     }
 }

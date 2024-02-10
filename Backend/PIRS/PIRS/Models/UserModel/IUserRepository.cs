@@ -1,10 +1,16 @@
-﻿namespace PIRS.Models.UserModel
+﻿
+
+using PIRS.Models.ReportModel;
+using PIRS.Models.TransactionModel;
+
+namespace PIRS.Models.UserModel
 {
     public interface IUserRepository
     {
-        public User add();
-        public User edit(User user);
-        public User delete(int id);
-        public List<User> GetAll();
+        void AddContractor(AppUser contractor);
+        AppUser UpdateContractor(AppUser contractor);
+        Transaction GetbyId(int id);
+        List<Report> GetAll();
+        Report GetReportById(int id);
     }
 }

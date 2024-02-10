@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Chapa.NET" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -26,6 +28,12 @@
     <Reference Include="System.Device">
       <HintPath>..\..\..\..\..\..\..\apps\SET_UP\System.Device.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\Images\CompanyLogo\" />
+    <Folder Include="wwwroot\Images\Report\" />
   </ItemGroup>
 
 </Project>
