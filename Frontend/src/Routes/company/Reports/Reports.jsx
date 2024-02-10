@@ -40,7 +40,7 @@ export default function Reports({companyId, reportStatus}){
 function approve(r){
   console.log(r);
   if((r.status==2)||(r.status==4))
-  fetch(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${3}`, {
+  fetch(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${3}&contractorId=${r.contractorId}`, {
           method: 'PUT',
         })
         .then(response => response.json())
@@ -69,8 +69,9 @@ function approve(r){
         .catch(error => console.error('Error:', error));
 }
 function reject(r){
+  console.log(r);
   if((r.status==2))
-  fetch(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${3}`, {
+  fetch(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${4}&contractorId=${r.contractorId}`, {
   }).then((respose)=>respose.json())
   .then((data)=>{console.log(data)})
 }

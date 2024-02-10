@@ -24,7 +24,7 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
       <Grid container>
         <Grid item xs={2}>
           <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
-            <img src={report.pictures.length>0?report.pictures[0].image:"https://picsum.photos/400/300"} alt="Demo" loading="lazy" style={{ position: 'absolute', height:'100%', objectFit: 'cover', borderRadius:'4px' }} />
+            <img src={report.pictures.length>0?report.pictures[0].image:"https://picsum.photos/400/300"} alt="Demo" loading="lazy" style={{ position: 'absolute', height:'100%', width:'150px', objectFit: 'cover', borderRadius:'4px' }} />
           </Box>
         </Grid>
         <Grid item xs={10} display={'flex'} justifyContent={'space-between'} paddingLeft={'1rem'}>
@@ -63,9 +63,10 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
                 {/* <IconButton>
                   <Edit  onClick={onEditCLick}/>
                 </IconButton> */}
+                {report.userId == localStorage.getItem('userId')?
                 <IconButton>
                   <Delete color='error' onClick={onDeleteClick}/>
-                </IconButton>
+                </IconButton>:<></>}
               </Box>
               </>
               : <></>   }

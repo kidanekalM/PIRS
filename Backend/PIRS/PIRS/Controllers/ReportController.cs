@@ -137,12 +137,14 @@ namespace PIRS.Controllers
             return report.upvotes;
         }
         [HttpPut("UpdateStatus")]
-        public async Task<ActionResult<Report>> UpdateStatus(int reportId, ReportStatus status)
+        public async Task<ActionResult<Report>> UpdateStatus(int reportId, ReportStatus status,string contractorId)
         {
+            var contractor = await _userManager.FindByIdAsync(contractorId);
             var report = _reportRepository.GetById(reportId);
             Report res;
-            if ((report != null))
+            if ((report != null)&&(contractor != null))
             {
+                report.Contractor = contractor;
                 report.status = status;
                 res = _reportRepository.Update(report);
             }

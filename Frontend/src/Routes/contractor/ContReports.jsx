@@ -33,7 +33,7 @@ export default function ContReports(){
           .then(data => setReports(data));
         },(err)=>console.log(err))
       }
-      }, []);
+      });
     console.log(reports);
     
     return<>
@@ -44,21 +44,23 @@ export default function ContReports(){
     </Box>
     </>
 }
+
+
 function save(r){
-  if((r.reportStatus==0))
-  console.log(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${1}`)
-  fetch(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${1}`, {
+  // if((r.reportStatus==0))
+  // console.log(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${1}`)
+  //https://localhost:7077/Report/UpdateStatus?reportId=1&status=1&contractorId=1
+  fetch(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${1}&contractorId=${localStorage.getItem('userId')}`, {
           method: 'PUT',
         })
         .then(response => response.json())
-        .then(data =>{ 
+        .then(data =>{
           console.log( data)
         }).catch(error => console.error('Error:', error));
-}
+}  
 function submit(r){
-  if((r.reportStatus==1) || (r.reportStatus==4))
-  console.log(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${2}`)
-  fetch(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${2}`, {
+  // if((r.reportStatus==1) || (r.reportStatus==4))
+  fetch(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${2}&contractorId=${localStorage.getItem('userId')}`, {
           method: 'PUT',
         })
         .then(response => response.json())
@@ -66,6 +68,7 @@ function submit(r){
           console.log( data)
         }).catch(error => console.error('Error:', error));
 }
+
 function onExportClick(reports){
   var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reports));
   var downloadAnchorNode = document.createElement('a');
@@ -75,5 +78,8 @@ function onExportClick(reports){
   downloadAnchorNode.click();
   downloadAnchorNode.remove();
 }
+
+
+
 
 

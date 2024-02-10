@@ -70,7 +70,6 @@ const onUpvoteClick = (r) => {
       });
     }
     else{
-      
       // If the user hasn't upvoted yet, add the upvote
       fetch(`https://localhost:7077/Report/Upvote?reportId=${data.reportId}&userId=${data.userId}`, {
         method: 'POST',

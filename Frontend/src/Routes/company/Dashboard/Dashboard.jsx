@@ -21,7 +21,6 @@ export default function Dashboard(){
     fetch(`https://localhost:7077/Report`)
       .then((response) => response.json())
       .then((data) => {
-        setReportCount(data.length)
         const companyReports = data.filter(report => report.companyId === companyId);
           let reportCounts = {
           newReports: 0,
@@ -52,6 +51,7 @@ export default function Dashboard(){
               break;
           }
         });
+        setReportCount(reportCounts.newReports+reportCounts.inProgress+reportCounts.submitted+reportCounts.approved+reportCounts.rejected)
           let newReportsData = Object.keys(reportCounts).map((key, index) => ({
           id: String(index),
           value: reportCounts[key],
@@ -72,7 +72,7 @@ export default function Dashboard(){
               Total Reports
             </Typography>
             <Typography variant="body2">
-              {reportCount||10}
+              {reportCount||0}
             </Typography>
           </CardContent>
         </Card>

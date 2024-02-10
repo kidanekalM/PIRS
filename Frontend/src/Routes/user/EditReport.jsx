@@ -41,16 +41,12 @@ export default function EditReportForm() {
 
     fetch(`https://localhost:7077/Report?id=${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
       body: JSON.stringify(updatedReport)
     })
       .then(response => {
         if (response.ok) {
           alert('Report updated successfully...');
           window.location.href = "./reports";
-          // Navigate back to the reports page
         } else {
           throw new Error('Error updating report.');
         }

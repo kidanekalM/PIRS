@@ -10,7 +10,7 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import {useState} from 'react'
 import DetailsIcon from '@mui/icons-material/Details';
 
-
+ 
 const ReportCard = ({ report, onDetailsClick, role, appUserId="",coord,onUpvoteClick, onDeleteClick,onEditCLick,onSubmitClick,onSaveClick,onApproveClick,onRejectClick }) => {
   coord==null?coord={latitude:0.0,longitude:0.0}:"";
   // const [coord,setCoord] = useState({latitude:0.0,longitude:0.00})
@@ -22,11 +22,11 @@ const ReportCard = ({ report, onDetailsClick, role, appUserId="",coord,onUpvoteC
   }
   return (
     <>
-    <Card sx={{ maxWidth: '80vw', width: '100%', marginRight:'2rem' }} >
+    <Card sx={{ maxWidth: '90vw', width: '100%', marginRight:'2rem' }} >
       <Grid container >
         <Grid item xs={2}>
           <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
-            <img src={report.pictures.length>0?report.pictures[0].image:"https://picsum.photos/400/300"} alt="Demo" loading="lazy" style={{ position: 'absolute', height:'100%', objectFit: 'cover', borderRadius:'4px' }} />
+            <img src={report.pictures.length>0?report.pictures[0].image:"https://picsum.photos/400/300"} alt="Demo" loading="lazy" style={{ width:"100px", position: 'absolute', height:'100px', objectFit: 'cover', borderRadius:'4px' }} />
           </Box>
         </Grid>
         <Grid item xs={10} display={'flex'} justifyContent={'space-between'} paddingLeft={'1rem'}>

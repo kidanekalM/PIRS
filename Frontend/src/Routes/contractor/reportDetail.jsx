@@ -13,7 +13,7 @@ export default function ReportDetail({report}) {
         <CardMedia
           component="img"
           height="140px"
-          image={report.pictures[0]} // replace with actual image url
+          image={report.pictures[0].image} // replace with actual image url
           alt={report.title}
         />
         <CardContent>

@@ -17,7 +17,7 @@ export default function contTransaction({ contractorId }) {
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    fetch(`https://localhost:7077/Transaction/GetAllByContractor/${contractorId}`)
+    fetch(`https://localhost:7077/Transaction/GetAllByContractor/${localStorage.getItem('userId')}`)
       .then(response => response.json())
       .then(data => setTransactions(data));
       console.log(transactions);
