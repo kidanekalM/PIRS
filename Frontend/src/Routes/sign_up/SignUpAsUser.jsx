@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+const apiKey = import.meta.env.VITE_API_URL
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -65,7 +65,7 @@ export default function SignUp() {
       password: password,
       name: firstName
     };
-    fetch(`https://localhost:7077/Account/signup?roleName=User&password=${password}`, {
+    fetch(`${apiKey}/Account/signup?roleName=User&password=${password}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

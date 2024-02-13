@@ -10,6 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+const apiKey = import.meta.env.VITE_API_URL
 
 function Copyright(props) {
   return (
@@ -76,7 +77,7 @@ export default function SignUp() {
       hiringCompanyId:selectedCompany.user.id
     };
     console.log(data);
-    fetch(`https://localhost:7077/Account/signup?roleName=Contractor&password=${password}`, {
+    fetch(`${apiKey}/Account/signup?roleName=Contractor&password=${password}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -98,7 +99,7 @@ export default function SignUp() {
     };
     React.useEffect(() => {
       // Fetch the list of hiring companies from the server
-      fetch(`https://localhost:7077/User/users-with-roles?roleName=Company`)
+      fetch(`${apiKey}/User/users-with-roles?roleName=Company`)
         .then((response) => response.json())
         .then((data) => {
           setHiringCompanies(data);

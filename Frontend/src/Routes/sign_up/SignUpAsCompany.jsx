@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+const apiKey = import.meta.env.VITE_API_URL
 
 function Copyright(props) {
   return (
@@ -80,7 +81,7 @@ export default function SignUp() {
 
     event.preventDefault();
 
-  fetch(`https://localhost:7077/Account/signup?roleName=Company&password=${password}`, {
+  fetch(`${apiKey}/Account/signup?roleName=Company&password=${password}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -94,7 +95,7 @@ export default function SignUp() {
         console.log(response)
         localStorage.setItem("token", response.token);
         localStorage.setItem("userId", response.user.id);
-        fetch(`https://localhost:7077/Images/PostCompanyLogo?id=${response.user.id}`, {
+        fetch(`${apiKey}/Images/PostCompanyLogo?id=${response.user.id}`, {
           method: 'POST',
           body: imageData
       })
