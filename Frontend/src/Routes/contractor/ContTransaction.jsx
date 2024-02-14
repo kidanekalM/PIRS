@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 
-
+const apiKey = import.meta.env.VITE_API_URL
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -17,7 +17,7 @@ export default function contTransaction({ contractorId }) {
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    fetch(`https://localhost:7077/Transaction/GetAllByContractor/${localStorage.getItem('userId')}`)
+    fetch(`${apiKey}/Transaction/GetAllByContractor/${localStorage.getItem('userId')}`)
       .then(response => response.json())
       .then(data => setTransactions(data));
       console.log(transactions);

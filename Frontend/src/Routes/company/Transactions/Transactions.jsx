@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-
+const apiKey = import.meta.env.VITE_API_URL
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
   { field: 'payment', headerName: 'Payment', width: 130 },
@@ -15,7 +15,7 @@ export default function Transactions({ companyId }) {
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    fetch(`https://localhost:7077/Transaction/GetAllByCompany/${companyId}`)
+    fetch(`${apiKey}/Transaction/GetAllByCompany/${companyId}`)
       .then(response => response.json())
       .then(data => setTransactions(data));
   }, [companyId]);

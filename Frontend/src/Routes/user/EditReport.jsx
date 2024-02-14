@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-
+const apiKey = import.meta.env.VITE_API_URL
 export default function EditReportForm() {
   const { id } = useParams();
   const [report, setReport] = useState({});
@@ -10,7 +10,7 @@ export default function EditReportForm() {
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    fetch(`https://localhost:7077/Report?id=${id}`)
+    fetch(`${apiKey}/Report?id=${id}`)
       .then(response => response.json())
       .then(data => {
         setReport(data);
@@ -39,7 +39,7 @@ export default function EditReportForm() {
       description: description
     };
 
-    fetch(`https://localhost:7077/Report?id=${id}`, {
+    fetch(`${apiKey}/Report?id=${id}`, {
       method: 'PUT',
       body: JSON.stringify(updatedReport)
     })

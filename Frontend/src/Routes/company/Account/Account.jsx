@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-
+const apiKey = import.meta.env.VITE_API_URL
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -36,7 +36,7 @@ export default function Account() {
     const [email,setEmail] =useState ('Email');
     const [password,setPassword] =React.useState ('Password');
 
-    useEffect(()=>{ fetch(`https://localhost:7077/User/${localStorage.getItem('userId')||0}`)
+    useEffect(()=>{ fetch(`${apiKey}/User/${localStorage.getItem('userId')||0}`)
     .then((response)=>response.json())
     .then((data)=>{
         console.log(data)
@@ -74,7 +74,7 @@ export default function Account() {
     const formData = new FormData();
     formData.append('file', file);
 
-    fetch(`https://localhost:7077/Images/PutCompanyLogo?id=${localStorage.getItem('userId')}`, {
+    fetch(`${apiKey}/Images/PutCompanyLogo?id=${localStorage.getItem('userId')}`, {
         method: 'PUT',
         body: formData
     })
@@ -99,7 +99,7 @@ export default function Account() {
 
     event.preventDefault();
   
-  fetch(`https://localhost:7077/User/${localStorage.getItem('userId')}?roleName=Company&password=${password}`, {
+  fetch(`${apiKey}/User/${localStorage.getItem('userId')}?roleName=Company&password=${password}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

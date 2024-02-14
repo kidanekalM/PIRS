@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography, Card, CardContent, CardMedia } from '@mui/material';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import { useParams } from "react-router-dom"
-
+const apiKey = import.meta.env.VITE_API_URL
 export default function ReportDetail({report}) {
   console.log(report)
   const position = [report.location.latitude, report.location.longitude]; // replace with actual latitude and longitude

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, TextField, Button } from '@mui/material';
-
+const apiKey = import.meta.env.VITE_API_URL
 const ContProfile = () => {
   let contractorId = localStorage.getItem('userId')
   const [profile, setProfile] = useState({});
@@ -14,7 +14,7 @@ const ContProfile = () => {
     phoneNumber: ""
   });
   useEffect(() => {
-    fetch(`https://localhost:7077/User/${contractorId}`)
+    fetch(`${apiKey}/User/${contractorId}`)
       .then(response => response.json())
       .then(data => {
         console.log('API Response:', data);
@@ -39,7 +39,7 @@ const ContProfile = () => {
   };
 
   const handleSubmitClick = () => {
-    fetch(`https://localhost:7077/User/${contractorId}?roleName=Contractor`, {
+    fetch(`${apiKey}/User/${contractorId}?roleName=Contractor`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

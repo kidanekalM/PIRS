@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-
+const apiKey = import.meta.env.VITE_API_URL
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -45,7 +45,7 @@ export default function SignUp() {
   React.useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos)=>{
       setCoord(pos.coords)
-      // fetch(`https://localhost:7077/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&Status=${ reportStatus || 0}`)
+      // fetch(`${apiKey}/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&Status=${ reportStatus || 0}`)
       //   .then(response => response.json())
       //   .then(data => setReports(data));
     },(err)=>console.log(err))
@@ -174,7 +174,7 @@ export default function SignUp() {
         formData.append('location.Altitude',pos.coords.altitude || 0.1);
         console.log('Form data before sending')
         console.log(formData);
-        fetch('https://localhost:7077/Report', {      
+        fetch(`${apiKey}/Report`, {      
           method: 'POST',
           body: formData
         }).then((response) => {
@@ -193,7 +193,7 @@ export default function SignUp() {
     };
     React.useEffect(() => {
       // Fetch the list of hiring companies from the server
-      fetch(`https://localhost:7077/User/users-with-roles?roleName=Company`)
+      fetch(`${apiKey}/User/users-with-roles?roleName=Company`)
         .then((response) => response.json())
         .then((data) => {
           setHiringCompanies(data);
@@ -270,7 +270,7 @@ export default function SignUp() {
               <ul className="dropdown-menu">
                 {hiringCompanies.map((company) => (
                   <li key={company.user.id} className='d-flex flex-direction-column'>
-                    <Avatar src={"https://localhost:7077/"+company.user.logo}></Avatar>
+                    <Avatar src={`${apiKey}/`+company.user.logo}></Avatar>
                     <a className="dropdown-item" onClick={() => handleCompanySelection(company)}>
                       {company.user.name}
                     </a>

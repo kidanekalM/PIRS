@@ -20,7 +20,7 @@ export default function Reports(companyId, status="0"){
     useEffect(() => {
       navigator.geolocation.getCurrentPosition((pos)=>{
         setCoord(pos.coords)
-        fetch(`https://localhost:7077/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&Status=${0}`)
+        fetch(`${apiKey}/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&Status=${0}`)
           .then(response => response.json())
           .then(data => {setReports(data); console.log(data)});
       },(err)=>console.log(err))
@@ -34,7 +34,7 @@ export default function Reports(companyId, status="0"){
     </>
 }
 const onDeleteClick = (r) => {
-  fetch(`https://localhost:7077/Report?id=${r.reportId}`,{
+  fetch(`${apiKey}/Report?id=${r.reportId}`,{
     method : 'DELETE',
     headers: {
       'Content-Type': 'application/json'      
@@ -61,7 +61,7 @@ const onUpvoteClick = (r) => {
     const upv = r.upvotes.find((upv)=> upv.userId == data.userId);
     if(upv){
       // If the user has already upvoted, remove the upvote
-      fetch(`https://localhost:7077/Report/Upvote?reportId=${data.reportId}&upvoteId=${upv.id}`, {
+      fetch(`${apiKey}/Report/Upvote?reportId=${data.reportId}&upvoteId=${upv.id}`, {
         method: 'DELETE'
       })
       .then((response) => response.json())
@@ -71,7 +71,7 @@ const onUpvoteClick = (r) => {
     }
     else{
       // If the user hasn't upvoted yet, add the upvote
-      fetch(`https://localhost:7077/Report/Upvote?reportId=${data.reportId}&userId=${data.userId}`, {
+      fetch(`${apiKey}/Report/Upvote?reportId=${data.reportId}&userId=${data.userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -85,7 +85,7 @@ const onUpvoteClick = (r) => {
     }
   }
   else{
-    fetch(`https://localhost:7077/Report/Upvote?reportId=${data.reportId}&userId=${data.userId}`, {
+    fetch(`${apiKey}/Report/Upvote?reportId=${data.reportId}&userId=${data.userId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

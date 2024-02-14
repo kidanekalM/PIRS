@@ -4,7 +4,7 @@ import ReportCard from "../../../components/ReportCard/ReportCard";
 import  Button  from "@mui/material/Button";
 import GetAppIcon from '@mui/icons-material/GetApp'
 import { Navigate } from "react-router-dom";
-
+const apiKey = import.meta.env.VITE_API_URL
 export default function Reports({companyId, reportStatus}){
      const [coord,setCoord] = useState( {
       latitude: 0.0,
@@ -20,7 +20,7 @@ export default function Reports({companyId, reportStatus}){
     useEffect(() => {
       navigator.geolocation.getCurrentPosition((pos)=>{
         setCoord(pos.coords)
-        fetch(`https://localhost:7077/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&CompanyId=${companyId}&Status=${ reportStatus || 0}`)
+        fetch(`${apiKey}/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&CompanyId=${companyId}&Status=${ reportStatus || 0}`)
           .then(response => response.json())
           .then(data => setReports(data));
       },(err)=>console.log(err))
@@ -40,7 +40,7 @@ export default function Reports({companyId, reportStatus}){
 function approve(r){
   console.log(r);
   if((r.status==2)||(r.status==4))
-  fetch(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${3}&contractorId=${r.contractorId}`, {
+  fetch(`${apiKey}/Report/UpdateStatus?reportId=${r.reportId}&status=${3}&contractorId=${r.contractorId}`, {
           method: 'PUT',
         })
         .then(response => response.json())
@@ -52,7 +52,7 @@ function approve(r){
             companyId:r.companyId,
             contractorId:r.contractorId,
           }
-          fetch(`https://localhost:7077/Transaction`, {
+          fetch(`${apiKey}/Transaction`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -71,7 +71,7 @@ function approve(r){
 function reject(r){
   console.log(r);
   if((r.status==2))
-  fetch(`https://localhost:7077/Report/UpdateStatus?reportId=${r.reportId}&status=${4}&contractorId=${r.contractorId}`, {
+  fetch(`${apiKey}/Report/UpdateStatus?reportId=${r.reportId}&status=${4}&contractorId=${r.contractorId}`, {
   }).then((respose)=>respose.json())
   .then((data)=>{console.log(data)})
 }

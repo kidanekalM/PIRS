@@ -37,7 +37,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Account from '../Account/Account'
 import { useEffect } from 'react';
 import {Link} from 'react-router-dom'
-
+const apiKey = import.meta.env.VITE_API_URL
 const drawerWidth = 240;
 const companyId = localStorage.getItem('userId')
 const menusItems = [
@@ -157,7 +157,7 @@ export default function MiniDrawer() {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }} >
             {title}
           </Typography>
-          <Avatar src={`https://localhost:7077/${companyInfo.logo}`} onClick={()=>{setTitle('Account'); SetMainContent(<Account/>)}}>A</Avatar>
+          <Avatar src={`${apiKey}/${companyInfo.logo}`} onClick={()=>{setTitle('Account'); SetMainContent(<Account/>)}}>A</Avatar>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>

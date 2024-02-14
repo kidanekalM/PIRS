@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useEffect, useState } from 'react';
-
+const apiKey = import.meta.env.VITE_API_URL
 export default function Dashboard(){
   let companyId = localStorage.getItem('userId');
   let allReportsData= [
@@ -18,7 +18,7 @@ export default function Dashboard(){
   const [reportsData,setReportsData] = useState(allReportsData)
   const [reportCount,setReportCount] = useState(1);
   useEffect(() => {
-    fetch(`https://localhost:7077/Report`)
+    fetch(`${apiKey}/Report`)
       .then((response) => response.json())
       .then((data) => {
         const companyReports = data.filter(report => report.companyId === companyId);

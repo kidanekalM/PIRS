@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+const apiKey = import.meta.env.VITE_API_URL
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -26,7 +27,7 @@ const columns = [
 export default function Contractors() {
     const [contractors,setContractors] = useState([{ id: '1', userName: 'user1', email: 'user1@example.com', phoneNumber: '1234567890', firstName: 'John', lastName: 'Doe' }])
     let rows = [{ id: '1', userName: 'user1', email: 'user1@example.com', phoneNumber: '1234567890', firstName: 'John', lastName: 'Doe' }]
-    useEffect(()=>{fetch('https://localhost:7077/User/users-with-roles?roleName=Contractor')
+    useEffect(()=>{fetch(`${apiKey}/User/users-with-roles?roleName=Contractor`)
     .then(response=>response.json())
     .then((data)=>{setContractors(data) ;
          rows = data.map((c)=>{return { id: c.user.id, userName: c.user.userName, email: c.user.email, phoneNumber: c.user.phoneNumber, firstName: c.user.firstName, lastName: c.user.lastName}})

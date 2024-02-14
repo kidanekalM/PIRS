@@ -6,7 +6,7 @@ import UNav from "../../components/user_dashboard/user_nav";
 export default function Reports(companyId="1", status="0"){
     const [reports,setReports] = useState([]);
     useEffect(() => {
-        fetch(`https://localhost:7077/Report`)
+        fetch(`${apiKey}/Report`)
           .then(response => response.json())
           .then(data => setReports(data));
       }, []);
