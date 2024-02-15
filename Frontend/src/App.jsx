@@ -20,6 +20,32 @@ import ContTransaction from '../src/Routes/contractor/ContTransaction'
 import reportDetail from './Routes/contractor/reportDetail'
 
 
+const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
+  <Route
+    {...rest}
+    render={(props) =>
+      isAuthenticated ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to="/SignInAsUser" />
+      )
+    }
+  />
+);
+
+const PublicRoute = ({ component: Component, isAuthenticated, restricted, ...rest }) => (
+  <Route
+    {...rest}
+    render={(props) =>
+      isAuthenticated && restricted ? (
+        <Redirect to="/dashboard" />
+      ) : (
+        <Component {...props} />
+      )
+    }
+  />
+);
+
 function App() {
   return (
     <>
