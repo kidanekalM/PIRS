@@ -51,8 +51,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-         <Route index path="/Home" element={<Home/>} />
-         <Route index path="/" element={<UDashboard/>} />
+         <Route index path="/" element={<Home/>} />
          <Route path="choosecreate" element={<ChooseCreateAcc/>} />
          <Route path="signupasuser" element={<SignUpAsUser/>} />
          <Route path="signupascontractor" element={<SignUpAsContractor/>} />
