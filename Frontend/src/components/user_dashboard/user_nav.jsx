@@ -2,9 +2,9 @@ import {Link} from 'react-router-dom'
 
 const UNav = () => {
     return ( 
-        <nav className="navbar navbar-expand-lg sticky-top bg-light">
+        <nav className="navbar navbar-expand-lg sticky-top bg-info  ">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
+          <a className="navbar-brand text-white" href="#">
             EthioRush
           </a>
           <button
@@ -22,35 +22,35 @@ const UNav = () => {
             <ul className="navbar-nav">
               <li className="nav-item">
                 <Link to='../udashboard'>
-                <button data-mdb-ripple-init type="button" className="btn">
+                <button data-mdb-ripple-init type="button " className="btn text-white">
                   Home
                 </button>
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to='../reports'>                
-                <button data-mdb-ripple-init type="button" className="btn">
+                <button data-mdb-ripple-init type="button" className="btn text-white">
                   My Reports
                 </button> 
                 </Link>
               </li> 
               <li className="nav-item">
                 <Link to='../createreport'>                
-                <button data-mdb-ripple-init type="button" className="btn">
+                <button data-mdb-ripple-init type="button" className="btn text-white">
                   Create Report
                 </button> 
                 </Link>
               </li>             
               <li className="nav-item">
                 <Link to='../trending'>                
-                <button data-mdb-ripple-init type="button" className="btn">
+                <button data-mdb-ripple-init type="button" className="btn text-white">
                   Trending Reports
                 </button> 
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to='../'>                
-                <button data-mdb-ripple-init type="button" className="btn">
+                <button data-mdb-ripple-init type="button" className="btn text-white">
                   Log Out
                 </button> 
                 </Link>

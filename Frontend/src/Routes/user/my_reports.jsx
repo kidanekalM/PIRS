@@ -45,7 +45,6 @@ const onDeleteClick = (r) => {
     window.location.href = "./reports";
   })
   .catch(error => {
-    // Handle error, e.g., show an error message
     console.error('Error deleting report:', error);
   });
 };
