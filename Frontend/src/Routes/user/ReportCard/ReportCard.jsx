@@ -20,15 +20,16 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
   }
   return (
     <>
-    <Card sx={{ maxWidth: '70vw', width: '100%', marginRight:'2rem', display:"flex", flexDirection:{ xs: 'column', md: 'row'} }}>
+    <Card sx={{ maxWidth: '70vw', width: '100%', marginRight:'2rem'}}>
         <CardMedia
-         sx={{ height: 140 , minWidth:'25%'}}
+         sx={{ height: 140}}
          image={report.pictures.length>0?report.pictures[0].image:"https://picsum.photos/400/300"}
-         
+         title="green iguana"
         />
-         <Box display={'flex'}  minWidth={'75%'} flexDirection={'column'}>
-          <Box display={'flex'} justifyContent={'space-between'}>
-
+          <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
+            <img 
+            src={report.pictures.length>0?report.pictures[0].image:"https://picsum.photos/400/300"} alt="Demo" loading="lazy" style={{ position: 'absolute', height:'100%', width:'150px', objectFit: 'cover', borderRadius:'4px' }} />
+          </Box>  
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               {report.title}
@@ -100,10 +101,8 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
               </Box>
             </Box>
           </CardActions>
-        </Box>
-      <Box width={'400%'}>
+      <Box sx={{ width: '400%' }}>
         {report.status==4?<LinearProgress variant="determinate" value={100} color='secondary' />:<LinearProgress variant="determinate" value={((report.status+1)/4)*100} color='primary' />}
-      </Box>  
       </Box>
     </Card>
    </>
