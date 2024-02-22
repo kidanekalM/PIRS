@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, IconButton, Box, Grid, CircularProgress, CardActions, CardMedia } from '@mui/material';
+import { Card, CardContent, Typography, IconButton, Box, Grid, CircularProgress } from '@mui/material';
 import LinearProgress from '@mui/material/LinearProgress';
 import circularProgress from '@mui/material/CircularProgress';
 import { Edit, Delete, ThumbUp, Book } from '@mui/icons-material';
@@ -20,16 +20,15 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
   }
   return (
     <>
-    <Card sx={{ maxWidth: '70vw', width: '100%', marginRight:'2rem'}}>
-        <CardMedia
-         sx={{ height: 140}}
-         image={report.pictures.length>0?report.pictures[0].image:"https://picsum.photos/400/300"}
-         title="green iguana"
-        />
+    <Card sx={{ maxWidth: '70vw', width: '100%', marginRight:'2rem' }}>
+      <Grid container>
+        <Grid item xs={2}>
           <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
-            <img 
-            src={report.pictures.length>0?report.pictures[0].image:"https://picsum.photos/400/300"} alt="Demo" loading="lazy" style={{ position: 'absolute', height:'100%', width:'150px', objectFit: 'cover', borderRadius:'4px' }} />
-          </Box>  
+            <img src={report.pictures.length>0?report.pictures[0].image:"https://picsum.photos/400/300"} alt="Demo" loading="lazy" style={{ position: 'absolute', height:'100%', width:'150px', objectFit: 'cover', borderRadius:'4px' }} />
+          </Box>
+        </Grid>
+        <Grid item xs={10} display={'flex'} justifyContent={'space-between'} paddingLeft={'1rem'}>
+          
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               {report.title}
@@ -49,7 +48,7 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
               
             )}
             </CardContent>
-            <CardActions>
+            <CardContent>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               {role=="User"?
               <>
@@ -100,7 +99,9 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
                 </>  :<></> }
               </Box>
             </Box>
-          </CardActions>
+          </CardContent>
+        </Grid>
+      </Grid>
       <Box sx={{ width: '400%' }}>
         {report.status==4?<LinearProgress variant="determinate" value={100} color='secondary' />:<LinearProgress variant="determinate" value={((report.status+1)/4)*100} color='primary' />}
       </Box>
