@@ -114,15 +114,17 @@ namespace PIRS.Controllers
             }
             else
             {
-                report.upvotes = new List<ReportUpvote>();
-                report.upvotes.Add(new ReportUpvote() { User = user });
+                report.upvotes = new List<ReportUpvote>
+                {
+                    new ReportUpvote() { User = user }
+                };
                 _reportRepository.Update(report);
 
             }
             return report.upvotes;
         }
         [HttpDelete("Upvote")]
-        public async Task<ActionResult<List<ReportUpvote>>> DeleteUpvote(int reportId, int upvoteId)
+        public async Task<ActionResult<List<ReportUpvote>>> DeleteUpvote([FromQuery] int reportId, int upvoteId)
         {
             var report = _reportRepository.GetById(reportId);
             if ((report != null) &&(report.upvotes != null))
@@ -137,7 +139,7 @@ namespace PIRS.Controllers
             return report.upvotes;
         }
         [HttpPut("UpdateStatus")]
-        public async Task<ActionResult<Report>> UpdateStatus(int reportId, ReportStatus status,string contractorId)
+        public async Task<ActionResult<Report>> UpdateStatus( int reportId, ReportStatus status,string contractorId)
         {
             var contractor = await _userManager.FindByIdAsync(contractorId);
             var report = _reportRepository.GetById(reportId);
