@@ -1,10 +1,9 @@
-import Trending from "./trending"
+import UNav from "../../components/user_dashboard/user_nav";
 
 const UDashboard = () => {
     return ( 
         <>
-        {/* <UNav/> */}
-        <Trending/>
+        <UNav/>
         </>
      )
 }
