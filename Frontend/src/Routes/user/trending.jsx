@@ -17,26 +17,25 @@ export default function Reports(companyId="1", status="0"){
     <UNav/>
     <Box display={"flex"} flexDirection='column' width={'90%'} gap='1.5rem' paddingTop={'100px'} paddingBottom={'50px'} className="report mx-5">
 
-    {reports.map((r)=>{return <ReportCard report={r} appUserId={companyId} role="User" onUpvoteClick={()=>{handleUpvote(r)}} onApproveClick={(e)=>{console.log(e)}} onRejectClick={()=>{console.log(r)}}/>})}
+    {reports.map((r)=>{return <ReportCard report={r} appUserId={appUserId} role="User" onUpvoteClick={()=>{handleUpvote(r)}} onApproveClick={(e)=>{console.log(e)}} onRejectClick={()=>{console.log(r)}}/>})}
     </Box>
     </>
 }
 
 function handleUpvote(report){
   console.log(report);
-  let upvoteId = report.upvotes.find((u)=>u.userId==appUserId);
+  let upvote = report.upvotes.find((u)=>u.userId==appUserId);
   // Delete
-  if(report.upvotes.some((u)=>{u.userId==appUserId})){
-    console.log(upvoteId)
-    console.log("Here")
-    console.log(report.reportId)
-    fetch(`${apiKey}/Report/Upvote?reportId=${report.reportId}&upvoteId=${upvoteId}`, {
+  if(report.upvotes.some((u)=>u.userId==appUserId)){
+    fetch(`${apiKey}/Report/Upvote?reportId=${report.reportId}&upvoteId=${upvote.id}`, {
       method: 'DELETE'
     })
   }
   // Create
   else{
-    fetch(`${apiKey}/Report/Upvote?reportId=${report.reportId}&userId=${appUserId}`)
+    fetch(`${apiKey}/Report/Upvote?reportId=${report.reportId}&userId=${appUserId}`, {
+      method: 'POST'
+    })
     .then((r)=>r.json())
     .then((r)=>{console.log(r)})
   }

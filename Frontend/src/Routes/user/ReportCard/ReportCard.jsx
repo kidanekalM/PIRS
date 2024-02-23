@@ -12,7 +12,7 @@ import {useState} from 'react'
 const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteClick,onEditCLick,onSubmitClick,onSaveClick,onApproveClick,onRejectClick }) => {
   coord==null?coord={latitude:0.0,longitude:0.0}:"";
   console.log(report.upvotes);
-  const [upvoteClicked,setUpvoteClicked] = useState((report.upvotes.some(r => r.userId === appUserId)))
+  const [upvoteClicked,setUpvoteClicked] = useState((report.upvotes.some((u) => u.userId === appUserId)))
   const[upvoteCount,setUpvoteCount] = useState(report.upvotes.length);
   const [submitClicked,setsubmitClicked] = useState(false)
   const [saveClicked,setsaveClicked] = useState(false)
@@ -61,8 +61,8 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
               <>
 
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent:'center', flexDirection:'column' }}>
-              <IconButton onClick={onUpvoteClick}>
-                  <ChangeHistoryRoundedIcon onClick={()=>{upvoteClicked?setUpvoteClicked(false):setUpvoteClicked(true)}} fontSize='medium' color={(report.upvotes.some(r => r.userId === appUserId))||upvoteClicked ? 'primary' : 'inherit'} />
+              <IconButton  onClick={()=>{ onUpvoteClick(); if( upvoteClicked){setUpvoteClicked(false); setUpvoteCount(upvoteCount-1)}else{setUpvoteClicked(true); setUpvoteCount(upvoteCount+1)}}}>
+                  <ChangeHistoryRoundedIcon  fontSize='medium' color={(upvoteClicked) ? 'primary' : 'inherit'} />
                 </IconButton>
                 <Typography variant="body2" color="text.secondary">
                 {upvoteCount}

@@ -99,7 +99,7 @@ namespace PIRS.Controllers
             return helperService.ToDto(oldReport);
         }
         [HttpPost("Upvote")]
-        public async Task<ActionResult<List<ReportUpvote>>> Upvote(int reportId,string userId)
+        public async Task<ActionResult<List<ReportUpvote>>> Upvote([FromQuery] int reportId,string userId)
         {
             var report = _reportRepository.GetById(reportId);
             var user = await _userManager.FindByIdAsync(userId);
