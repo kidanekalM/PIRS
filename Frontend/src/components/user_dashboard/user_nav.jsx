@@ -4,7 +4,7 @@ const UNav = () => {
     return ( 
         <nav className="navbar navbar-expand-lg sticky-top bg-info  ">
         <div className="container-fluid">
-          <a className="navbar-brand text-white" href="#">
+          <a className="navbar-brand text-white" href="/Home">
             EthioRush
           </a>
           <button
@@ -21,7 +21,7 @@ const UNav = () => {
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link to='../udashboard'>
+                <Link to='/Home'>
                 <button data-mdb-ripple-init type="button " className="btn text-white">
                   Home
                 </button>

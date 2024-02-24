@@ -18,63 +18,59 @@ import ContReports from '../src/Routes/contractor/ContReports'
 import ContProfile from '../src/Routes/contractor/ContProfile'
 import ContTransaction from '../src/Routes/contractor/ContTransaction'
 import reportDetail from './Routes/contractor/reportDetail'
+import {useState} from 'react'
 
 
-const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      isAuthenticated ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to="/SignInAsUser" />
-      )
-    }
-  />
-);
-
-const PublicRoute = ({ component: Component, isAuthenticated, restricted, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      isAuthenticated && restricted ? (
-        <Redirect to="/dashboard" />
-      ) : (
-        <Component {...props} />
-      )
-    }
-  />
-);
+const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      element={
+        isAuthenticated ? (
+          <Component />
+        ) : (
+          <Navigate to="/SignInAsUser" replace={true} />
+        )
+      }
+    />
+  );
+};
 
 function App() {
+  const [isAuthenticated,setIsAuthenticated] = useState(false);
   return (
     <>
       <BrowserRouter>
         <Routes>
          <Route index path="/" element={<UDashboard/>} />
+         <Route index path="/Home" element={<Home/>} />
          <Route path="choosecreate" element={<ChooseCreateAcc/>} />
          <Route path="signupasuser" element={<SignUpAsUser/>} />
-         <Route path="signupascontractor" element={<SignUpAsContractor/>} />
-         <Route path="signupascompany" element={<SignUpAsCompany/>} />
+         {/* <Route path="signupascontractor" element={<SignUpAsContractor/>} /> */}
+         {/* <Route path="signupascompany" element={<SignUpAsCompany/>} /> */}
          <Route path="signinasuser" element={<SignInAsUser/>} />
          <Route path="udashboard" element={<UDashboard/>} />
-         <Route path="createreport" element={<CreateReport/>} />
+         
+         <PrivateRoute
+            path="createreport"
+            component={CreateReport}
+            isAuthenticated={isAuthenticated}
+          />
+         
          <Route path="reports" element={<MyReports/>} />
          <Route path="trending" element={<Trending/>} />
          <Route path="editreport/*" element={<EditReport/>} />
          <Route path='Company/*' element={<Company/>}/>
 
-         <Route path="contdashboard" element={<Layout/>} >
+         {/* <Route path="contdashboard" element={<Layout/>} >
            <Route path="GetReportById" element={<ContReports />}/>
            <Route path="reportDetail" element={<reportDetail />}/>
            <Route path="profile" element={<ContProfile/>} />
            <Route path="Transaction" element={<ContTransaction/>}/>
-          </Route>
+          </Route> */}
 
-         {/* <Route path="contdashboard/Logout" element={<Home/>}/> */}
-         {/* <Route path="contdashboard/Logout/choose" element={<ChooseAccount/>}/> */}
-         <Route path="contdashboard/Logout/choose/choosecreate" element={<ChooseCreateAcc/>}/>
-         <Route path='contdashboard/Logout/choosecreate' element={<ChooseCreateAcc/>}/>
+         {/* <Route path="contdashboard/Logout/choose/choosecreate" element={<ChooseCreateAcc/>}/> */}
+         {/* <Route path='contdashboard/Logout/choosecreate' element={<ChooseCreateAcc/>}/> */}
 
         </Routes>
       </BrowserRouter>
