@@ -121,7 +121,8 @@ namespace PIRS.Models.ReportModel
                 .Include(r => r.Contractor)
                 .Include(r => r.location)
                 .Include(r => r.upvotes).ThenInclude(u => u.User)
-                .Include(r => r.pictures).Where(r => r.User.Id.Equals( id.ToString() ) ).ToList();
+                .Include(r => r.pictures).Where(r => r.User.Id.Equals( id.ToString() ) )
+                .ToList();
         }
 
         public Report Update(Report report)
@@ -149,7 +150,8 @@ namespace PIRS.Models.ReportModel
                              .Include(r => r.Contractor)
                              .Include(r => r.location)
                              .Include(r => r.upvotes).ThenInclude(u => u.User)
-                             .Include(r => r.pictures);
+                             .Include(r => r.pictures)
+                             .Take(30);
 
             var reportList = reports.ToList();
 
