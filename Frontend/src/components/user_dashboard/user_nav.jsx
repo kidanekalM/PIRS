@@ -1,6 +1,7 @@
 import {Link} from 'react-router-dom'
 
 const UNav = () => {
+  console.log((localStorage.getItem('AuthInfo')=="true"))
     return ( 
         <nav className="navbar navbar-expand-lg sticky-top bg-info  ">
         <div className="container-fluid">
@@ -48,10 +49,25 @@ const UNav = () => {
                 </button> 
                 </Link>
               </li>
+              {(localStorage.getItem('AuthInfo')=="true")?
               <li className="nav-item">
-                <Link to='../'>                
-                <button data-mdb-ripple-init type="button" className="btn text-white">
+                <Link  onClick={()=>{localStorage.setItem('AuthInfo',false); localStorage.setItem('userId',""); location.reload();}}>                
+                <button data-mdb-ripple-init type="button" className="btn text-white" >
                   Log Out
+                </button> 
+                </Link>
+              </li>:
+              <li className="nav-item">
+              <Link  to='./signInAsUser'>                
+              <button data-mdb-ripple-init type="button" className="btn text-white" >
+                Log In
+              </button> 
+              </Link>
+              </li>}
+              <li className="nav-item">
+                <Link to='../about'>                
+                <button data-mdb-ripple-init type="button" className="btn text-white">
+                  About
                 </button> 
                 </Link>
               </li>

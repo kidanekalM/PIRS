@@ -1,4 +1,4 @@
-import {BrowserRouter,Routes,Route} from 'react-router-dom'
+import {BrowserRouter,Routes,Route,Navigate} from 'react-router-dom'
 import Home from './Routes/homepage/home'
 import ChooseCreateAcc from './Routes/ChooseCreateAcc'
 import SignUpAsUser from './Routes/sign_up/SignUpAsUser'
@@ -19,43 +19,34 @@ import ContProfile from '../src/Routes/contractor/ContProfile'
 import ContTransaction from '../src/Routes/contractor/ContTransaction'
 import reportDetail from './Routes/contractor/reportDetail'
 import {useState} from 'react'
-
-
-const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      element={
-        isAuthenticated ? (
-          <Component />
-        ) : (
-          <Navigate to="/SignInAsUser" replace={true} />
-        )
-      }
-    />
-  );
-};
+import About from './Routes/user/About'
 
 function App() {
-  const [isAuthenticated,setIsAuthenticated] = useState(false);
+  console.log("At app",localStorage.getItem('AuthInfo'))
   return (
     <>
       <BrowserRouter>
         <Routes>
-         <Route index path="/" element={<UDashboard/>} />
+         <Route index path="/" element={ localStorage.getItem('AuthInfo')=="true" ? 
+              <UDashboard/>
+             : <Home/>} />
          <Route index path="/Home" element={<Home/>} />
          <Route path="choosecreate" element={<ChooseCreateAcc/>} />
          <Route path="signupasuser" element={<SignUpAsUser/>} />
          {/* <Route path="signupascontractor" element={<SignUpAsContractor/>} /> */}
          {/* <Route path="signupascompany" element={<SignUpAsCompany/>} /> */}
          <Route path="signinasuser" element={<SignInAsUser/>} />
+         <Route path="About" element={<About/>} />
          <Route path="udashboard" element={<UDashboard/>} />
-         
-         <PrivateRoute
-            path="createreport"
-            component={CreateReport}
-            isAuthenticated={isAuthenticated}
-          />
+         <Route
+          path='createreport'
+          element={
+            localStorage.getItem('AuthInfo')=="true" ? 
+              <CreateReport />
+             : 
+              <SignInAsUser redirectUrl={'createreport'}/>
+          }
+        />
          
          <Route path="reports" element={<MyReports/>} />
          <Route path="trending" element={<Trending/>} />

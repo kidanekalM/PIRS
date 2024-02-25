@@ -27,8 +27,8 @@ namespace PIRS.Controllers
             _webHostEnvironment = webHostEnvironment;
             helperService = new HelperService(webHostEnvironment,userManager,httpContextAccessor.HttpContext);
         }
-
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<ReportDto<ImageGallery>>> Create([FromForm] ReportDto<IFormFile> reportDto)
         {
             Console.WriteLine(reportDto);
@@ -39,6 +39,7 @@ namespace PIRS.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<ActionResult<ReportDto<ImageGallery>>> Update([FromForm]ReportDto<IFormFile> reportDto)
         {
             var newReport = await helperService.ToModel(reportDto);
@@ -157,6 +158,7 @@ namespace PIRS.Controllers
             return res;
         }
         [HttpDelete]
+        [Authorize]
         public ActionResult<ReportDto<ImageGallery>> Delete(int id)
         {
             Report report = _reportRepository.GetById(id);

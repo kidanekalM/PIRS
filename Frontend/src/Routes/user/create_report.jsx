@@ -172,20 +172,26 @@ export default function SignUp() {
         formData.append('location.HorizontalAccuracy', pos.coords.accuracy);
         formData.append('location.Longitude', pos.coords.longitude);
         formData.append('location.Altitude',pos.coords.altitude || 0.1);
+        //formData.append('Authorization',localStorage.getItem('token'));
+
         console.log('Form data before sending')
-        console.log(formData);
+        console.log(formData,localStorage.getItem('token'));
         fetch(`${apiKey}/Report`, {      
           method: 'POST',
-          body: formData
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
         }).then((response) => {
+          console.log(response)
           return response.json();
        
         }).then((response) => {
-          console.log(response);
           alert("Report Created...");
           window.location.href = "./reports";
-        }).catch(() => {
+        }).catch((e) => {
           alert("Invalid input");
+          console.log(e);
         })
 
        

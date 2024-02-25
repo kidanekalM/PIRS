@@ -78,7 +78,7 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
               </>
               : <></>   }
               <Box sx={{ display: 'flex', alignItems: 'center'}}>
-              {((role=="User") && (appUserId==report.userId))?
+              {/* {((role=="User") && (appUserId==report.userId))?
               <>
               <IconButton>
                   <Edit  onClick={onEditCLick}/>
@@ -86,7 +86,7 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
                 <IconButton>
                   <Delete color='error' onClick={onDeleteClick}/>
                 </IconButton>
-                </>:<></>}
+                </>:<></>} */}
                 { (role=="Contractor")&&((report.status != 2) && (report.status != 3))?
                 <><IconButton>
                   <BookmarkBorderIcon onClick={onSaveClick} {...report.contractorId==appUserId?{color:"primary"}:{color:"inherit"}}/>

@@ -7,13 +7,13 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Link from '@mui/material/Link';
+import {Link} from 'react-router-dom';
 const apiKey = import.meta.env.VITE_API_URL
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function SignInAsUser() {
+export default function SignInAsUser({redirectUrl}) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -70,13 +70,13 @@ export default function SignInAsUser() {
     localStorage.setItem('token', response.token);
     localStorage.setItem('userId', response.user.id);
     const role = response.role;
-    alert(`Redirecting to the ${role.toLowerCase()} dashboard...`);
-    window.location.href =
+    localStorage.setItem('AuthInfo',true);
+    window.location.href = ((redirectUrl==null)|| (redirectUrl==""))?
       role === 'User'
         ? './udashboard'
         : role === 'Contractor'
         ? './ContDashboard'
-        : './Company';
+        : './Company':`/${redirectUrl}`;
   })
   .catch((error) => {
     alert(error.message);
@@ -133,6 +133,7 @@ export default function SignInAsUser() {
             >
               Sign In
             </Button>
+          <Link to="/choosecreate">Create account</Link>
           </Box>
         </Box>
         <Typography variant="body2" color="text.secondary" align="center">
