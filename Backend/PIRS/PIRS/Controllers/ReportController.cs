@@ -188,6 +188,7 @@ namespace PIRS.Controllers
         }
         [HttpGet("{id}",Name ="GetById")]
         [ActionName("GetById")]
+        [Authorize]
         public ActionResult<ReportDto<ImageGallery>> GetById(int id)
         {
             var report = _reportRepository.GetById(id);
