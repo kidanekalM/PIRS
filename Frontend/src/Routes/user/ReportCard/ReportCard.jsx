@@ -11,7 +11,7 @@ import {useState} from 'react'
 
 const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteClick,onEditCLick,onSubmitClick,onSaveClick,onApproveClick,onRejectClick }) => {
   coord==null?coord={latitude:0.0,longitude:0.0}:"";
-  console.log(report.upvotes);
+  // console.log(report.upvotes);
   const [upvoteClicked,setUpvoteClicked] = useState((report.upvotes.some((u) => u.userId === appUserId)))
   const[upvoteCount,setUpvoteCount] = useState(report.upvotes.length);
   const [submitClicked,setsubmitClicked] = useState(false)
@@ -122,7 +122,7 @@ export default ReportCard;
 
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   var R = 6371; // Radius of the earth in km
-  console.log(lat1,lon1,lat2,lon2);
+  // console.log(lat1,lon1,lat2,lon2);
   var dLat = deg2rad(lat2-lat1);
   var dLon = deg2rad(lon2-lon1); 
   var a = 
