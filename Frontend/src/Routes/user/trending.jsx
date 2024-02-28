@@ -6,18 +6,23 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Avatar from '@mui/material/Avatar';
 import FormControl from '@mui/material/FormControl';
+import Typography  from "@mui/material/Typography";
 import Select from '@mui/material/Select';
 const apiKey = import.meta.env.VITE_API_URL
 const appUserId = localStorage.getItem("userId")
 export default function Reports(companyId="1", status="0"){
 
     const [reports,setReports] = useState([]);
+    const [pos,setPos] = useState();
     const [hiringCompanies,setHiringCompanies] = useState([])
-    const [selectedCompany,setSelectedCompany] = useState({user:{id:""}})
+    const [selectedCompanyId,setSelectedCompanyId] = useState(1)
     useEffect(() => {
-        fetch(`${apiKey}/Report`)
+      navigator.geolocation.getCurrentPosition((pos)=>{
+        setPos(pos)
+        fetch(`${apiKey}/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&CompanyId=${selectedCompanyId}&Status=${  0}`)
           .then(response => response.json())
           .then(data => setReports(data));
+      },(err)=>console.log(err))
       }, []);
       useEffect(()=>{
         fetch(`${apiKey}/User/users-with-roles?roleName=Company`)
@@ -31,39 +36,37 @@ export default function Reports(companyId="1", status="0"){
           console.error('Error fetching hiring companies:', error);
         });
       },[])
-      const handleCompanySelection = (companyId) => {
-        setSelectedCompany(companyId);
-        useEffect(() => {
-          fetch(`${apiKey}/Report/GetByCompany?id=${company}&reportStatus=${0}`)
-            .then((response) => response.json())
-            .then((data) => {
-              setReports(data);
-            })
-            .catch((error) => {
-              console.error('Error fetching hiring companies:', error);
-            });
-        }, [])
+      
+      const handleCompanySelection = async (companyId) => {
+        setSelectedCompanyId(companyId);
+           let response = await fetch(`${apiKey}/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&CompanyId=${selectedCompanyId}&Status=${  0}`);
+           let data = await response.json();
+           setReports(data);
       };
     
     return<>
     <UNav/>
     <Box display={"flex"} flexDirection='column' width={'90%'} gap='1.5rem' paddingTop={'10px'} paddingBottom={'50px'} className="report mx-5">
-    <Box sx={{width:200}}>
+    <Box sx={{maxWidth:300, width:"100%"}}>
 
     <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Company</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={selectedCompany && selectedCompany.user.id}
+          // value={selectedCompany && selectedCompany.user.id}
           // value={selectedCompany==''? <> <Avatar src={"https://localhost:7077/"+selectedCompany.user.logo}></Avatar> {selectedCompany.user.name}</>:<></>}
           label="Company"
           onChange={(event)=>{handleCompanySelection(event.target.value)}}
           >
           { hiringCompanies.map((company)=>
             <MenuItem value={company.user.id} >
-              <Avatar src={apiKey+"/"+company.user.logo}></Avatar>
-              {company.user.name}
+              <Box sx={{display:"flex" ,gap:".5rem", alignItems:"center"}}>
+                <Avatar src={apiKey+"/"+company.user.logo}></Avatar>
+                <Typography>
+                  {company.user.name}
+                </Typography>
+              </Box>
             </MenuItem>)
           }
         </Select>
