@@ -28,7 +28,6 @@ namespace PIRS.Controllers
             helperService = new HelperService(webHostEnvironment,userManager,httpContextAccessor.HttpContext);
         }
         [HttpPost]
-        [Authorize]
         public async Task<ActionResult<ReportDto<ImageGallery>>> Create([FromForm] ReportDto<IFormFile> reportDto)
         {
             Console.WriteLine(reportDto);
