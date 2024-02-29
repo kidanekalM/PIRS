@@ -38,10 +38,18 @@ export default function Reports(companyId="1", status="0"){
       },[])
       
       const handleCompanySelection = async (companyId) => {
-        setSelectedCompanyId(companyId);
-           let response = await fetch(`${apiKey}/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&CompanyId=${selectedCompanyId}&Status=${  0}`);
-           let data = await response.json();
-           setReports(data);
+        if(companyId == "select")
+        {
+          let response = await fetch(`${apiKey}/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&CompanyId=${selectedCompanyId}&Status=${  0}`)
+          let data = await response.json()
+          setReports(data)
+        }
+        else{
+          setSelectedCompanyId(companyId);
+          let response = await fetch(`${apiKey}/Report/Sort?GeoCoordinate.Latitude=${pos.coords.latitude}&GeoCoordinate.Longitude=${pos.coords.longitude}&GeoCoordinate.Altitude=${pos.coords.altitude || 0}&GeoCoordinate.HorizontalAccuracy=${pos.coords.accuracy || 0}&GeoCoordinate.VerticalAccuracy=${pos.coords.altitudeAccuracy || 0}&GeoCoordinate.Speed=${pos.coords.speed || 0}&GeoCoordinate.Course=${pos.coords.heading || 0}&GeoCoordinate.IsUnknown=true&CompanyId=${selectedCompanyId}&Status=${  0}`);
+          let data = await response.json();
+          setReports(data);
+        }
       };
     
     return<>
@@ -59,7 +67,13 @@ export default function Reports(companyId="1", status="0"){
           label="Company"
           onChange={(event)=>{handleCompanySelection(event.target.value)}}
           >
-          { hiringCompanies.map((company)=>
+            <MenuItem value={"select"} >
+                <Typography>
+                  {"--Select--"}
+                </Typography>
+            </MenuItem>
+          { 
+          hiringCompanies.map((company)=>
             <MenuItem value={company.user.id} >
               <Box sx={{display:"flex" ,gap:".5rem", alignItems:"center"}}>
                 <Avatar src={apiKey+"/"+company.user.logo}></Avatar>
