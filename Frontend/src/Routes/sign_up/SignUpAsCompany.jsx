@@ -71,8 +71,8 @@ export default function SignUp() {
 
     const data = {
       username: username,
-      firstName: firstName,
-      lastName: lastName,
+      // firstName: firstName,
+      // lastName: lastName,
       email: email,
       password: password,
       name: firstName,
@@ -149,6 +149,7 @@ export default function SignUp() {
                   onChange={handleUsernameChange}
                 />
               </Grid>
+{/*               
             <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
@@ -173,8 +174,8 @@ export default function SignUp() {
                   autoFocus
                   value={lastName}
                   onChange={handleLastNameChange}
-                />
-              </Grid>
+                /> 
+              </Grid>*/}
               <Grid item xs={12}>
                 <TextField
                   autoComplete="formula"

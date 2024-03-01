@@ -59,8 +59,8 @@ export default function SignUp() {
     event.preventDefault();
     const data = {
       username: username,
-      firstName: firstName,
-      lastName: lastName,
+      // firstName: firstName,
+      // lastName: lastName,
       email: email,
       password: password,
       name: firstName
@@ -120,7 +120,7 @@ export default function SignUp() {
                   onChange={handleUsernameChange}
                 />
               </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
                   name="name"
@@ -145,7 +145,7 @@ export default function SignUp() {
                   value={lastName}
                   onChange={handleLastNameChange}
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
                 <TextField
                   required
