@@ -87,9 +87,9 @@ namespace PIRS.Controllers
 
             var claims = new[]
             {
-        new Claim(ClaimTypes.Name, user.Name),
-        new Claim(ClaimTypes.Role, roles != null && roles.Count > 0 ? roles[0] : "User")
-    };
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Role, roles != null && roles.Count > 0 ? roles[0] : "User")
+            };
 
             var token = GenerateJwtToken(claims);
             return Ok(new { Token = token, User = user, Role = roles.Count > 0 ? roles[0] : "User" });
@@ -101,17 +101,17 @@ namespace PIRS.Controllers
             var jwtSecret = _configuration["Jwt:Key"];
             var jwtIssuer = _configuration["Jwt:Issuer"];
             var jwtAudience = _configuration["Jwt:Audience"];
-            var jwtExpiryMinutes = 120;
+            //var jwtExpiryMinutes = 120;
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expiry = DateTime.UtcNow.AddMinutes(jwtExpiryMinutes);
+            //var expiry = DateTime.UtcNow.AddMinutes(jwtExpiryMinutes);
 
             var token = new JwtSecurityToken(
                 jwtIssuer,
                 jwtAudience,
                 claims,
-                expires: expiry,
+                //expires: expiry,
                 signingCredentials: credentials
             );
 

@@ -201,7 +201,7 @@ export default function SignUp() {
               <ul className="dropdown-menu">
                 {hiringCompanies.map((company) => (
                   <li key={company.user.id} className='d-flex flex-direction-column'>
-                    <Avatar src={"https://localhost:7077/"+company.user.logo}></Avatar>
+                    <Avatar src={apiKey+"/"+company.user.logo}></Avatar>
                     <a className="dropdown-item" onClick={() => handleCompanySelection(company)}>
                       {company.user.name}
                     </a>

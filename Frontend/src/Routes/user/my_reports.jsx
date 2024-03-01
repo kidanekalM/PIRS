@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import ReportCard from "./ReportCard/ReportCard";
 import UNav from "../../components/user_dashboard/user_nav";
 
-
+const apiKey = import.meta.env.VITE_API_URL
 export default function Reports(companyId, status="0"){
 
   const [coord,setCoord] = useState( {

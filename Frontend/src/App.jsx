@@ -1,4 +1,4 @@
-import {BrowserRouter,Routes,Route} from 'react-router-dom'
+import {BrowserRouter,Routes,Route,Navigate} from 'react-router-dom'
 import Home from './Routes/homepage/home'
 import ChooseCreateAcc from './Routes/ChooseCreateAcc'
 import SignUpAsUser from './Routes/sign_up/SignUpAsUser'
@@ -18,63 +18,50 @@ import ContReports from '../src/Routes/contractor/ContReports'
 import ContProfile from '../src/Routes/contractor/ContProfile'
 import ContTransaction from '../src/Routes/contractor/ContTransaction'
 import reportDetail from './Routes/contractor/reportDetail'
-
-
-const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      isAuthenticated ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to="/SignInAsUser" />
-      )
-    }
-  />
-);
-
-const PublicRoute = ({ component: Component, isAuthenticated, restricted, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      isAuthenticated && restricted ? (
-        <Redirect to="/dashboard" />
-      ) : (
-        <Component {...props} />
-      )
-    }
-  />
-);
+import {useState} from 'react'
+import About from './Routes/user/About'
 
 function App() {
+  console.log("At app",localStorage.getItem('AuthInfo'))
   return (
     <>
       <BrowserRouter>
         <Routes>
-         <Route index path="/" element={<Home/>} />
+         <Route index path="/" element={ localStorage.getItem('AuthInfo')=="true" ? 
+              <UDashboard/>
+             : <Home/>} />
+         <Route index path="/Home" element={<Home/>} />
          <Route path="choosecreate" element={<ChooseCreateAcc/>} />
          <Route path="signupasuser" element={<SignUpAsUser/>} />
-         <Route path="signupascontractor" element={<SignUpAsContractor/>} />
-         <Route path="signupascompany" element={<SignUpAsCompany/>} />
+         {/* <Route path="signupascontractor" element={<SignUpAsContractor/>} /> */}
+         {/* <Route path="signupascompany" element={<SignUpAsCompany/>} /> */}
          <Route path="signinasuser" element={<SignInAsUser/>} />
+         <Route path="About" element={<About/>} />
          <Route path="udashboard" element={<UDashboard/>} />
-         <Route path="createreport" element={<CreateReport/>} />
+         <Route
+          path='createreport'
+          element={
+            localStorage.getItem('AuthInfo')=="true" ? 
+              <CreateReport />
+             : 
+              <SignInAsUser redirectUrl={'createreport'}/>
+          }
+        />
+         
          <Route path="reports" element={<MyReports/>} />
          <Route path="trending" element={<Trending/>} />
          <Route path="editreport/*" element={<EditReport/>} />
          <Route path='Company/*' element={<Company/>}/>
 
-         <Route path="contdashboard" element={<Layout/>} >
+         {/* <Route path="contdashboard" element={<Layout/>} >
            <Route path="GetReportById" element={<ContReports />}/>
            <Route path="reportDetail" element={<reportDetail />}/>
            <Route path="profile" element={<ContProfile/>} />
            <Route path="Transaction" element={<ContTransaction/>}/>
-          </Route>
+          </Route> */}
 
-         {/* <Route path="contdashboard/Logout" element={<Home/>}/> */}
-         {/* <Route path="contdashboard/Logout/choose" element={<ChooseAccount/>}/> */}
-         <Route path="contdashboard/Logout/choose/choosecreate" element={<ChooseCreateAcc/>}/>
-         <Route path='contdashboard/Logout/choosecreate' element={<ChooseCreateAcc/>}/>
+         {/* <Route path="contdashboard/Logout/choose/choosecreate" element={<ChooseCreateAcc/>}/> */}
+         {/* <Route path='contdashboard/Logout/choosecreate' element={<ChooseCreateAcc/>}/> */}
 
         </Routes>
       </BrowserRouter>

@@ -27,7 +27,6 @@ namespace PIRS.Controllers
             _webHostEnvironment = webHostEnvironment;
             helperService = new HelperService(webHostEnvironment,userManager,httpContextAccessor.HttpContext);
         }
-
         [HttpPost]
         public async Task<ActionResult<ReportDto<ImageGallery>>> Create([FromForm] ReportDto<IFormFile> reportDto)
         {
@@ -39,6 +38,7 @@ namespace PIRS.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<ActionResult<ReportDto<ImageGallery>>> Update([FromForm]ReportDto<IFormFile> reportDto)
         {
             var newReport = await helperService.ToModel(reportDto);
@@ -99,7 +99,7 @@ namespace PIRS.Controllers
             return helperService.ToDto(oldReport);
         }
         [HttpPost("Upvote")]
-        public async Task<ActionResult<List<ReportUpvote>>> Upvote(int reportId,string userId)
+        public async Task<ActionResult<List<ReportUpvote>>> Upvote([FromQuery] int reportId,string userId)
         {
             var report = _reportRepository.GetById(reportId);
             var user = await _userManager.FindByIdAsync(userId);
@@ -155,6 +155,7 @@ namespace PIRS.Controllers
             return res;
         }
         [HttpDelete]
+        [Authorize]
         public ActionResult<ReportDto<ImageGallery>> Delete(int id)
         {
             Report report = _reportRepository.GetById(id);
@@ -184,6 +185,7 @@ namespace PIRS.Controllers
         }
         [HttpGet("{id}",Name ="GetById")]
         [ActionName("GetById")]
+        [Authorize]
         public ActionResult<ReportDto<ImageGallery>> GetById(int id)
         {
             var report = _reportRepository.GetById(id);

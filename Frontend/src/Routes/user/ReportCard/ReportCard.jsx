@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography, IconButton, Box, Grid, CircularProgress } from '@mui/material';
+import { Card, CardContent, Typography, IconButton, Box, Grid, CircularProgress, CardActions, CardMedia } from '@mui/material';
 import LinearProgress from '@mui/material/LinearProgress';
 import circularProgress from '@mui/material/CircularProgress';
 import { Edit, Delete, ThumbUp, Book } from '@mui/icons-material';
@@ -11,6 +11,13 @@ import {useState} from 'react'
 
 const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteClick,onEditCLick,onSubmitClick,onSaveClick,onApproveClick,onRejectClick }) => {
   coord==null?coord={latitude:0.0,longitude:0.0}:"";
+  // console.log(report.upvotes);
+  const [upvoteClicked,setUpvoteClicked] = useState((report.upvotes.some((u) => u.userId === appUserId)))
+  const[upvoteCount,setUpvoteCount] = useState(report.upvotes.length);
+  const [submitClicked,setsubmitClicked] = useState(false)
+  const [saveClicked,setsaveClicked] = useState(false)
+  const [approveClicked,setapproveClicked] = useState(false)
+  const [rejectClicked,setrejectClicked] = useState(false)
   // const [coord,setCoord] = useState({latitude:0.0,longitude:0.00})
   //  role= 'Contractor'
     // appUserId='2'
@@ -20,15 +27,15 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
   }
   return (
     <>
-    <Card sx={{ maxWidth: '70vw', width: '100%', marginRight:'2rem' }}>
-      <Grid container>
-        <Grid item xs={2}>
-          <Box sx={{ width: '100%', height: '100%', position: 'relative' }}>
-            <img src={report.pictures.length>0?report.pictures[0].image:"https://picsum.photos/400/300"} alt="Demo" loading="lazy" style={{ position: 'absolute', height:'100%', width:'150px', objectFit: 'cover', borderRadius:'4px' }} />
-          </Box>
-        </Grid>
-        <Grid item xs={10} display={'flex'} justifyContent={'space-between'} paddingLeft={'1rem'}>
-          
+    <Card sx={{ maxWidth: '70vw', width: '100%', marginRight:'2rem', display:"flex", flexDirection:{ xs: 'column', md: 'row'} }}>
+        <CardMedia
+         sx={{ height: 140 , minWidth:'25%'}}
+         image={report.pictures.length>0?report.pictures[0].image:"https://picsum.photos/400/300"}
+         
+        />
+         <Box display={'flex'}  minWidth={'75%'} flexDirection={'column'}>
+          <Box display={'flex'} justifyContent={'space-between'}>
+
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               {report.title}
@@ -48,17 +55,17 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
               
             )}
             </CardContent>
-            <CardContent>
+            <CardActions>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               {role=="User"?
               <>
 
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent:'center', flexDirection:'column' }}>
-              <IconButton>
-                  <ChangeHistoryRoundedIcon onClick={onUpvoteClick} fontSize='medium' color={report.upvotes.some(r => r.userId === appUserId) ? 'primary' : 'inherit'} />
+              <IconButton  onClick={()=>{ onUpvoteClick(); if( upvoteClicked){setUpvoteClicked(false); setUpvoteCount(upvoteCount-1)}else{setUpvoteClicked(true); setUpvoteCount(upvoteCount+1)}}}>
+                  <ChangeHistoryRoundedIcon  fontSize='medium' color={(upvoteClicked) ? 'primary' : 'inherit'} />
                 </IconButton>
                 <Typography variant="body2" color="text.secondary">
-                {report.upvotes.length}
+                {upvoteCount}
                 </Typography>
                 {/* <IconButton>
                   <Edit  onClick={onEditCLick}/>
@@ -71,7 +78,7 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
               </>
               : <></>   }
               <Box sx={{ display: 'flex', alignItems: 'center'}}>
-              {((role=="User") && (appUserId==report.userId))?
+              {/* {((role=="User") && (appUserId==report.userId))?
               <>
               <IconButton>
                   <Edit  onClick={onEditCLick}/>
@@ -79,7 +86,7 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
                 <IconButton>
                   <Delete color='error' onClick={onDeleteClick}/>
                 </IconButton>
-                </>:<></>}
+                </>:<></>} */}
                 { (role=="Contractor")&&((report.status != 2) && (report.status != 3))?
                 <><IconButton>
                   <BookmarkBorderIcon onClick={onSaveClick} {...report.contractorId==appUserId?{color:"primary"}:{color:"inherit"}}/>
@@ -99,22 +106,23 @@ const ReportCard = ({ report, role, appUserId="",coord,onUpvoteClick, onDeleteCl
                 </>  :<></> }
               </Box>
             </Box>
-          </CardContent>
-        </Grid>
-      </Grid>
-      <Box sx={{ width: '400%' }}>
+          </CardActions>
+        </Box>
+      <Box width={'400%'}>
         {report.status==4?<LinearProgress variant="determinate" value={100} color='secondary' />:<LinearProgress variant="determinate" value={((report.status+1)/4)*100} color='primary' />}
+      </Box>  
       </Box>
     </Card>
    </>
   );
 };
 
+
 export default ReportCard;
 
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
   var R = 6371; // Radius of the earth in km
-  console.log(lat1,lon1,lat2,lon2);
+  // console.log(lat1,lon1,lat2,lon2);
   var dLat = deg2rad(lat2-lat1);
   var dLon = deg2rad(lon2-lon1); 
   var a = 

@@ -119,8 +119,8 @@ public class UserController : ControllerBase
         existingUser.Email = user.Email;
         existingUser.PasswordHash = user.PasswordHash;
         existingUser.PhoneNumber = user.PhoneNumber;
-        existingUser.FirstName = user.FirstName;
-        existingUser.LastName = user.LastName;
+        //existingUser.FirstName = user.FirstName;
+        //existingUser.LastName = user.LastName;
 
 
         var result = await _userManager.UpdateAsync(existingUser);
