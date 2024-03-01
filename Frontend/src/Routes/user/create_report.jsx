@@ -278,7 +278,7 @@ export default function SignUp() {
                   <li key={company.user.id} className='d-flex flex-direction-column'>
                     <Avatar src={`${apiKey}/`+company.user.logo}></Avatar>
                     <a className="dropdown-item" onClick={() => handleCompanySelection(company)}>
-                      {company.user.name}
+                      {company.user.userName}
                     </a>
                   </li>
                 ))}

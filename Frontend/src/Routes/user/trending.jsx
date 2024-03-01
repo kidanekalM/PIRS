@@ -34,6 +34,7 @@ export default function Reports(companyId="1", status="0"){
         .then((response) => {
           setHiringCompanies(response);
           setHiringCompanies(response);
+          
           console.log("asdfafd",hiringCompanies)
         })
         .catch((error) => {
@@ -83,7 +84,7 @@ export default function Reports(companyId="1", status="0"){
               <Box sx={{display:"flex" ,gap:".5rem", alignItems:"center"}}>
                 <Avatar src={apiKey+"/"+company.user.logo}></Avatar>
                 <Typography>
-                  {company.user.name}
+                  {company.user.userName}
                 </Typography>
               </Box>
             </MenuItem>)
