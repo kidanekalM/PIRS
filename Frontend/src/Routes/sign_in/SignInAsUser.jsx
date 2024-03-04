@@ -73,10 +73,10 @@ export default function SignInAsUser({redirectUrl}) {
     localStorage.setItem('AuthInfo',true);
     window.location.href = ((redirectUrl==null)|| (redirectUrl==""))?
       role === 'User'
-        ? './udashboard'
+        ? '/udashboard'
         : role === 'Contractor'
-        ? './ContDashboard'
-        : './Company':`/${redirectUrl}`;
+        ? '/ContDashboard'
+        : '/Company':`/${redirectUrl}`;
   })
   .catch((error) => {
     alert(error.message);

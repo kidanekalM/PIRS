@@ -82,7 +82,7 @@ export default function SignUp() {
       })
       .then(() => {
         alert("Account Created. Redirecting to the Sign In...");
-        window.location.href = "./signinasuser";
+        window.location.href = "/signinasuser";
       })
       .catch(() => {
         alert("Sign up failed. Please try again.");
