@@ -33,8 +33,8 @@ function App() {
          <Route index path="/Home" element={<Home/>} />
          <Route path="choosecreate" element={<ChooseCreateAcc/>} />
          <Route path="signupasuser" element={<SignUpAsUser/>} />
-         {/* <Route path="signupascontractor" element={<SignUpAsContractor/>} /> */}
-         {/* <Route path="signupascompany" element={<SignUpAsCompany/>} /> */}
+         <Route path="signupascontractor" element={<SignUpAsContractor/>} />{/** */}
+         <Route path="signupascompany" element={<SignUpAsCompany/>} />{/** */}
          <Route path="signinasuser" element={<SignInAsUser/>} />
          <Route path="About" element={<About/>} />
          <Route path="udashboard" element={<UDashboard/>} />
@@ -52,16 +52,16 @@ function App() {
          <Route path="trending" element={<Trending/>} />
          <Route path="editreport/*" element={<EditReport/>} />
          <Route path='Company/*' element={<Company/>}/>
-
-         {/* <Route path="contdashboard" element={<Layout/>} >
+          {/*  */}
+         <Route path="contdashboard" element={<Layout/>} >
            <Route path="GetReportById" element={<ContReports />}/>
            <Route path="reportDetail" element={<reportDetail />}/>
            <Route path="profile" element={<ContProfile/>} />
            <Route path="Transaction" element={<ContTransaction/>}/>
-          </Route> */}
+          </Route>
 
-         {/* <Route path="contdashboard/Logout/choose/choosecreate" element={<ChooseCreateAcc/>}/> */}
-         {/* <Route path='contdashboard/Logout/choosecreate' element={<ChooseCreateAcc/>}/> */}
+         <Route path="contdashboard/Logout/choose/choosecreate" element={<ChooseCreateAcc/>}/>{/** */}
+         <Route path='contdashboard/Logout/choosecreate' element={<ChooseCreateAcc/>}/>{/** */}
 
         </Routes>
       </BrowserRouter>
