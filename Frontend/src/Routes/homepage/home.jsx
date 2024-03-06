@@ -9,10 +9,11 @@ function Home(){
         <>
         <NavBar/>
         <Hero />
-        <div className="container w-100 my-4">
+        <br />
+        {/* <div className="container w-100 my-4 d-lg-none">
         <Describe/>
         <Steps/>
-        </div>
+        </div> */}
         <Footer/>
         </>
     );

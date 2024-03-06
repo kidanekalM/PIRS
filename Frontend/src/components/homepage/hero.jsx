@@ -7,11 +7,12 @@ const Hero = () => {
           <section className='light-image col-6'>
         <div className="heroInner justify-content-center my-5">
             <span>
-              <h1 className='display-6 my-5'>Report, Gain Ratings and Expect Support in a Short Time</h1>
+              <h3 >Report, Gain Ratings and Expect Support in a Short Time</h3>
               <Link to="/signupasuser">
-              <p className="btn btn-dark">
+                <br />
+              <button className="btn btn-primary">
                 Report Now
-              </p>
+              </button>
               </Link>
             </span>
           </div>

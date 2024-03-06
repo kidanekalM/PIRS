@@ -100,6 +100,11 @@ export default function Reports(companyId="1", status="0"){
 
 function handleUpvote(report){
   console.log(report);
+  if((localStorage.getItem('userId')== null) || (localStorage.getItem('userId')== "" ) || (localStorage.getItem('AuthInfo')=="false"))
+  {
+    location.href = "/signinasuser"
+    return
+  }
   let upvote = report.upvotes.find((u)=>u.userId==appUserId);
   // Delete
   if(report.upvotes.some((u)=>u.userId==appUserId)){

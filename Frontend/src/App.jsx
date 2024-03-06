@@ -28,7 +28,7 @@ function App() {
       <BrowserRouter>
         <Routes>
          <Route index path="/" element={ localStorage.getItem('AuthInfo')=="true" ? 
-              <UDashboard/>
+              <Trending/>
              : <Home/>} />
          <Route index path="/Home" element={<Home/>} />
          <Route path="choosecreate" element={<ChooseCreateAcc/>} />
