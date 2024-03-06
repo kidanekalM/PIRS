@@ -5,12 +5,17 @@ export default function About(){
     <br/>
     <h3 style={{color: "black", textAlign:"center"}}>Public Reporting System</h3>
     <br />
-    <p style={{color: "black", textAlign:"center"}}>
-    This application serves as a comprehensive platform designed to efficiently log and manage issues associated with any of our partner companies. It is meticulously crafted with the primary aim of expediting the process of support and maintenance. By doing so, it ensures that any potential risks are promptly addressed and mitigated, thereby significantly reducing any inconvenience that could be caused to our partners or customers.
+    <p style={{color: "black", textAlign:"center" , padding:"2rem"}}>
+        <p>
 
-The application stands as a testament to our commitment to providing seamless service and fostering strong, reliable relationships with our partner companies. It underscores our proactive approach to problem-solving, ensuring that issues are not just reacted to, but anticipated and prevented.
-
-In essence, this application is more than just a tool - it is a strategic ally in maintaining the smooth operation of our collective businesses, a guardian of our shared interests, and a key player in our mission to provide the highest level of service. It is our solution to ensuring that our operations run as smoothly and efficiently as possible, always.
+        This app is like a one-stop-shop for keeping track of any issues with our partner companies. It’s been carefully built to speed up support and maintenance tasks. This way, we can quickly deal with any potential problems, making life easier for our partners and customers.
+        </p>
+        <p>
+        The app shows our dedication to smooth service and building solid relationships with our partner companies. It’s all about being proactive in solving problems, not just reacting to them, but also trying to prevent them.
+        </p>
+        <p>
+        In short, this app isn’t just a tool - it’s a strategic buddy in keeping our businesses running smoothly. It’s a protector of our shared interests and a major player in our mission to deliver top-notch service. It’s our secret weapon to make sure our operations are always running as slick and efficient as possible.
+        </p>
     </p>
     <br />
     <p style={{color: "black", textAlign:"center"}}>Contact: +2519</p>
