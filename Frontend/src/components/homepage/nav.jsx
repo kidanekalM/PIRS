@@ -9,6 +9,11 @@ function NavBar(){
                 EthioRush
                 </button>
             </Link>
+            <Link to="/About">
+              <button data-mdb-ripple-init type="button" className="btn">
+                About
+                </button>
+            </Link>
           <button
             className="navbar-toggler"
             type="button"

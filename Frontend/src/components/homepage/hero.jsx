@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import '../../component_styles/hero.css';
 const Hero = () => {
     return ( 
-        <div style={{overflow:"hidden"}}>
+        <div style={{overflow:"hidden", paddingBottom:"9vh"}}>
           <div className="row" >
           <section className='light-image col-6'>
         <div className="heroInner justify-content-center my-5">

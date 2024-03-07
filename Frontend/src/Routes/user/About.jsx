@@ -18,6 +18,8 @@ export default function About(){
         </p>
     </p>
     <br />
+    <a href="tel:+251922335151">
     <p style={{color: "black", textAlign:"center"}}>Contact: +2519</p>
+    </a>
     </>
 }

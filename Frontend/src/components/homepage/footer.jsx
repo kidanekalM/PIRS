@@ -14,9 +14,12 @@ const Footer = () => {
       <button type="button" className="btn btn-light btn-lg btn-floating mx-2">
       <i className="fab fa-instagram"></i>
       </button>
+      <a href="t.me/">
+
       <button type="button" className="btn btn-light btn-lg btn-floating mx-2">
         <i className="fab fa-telegram"></i>
       </button>
+      </a>
     </div>
 
     <div className="text-center text-white p-3">
