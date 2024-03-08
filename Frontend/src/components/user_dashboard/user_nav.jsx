@@ -32,21 +32,21 @@ const UNav = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to='../reports'>                
+                <Link to='../../reports'>                
                 <button data-mdb-ripple-init type="button" className="btn text-white">
                   My Reports
                 </button> 
                 </Link>
               </li> 
               <li className="nav-item">
-                <Link to='../createreport'>                
+                <Link to='../../createreport'>                
                 <button data-mdb-ripple-init type="button" className="btn text-white">
                   Create Report
                 </button> 
                 </Link>
               </li>             
               <li className="nav-item">
-                <Link to='../trending'>                
+                <Link to='../../trending'>                
                 <button data-mdb-ripple-init type="button" className="btn text-white">
                   Trending Reports
                 </button> 
@@ -61,7 +61,7 @@ const UNav = () => {
                 </Link>
               </li>:
               <li className="nav-item">
-              <Link  to='./signInAsUser'>                
+              <Link  to='../../signInAsUser'>                
               <button data-mdb-ripple-init type="button" className="btn text-white" >
                 Log In
               </button> 
