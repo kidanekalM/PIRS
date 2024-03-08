@@ -123,7 +123,7 @@ export default function MiniDrawer() {
   const [open, setOpen] = useState(false);
   const [MainContent,SetMainContent] = useState(<Dashboard/>);
   const [title,setTitle] = useState("Home")
-  useEffect(()=>{fetch(`https://localhost:7077/User/${companyId}`)
+  useEffect(()=>{fetch(`${apiKey}/${companyId}`)
   .then((res)=>res.json())
   .then((data)=>{setCompanyInfo(data)
   console.log(data)})},[])
