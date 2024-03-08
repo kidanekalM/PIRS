@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import { FormControl,InputLabel,Select,MenuItem } from '@mui/material';
 const apiKey = import.meta.env.VITE_API_URL
 function Copyright(props) {
   return (
@@ -122,8 +123,9 @@ export default function SignUp() {
     };
     const handleCompanySelection = (company) => {
       console.log(company.user.id)
-      setSelectedCompany(company);
-      setCompanyId(company.user.id);
+      setSelectedCompany(hiringCompanies.find((c)=>c.user.id==company));
+      setSelectedCompany(hiringCompanies.find((c)=>c.user.id==company));
+      // setCompanyId(company.user.id);
     };
     const handleIsUnknownChange = (event) => {
       setIsUnknown(event.target.value);
@@ -267,7 +269,7 @@ export default function SignUp() {
                   onChange={handleUserIdChange}
                 />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
               <div className="dropdown text-center">
               <p> Company:</p> 
               <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -284,6 +286,33 @@ export default function SignUp() {
                 ))}
               </ul>
             </div>
+              </Grid> */}
+              <Grid item xs={12}>
+              <Box sx={{maxWidth:300, width:"100%"}}>
+                <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Company</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      // value={selectedCompany && selectedCompany.user.id}
+                      // value={selectedCompany==''? <> <Avatar src={"https://localhost:7077/"+selectedCompany.user.logo}></Avatar> {selectedCompany.user.name}</>:<></>}
+                      label="Company"
+                      onChange={(event)=>{handleCompanySelection(event.target.value)}}
+                      >
+                      { 
+                      hiringCompanies.map((company)=>
+                        <MenuItem value={company.user.id} >
+                          <Box sx={{display:"flex" ,gap:".5rem", alignItems:"center"}}>
+                            <Avatar src={apiKey+"/"+company.user.logo}></Avatar>
+                            <Typography>
+                              {company.user.userName}
+                            </Typography>
+                          </Box>
+                        </MenuItem>)
+                      }
+                    </Select>
+                  </FormControl>
+                  </Box>
               </Grid>
 
               {/* <Grid item xs={12}>

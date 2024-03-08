@@ -46,7 +46,7 @@ const UNav = () => {
                 </Link>
               </li>             
               <li className="nav-item">
-                <Link to='../trending'>                
+                <Link to='../'>                
                 <button data-mdb-ripple-init type="button" className="btn text-white">
                   Trending 
                 </button> 
