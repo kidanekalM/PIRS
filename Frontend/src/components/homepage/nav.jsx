@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 function NavBar(){
+  const [baropen,setbaropen] = useState(false)
     return(
         <>
         <nav className="navbar navbar-expand-lg bg-light sticky-top">
@@ -22,6 +24,7 @@ function NavBar(){
             aria-controls="navbarNavDropdown"
             aria-expanded="false"
             aria-label="Toggle navigation"
+            onClick={()=>{if(baropen) document.getElementById('navbarNavDropdown').style.display="none";else{document.getElementById('navbarNavDropdown').style.display="block"} setbaropen(!baropen)}}
           >
             <span className="navbar-toggler-icon"></span>
           </button>
