@@ -34,7 +34,6 @@ namespace PIRS.Controllers
             var report = await helperService.ToModel(reportDto);
             _reportRepository.Add(report);
             return helperService.ToDto(report);
-
         }
 
         [HttpPut]

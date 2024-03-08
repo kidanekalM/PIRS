@@ -121,10 +121,10 @@ export default function SignUp() {
       const file = event.target.files[0];
       setPicture(file);
     };
-    const handleCompanySelection = (company) => {
-      console.log(company.user.id)
+    const handleCompanySelection = (company) => {      
       setSelectedCompany(hiringCompanies.find((c)=>c.user.id==company));
       setSelectedCompany(hiringCompanies.find((c)=>c.user.id==company));
+      setCompanyId(company)
       // setCompanyId(company.user.id);
     };
     const handleIsUnknownChange = (event) => {
@@ -180,10 +180,7 @@ export default function SignUp() {
         console.log(formData,localStorage.getItem('token'));
         fetch(`${apiKey}/Report`, {      
           method: 'POST',
-          body: formData,
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
+          body: formData
         }).then((response) => {
           console.log(response)
           return response.json();
