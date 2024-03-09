@@ -77,14 +77,17 @@ export default function SignUp() {
         return response.json();
       })
       .then((response) => {
+        const role = response.role;
+        localStorage.setItem('AuthInfo',true);
         localStorage.setItem("token", response.token);
         localStorage.setItem("userId", response.user.id);
       })
       .then(() => {
         alert("Account Created. Redirecting to the Sign In...");
-        window.location.href = "/signinasuser";
+        window.location.href = "../";
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log(e)
         alert("Sign up failed. Please try again.");
       });
     };
