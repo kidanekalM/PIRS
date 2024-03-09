@@ -83,7 +83,7 @@ export default function SignUp() {
         localStorage.setItem("userId", response.user.id);
       })
       .then(() => {
-        alert("Account Created. Redirecting to the Sign In...");
+        // alert("Account Created. Redirecting to the Sign In...");
         window.location.href = "../";
       })
       .catch((e) => {

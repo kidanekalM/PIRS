@@ -90,8 +90,14 @@ export default function SignUp() {
       .then((response) => {
         localStorage.setItem("token", response.token);
         localStorage.setItem("userId", response.user.id);
-        alert("Account Created. Redirecting to the Sign In...");
-        window.location.href = "./signinasuser";
+        // alert("Account Created. Redirecting to the Sign In...");
+        const role = response.role 
+        window.location.href = ((redirectUrl==null)|| (redirectUrl==""))?
+        role === 'User'
+          ? '../'
+          : role === 'Contractor'
+          ? '/ContDashboard'
+          : '/Company':`/${redirectUrl}`;
       })
       .catch(() => {
         alert("Sign up failed. Please try again.");

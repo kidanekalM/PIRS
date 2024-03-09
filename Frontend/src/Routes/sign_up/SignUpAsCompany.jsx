@@ -108,8 +108,14 @@ export default function SignUp() {
       });
       })
       .then(() => {
-        alert("Account Created. Redirecting to the Sign In...");
-        window.location.href = "./signinasuser";
+        // alert("Account Created. Redirecting to the Sign In...");
+        const role = response.role 
+        window.location.href = ((redirectUrl==null)|| (redirectUrl==""))?
+        role === 'User'
+          ? '../'
+          : role === 'Contractor'
+          ? '/ContDashboard'
+          : '/Company':`/${redirectUrl}`;
       })
       .catch((error) => {
         console.error(error);
