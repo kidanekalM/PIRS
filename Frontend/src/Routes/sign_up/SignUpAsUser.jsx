@@ -82,13 +82,14 @@ export default function SignUp() {
         localStorage.setItem("token", response.token);
         localStorage.setItem("userId", response.user.id);
       })
-      .then(() => {
+      .then((e) => {
+        console.log(e)
         // alert("Account Created. Redirecting to the Sign In...");
         window.location.href = "../";
       })
       .catch((e) => {
         console.log(e)
-        alert("Sign up failed. Please try again.");
+        alert("Sign up failed. Please try again.",e);
       });
     };
   return (
