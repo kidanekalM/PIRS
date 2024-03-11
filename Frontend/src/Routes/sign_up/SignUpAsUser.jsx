@@ -125,32 +125,6 @@ export default function SignUp() {
                   onChange={handleUsernameChange}
                 />
               </Grid>
-            {/* <Grid item xs={12}>
-                <TextField
-                  autoComplete="given-name"
-                  name="name"
-                  required
-                  fullWidth
-                  id="name"
-                  label="First Name"
-                  autoFocus
-                  value={firstName}
-                  onChange={handleFirstNameChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="given-name"
-                  name="name"
-                  required
-                  fullWidth
-                  id="name"
-                  label="Last Name"
-                  autoFocus
-                  value={lastName}
-                  onChange={handleLastNameChange}
-                />
-              </Grid> */}
               <Grid item xs={12}>
                 <TextField
                   required
