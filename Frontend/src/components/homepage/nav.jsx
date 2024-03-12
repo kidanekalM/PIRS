@@ -11,11 +11,6 @@ function NavBar(){
                 EthioRush
                 </button>
             </Link>
-            <Link to="/About">
-              <button data-mdb-ripple-init type="button" className="btn">
-                About
-                </button>
-            </Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -32,6 +27,11 @@ function NavBar(){
             <ul className="navbar-nav  me-auto mb-2 mb-lg-0">
             </ul>
                   <div className="d-flex align-items-center">
+                  <Link to="/About">
+              <button data-mdb-ripple-init type="button" className="btn">
+                About
+                </button>
+            </Link>
         <Link to='signinasuser'>
         <button data-mdb-ripple-init type="button" className="btn px-3 me-2">
           Sign In
