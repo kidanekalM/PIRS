@@ -49,7 +49,6 @@ function App() {
          <Route path="trending" element={<Trending/>} />
          <Route path="editreport/*" element={<EditReport/>} />
          <Route path='Company/*' element={<Company/>}/>
-          {/*  */}
          <Route path="contdashboard" element={<Layout/>} >
            <Route path="GetReportById" element={<ContReports />}/>
            <Route path="reportDetail" element={<reportDetail />}/>

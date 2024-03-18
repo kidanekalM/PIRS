@@ -8,7 +8,7 @@ const UNav = () => {
         <nav className="navbar navbar-expand-lg sticky-top bg-info  ">
         <div className="container-fluid">
           <a className="navbar-brand text-white" href="/Home">
-            EthioRush
+            Yemimeleketew
           </a>
           <button
             className="navbar-toggler"
@@ -24,20 +24,7 @@ const UNav = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
             <ul className="navbar-nav">
-              {/* <li className="nav-item">
-                <Link to='/Home'>
-                <button data-mdb-ripple-init type="button " className="btn text-white">
-                  Home
-                </button>
-                </Link>
-              </li> 
-              <li className="nav-item">
-                <Link to='../reports'>                
-                <button data-mdb-ripple-init type="button" className="btn text-white">
-                  My Reports
-                </button> 
-                </Link>
-              </li> */}
+             
               <li className="nav-item">
                 <Link to='../createreport'>                
                 <button data-mdb-ripple-init type="button" className="btn text-white">

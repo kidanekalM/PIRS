@@ -13,10 +13,6 @@ import DetailsIcon from '@mui/icons-material/Details';
  
 const ReportCard = ({ report, onDetailsClick, role, appUserId="",coord,onUpvoteClick, onDeleteClick,onEditCLick,onSubmitClick,onSaveClick,onApproveClick,onRejectClick }) => {
   coord==null?coord={latitude:0.0,longitude:0.0}:"";
-  // const [coord,setCoord] = useState({latitude:0.0,longitude:0.00})
-  //  role= 'Contractor'
-    // appUserId='2'
-  // navigator.geolocation.getCurrentPosition((pos)=>console.log(setCoord(pos.coords)),(err)=>console.log(err))
   if (!report) {
     return <div>No report data</div>;
   }
