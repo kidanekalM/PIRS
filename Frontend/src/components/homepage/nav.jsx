@@ -8,7 +8,7 @@ function NavBar(){
         <div className="container-fluid">
             <Link to="/">
               <button data-mdb-ripple-init type="button" className="btn btn-lg">
-                EthioRush
+                Yemimeleketw
                 </button>
             </Link>
           <button
