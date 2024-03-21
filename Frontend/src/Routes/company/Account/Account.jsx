@@ -154,19 +154,6 @@ export default function Account() {
                   onChange={handleUsernameChange}
                 />
               </Grid>
-            {/* <Grid item xs={12}>
-                <TextField
-                  autoComplete="given-name"
-                  name="name"
-                  required
-                  fullWidth
-                  id="name"
-                  label="First Name"
-                  autoFocus
-                  value={firstName}
-                  onChange={handleFirstNameChange}
-                />
-              </Grid> */}
 
               <Grid item xs={12}>
                 <TextField
